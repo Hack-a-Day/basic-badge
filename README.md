@@ -1,7 +1,7 @@
 # Retrocomputing BASIC Badge
 2018 Hackaday Belgrade Hardware Badge
 
-##Proposed Functionality
+## Proposed Functionality
 * High Importance:
   * BASIC interpreter
   * Line editor for BASIC programs
