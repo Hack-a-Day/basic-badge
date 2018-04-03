@@ -1,0 +1,17 @@
+0.10
+- you can now enter new lines into the source buffer, though for now only appending at the end of program, you can't insert it in the middle - that is high in TODO list
+- help command - writes out help
+- clr command - clears program buffer, so you can write new program
+- first numbered revision, 0.10 now. A lot of revision numbers available up to 1.00
+
+0.11
+-  allow inserting new lines of code anywhere, as well as overwriting previously entered lines.
+
+0.12
+- allowed deleting line by inserting zero length line at line number
+- interpreter now should fail gracefully, without hard crash, error report isn't much helpful by now
+
+
+
+
+
