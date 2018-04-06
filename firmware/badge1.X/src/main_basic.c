@@ -1,6 +1,5 @@
 #include <xc.h>
-#define		_SUPPRESS_PLIB_WARNING
-#include "ubasic.h"
+#include "basic/ubasic.h"
 #include <plib.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +7,10 @@
 #include <ctype.h>
 #include "hw.h"
 #include <setjmp.h>
+
+#include "Z80/sim.h"
+#include "Z80/simglb.h"
+#include "Z80/hwz.h"
 
 
 char bprog[1000] =
@@ -58,6 +61,10 @@ unsigned char key_buffer_ptr =0;
 
 char disp_buffer[800];
 /*
+char uart_buffer[500];
+int uart_buffer_ptr = 0;
+*/
+/*
 static const char program[] =
 "10 out 9\n\
 20 let a=5\n\
@@ -86,31 +93,89 @@ unsigned char cmd_line_buff[30], cmd_line_pointer,cmd_line_key_stat_old,prompt;
 
 jmp_buf buf;
 
+
+extern const unsigned char ram_image[65536];
+extern unsigned char ram_disk[65536];
+
+void init_z80 (void);
+void init_basic (void);
+void loop_z80 (void);
+void loop_basic (void);
+
+
+
 int main(void)
 {
-
-	
-//    add_prog_line("print 99",bprog,50);
-    hw_init();
+   hw_init();
 	CS_FLASH = 1;
-	
-	while (1)
-		{
-		fl_rdid();
-		}
-	
-    fl_rdid();
-
 	for (i=0;i<40;i++)
 		for (j=0;j<20;j++)	
 			disp_buffer[i+(j*40)] = ' ';
     tft_disp_buffer_refresh(disp_buffer,0xFFFFFF,0);
-//	stdio_src = STDIO_LOCAL;
-	stdio_src = STDIO_TTY1;
-    stdio_write("BASIC interpreter version 0.12 - type 'help' for help\n");
-    prompt = 1;
+	stdio_src = STDIO_LOCAL;
+//	stdio_src = STDIO_TTY1;
+	stdio_write("\nBelegrade badge version 0.13\n");
+	stdio_write("Type your choice and hit ENTER\n");
+	stdio_write("1 - BASIC interpreter\n");
+	stdio_write("2 - CP/M @ Z80\n");
+	while (1)
+		{
+		get_stat = stdio_get(sstr);
+		if (get_stat!=0)
+			{
+			stdio_write(sstr);	
+			if (sstr[0]==0x0A) 
+				{
+				cmd_line_buff[cmd_line_pointer] = 0;
+				if (strcmp(cmd_line_buff,"1")==0)
+					{
+					init_basic();
+					while (1) loop_basic();
+					}
+				if (strcmp(cmd_line_buff,"2")==0)
+					{
+					init_z80();
+					while (1) loop_z80();
+					}			
+				}
+			else
+				{
+				len = strlen(sstr);
+				for (i=0;i<len;i++)
+					{
+					if (sstr[i]>0x1F) cmd_line_buff[cmd_line_pointer++] = sstr[i];
+					else if (sstr[i]==BACKSPACE)
+						{
+						if (cmd_line_pointer>0) cmd_line_buff[cmd_line_pointer--]=0;
+						}
+					}			
+				}
+			}	
+		}
+	}
 
-    while (1)
+void init_z80 (void)
+	{
+#ifdef	USE_RAM_IMAGE	
+	for (i=0;i<65536;i++) ram[i] = ram_image[i];
+#endif	
+	for (i=0;i<51200;i++) ram_disk[i] = 0xE5;
+	wrk_ram	= PC = STACK = ram;
+	}
+
+void loop_z80 (void)
+	{
+	cpu_error = NONE;
+	cpu();	
+	}
+
+void init_basic (void)
+	{
+	stdio_write("BASIC interpreter, type help for help\n");
+	prompt = 1;
+	}
+
+void loop_basic (void)
 	{
 	if (prompt==1)
 	    {
@@ -141,9 +206,10 @@ int main(void)
 			}
 		    }			
 		}
-	    }
-	}	
-}
+	    }	
+	
+	}
+
 
 unsigned char add_prog_line (char * line, char * prog, int linenum)
     {
@@ -242,7 +308,7 @@ unsigned char cmd_exec (char * cmd)
 	else 
 	    {
 	    sprintf(tprog,"10 %s\n",cmd);
-	    ubasic_init(bprog);
+	    ubasic_init(tprog);
 	    do 
 		    {
 		    if (!setjmp(buf))
@@ -261,36 +327,16 @@ unsigned char cmd_exec (char * cmd)
     
     }
 
-/*
-int main(void)
-{
-	strcpy(bprog,program);
-	ubasic_init(bprog);
-	do 
-		{
-			ubasic_run();
-	  	} 	while(!ubasic_finished());
-while (1);	
-}
-
-*/
-
-
-
-
 void __ISR(_TIMER_2_VECTOR, ipl3) Timer2Handler(void)
 {
     unsigned char key_temp;
 	IFS0bits.T2IF = 0;
-//    LATBbits.LATB13 = ~ LATBbits.LATB13;
-    LATDbits.LATD2 = 1;
     tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
     key_temp = keyb_tasks();
     if (key_temp>0)
         {
         key_buffer[key_buffer_ptr++] = key_temp;
         }
-    LATDbits.LATD2 = 0;
 }
 
 
@@ -299,16 +345,22 @@ void __ISR(_TIMER_2_VECTOR, ipl3) Timer2Handler(void)
 
 unsigned char rx_sta (void)
 {
-    
-if (U3STAbits.URXDA==1) return 0xFF;
-	else return 0x00;
-   
-    return 0;
+volatile int u_sta;
+if (U3STAbits.URXDA==1) 
+	{
+		u_sta++;
+		return 0xFF;
+	}
+	else 
+		return 0x00;
 }
 unsigned char rx_read (void)
 {
-return U3RXREG;
-    return 0;
+	unsigned char data;
+//	if (uart_buffer_ptr<500)
+//		uart_buffer[uart_buffer_ptr++] = data;
+	data = U3RXREG;
+	return data;
 }
 void tx_write (unsigned char data)
 {
@@ -341,6 +393,14 @@ if (stdio_src==STDIO_LOCAL)
 else if (stdio_src==STDIO_TTY1)
 	tx_write(data);
 }
+
+char stdio_get_state (void)
+	{
+	if (stdio_src==STDIO_LOCAL)
+		return term_k_stat();
+	else if (stdio_src==STDIO_TTY1)
+		return rx_sta();
+	}
 
 char stdio_get (char * dat)
 {

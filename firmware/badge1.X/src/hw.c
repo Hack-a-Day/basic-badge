@@ -1,4 +1,3 @@
-#define		_SUPPRESS_PLIB_WARNING
 #include <xc.h>
 #include "hw.h"
 #include <plib.h>
@@ -45,11 +44,30 @@ const char keys_normal[50] =
 	'3','4','2','5','1','9','6','7','0','8',
 	'e','r','w','t','q','o','y','u','p','i',
 	's','d','a','f','/','k','g','h','l','j',
-	'x','c','z','v',' ',0x2c,'b','n','>','m',
+	'x','c','z','v',' ',0x2c,'b','n','.','m',
 	K_DN,K_RT,K_LT,';',K_UP,K_DEL,'=',K_ENT,BACKSPACE,'_',
 	};
 
+const char keys_shift_l[50] = 
+	{
+	'#','$','@','%','!','(',' ','&',')','*',
+	'E','R','W','T','Q','O','Y','U','P','I',
+	'S','D','A','F','?','K','G','H','L','J',
+	'X','C','Z','V',' ','<','B','N','>','M',
+	K_DN,K_RT,K_LT,':',K_UP,K_DEL,'+',K_ECR,BACKSPACE,'"',
+	};
+const char keys_shift_r[50] = 
+	{
+	'#','$','@','%','!','(',' ','&',')','*',
+	'E','R','W','T','Q','O','Y','U','P','I',
+	'S','D','A','F','?','K','G','H','L','J',
+	'X','C','Z','V',' ','<','B','N','>','M',
+	K_DN,K_RT,K_LT,':',K_UP,K_DEL,'+',K_ECR,BACKSPACE,'"',
+	};
+
 char key_char;
+
+
 
 
 void hw_init (void)
@@ -98,7 +116,7 @@ void hw_init (void)
 //	U1MODEbits.STSEL = 1;
     U3STAbits.URXEN = 1;
     U3STAbits.UTXEN = 1;
-    U3BRG = ((PB_CLK)/(16*9600)) - 1;
+    U3BRG = ((PB_CLK)/(16*19200)) - 1;
 //    INTEnable(INT_SOURCE_UART_RX(UART3), INT_ENABLED);
 //    IPC7bits.U3IP = 6;
     U3STAbits.OERR=0;
@@ -116,13 +134,15 @@ void hw_init (void)
 	TRISCbits.TRISC15 = 0;
     TFT_24_7789_Init();
     tft_set_write_area(0,0,320,240);
-    
+  
+	
     PR2 = 10 *(FPB / 64 / 1000);
     T2CONbits.TCKPS = 0b110;
     T2CONbits.TON = 1;
     IEC0bits.T2IE = 1;	
     IPC2bits.T2IP = 3;
     
+	
     INTEnableSystemMultiVectoredInt();
 	
 	
@@ -131,7 +151,7 @@ void hw_init (void)
 
 unsigned char keyb_tasks (void)
 	{
-	char shift=0;
+	static char shift=0;
 	unsigned char retval = 0;
 	K_R1 = 1;
 	K_R2 = 1;
@@ -150,7 +170,9 @@ unsigned char keyb_tasks (void)
 		{
 		if ((key<255)&(key_last!=key))
 			{
-			key_char = keys_normal[key];
+			if (K_SHIFTL==0) key_char = keys_shift_l[key];
+			else if (K_SHIFTR==0) key_char = keys_shift_r[key];
+			else key_char = keys_normal[key];
 			retval = key_char;
 			}
 		key_last = key;
@@ -168,8 +190,6 @@ unsigned char keyb_tasks (void)
 		if (K_C8==0)	key = 7 + (key_state*10);
 		if (K_C9==0)	key = 8 + (key_state*10);
 		if (K_C10==0)	key = 9 + (key_state*10);
-		if (K_SHIFTL==0) shift = 1;
-		if (K_SHIFTR==0) shift = 1;
 		key_state++;
 		}
 	return retval;

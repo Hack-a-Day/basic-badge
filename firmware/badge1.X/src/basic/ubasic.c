@@ -38,7 +38,7 @@
 
 
 #include "ubasic.h"
-#include "hw.h"
+#include "../hw.h"
 #include "tokenizer.h"
 
 #include <stdio.h> /* printf() */

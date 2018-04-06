@@ -76,6 +76,8 @@ unsigned char CHAR;
 }kspec_var; 
 
 #define	K_ENT	0x0A
+#define	K_ECR	0x0D
+
 #define	BACKSPACE	0x08
 #define	K_UP		0x1C
 #define	K_DN		0x1D
@@ -96,6 +98,7 @@ unsigned char CHAR;
 unsigned char stdio_write (unsigned char * data);
 unsigned char stdio_c (unsigned char data);
 unsigned char stdio_in (unsigned char block);
+char stdio_get_state (void);
 char stdio_get (char * dat);
 
 #define	FCY		48000000UL
