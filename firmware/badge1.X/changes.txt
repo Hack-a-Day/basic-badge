@@ -18,4 +18,7 @@
 - BASIC interpreter got some more tweaks and it's now better separated from other tasks. Major cleanup/separation of sources is needed, though.
 - primitive menu on start, allowing to choose either BASIC interpreter or CP/M machine.
 
+0.14
+- half of FLASH memory now appears as four disk drives by 512k each in CP/M system. I downloaded ZORK via XMODEM and spent a while playing it.
+
 

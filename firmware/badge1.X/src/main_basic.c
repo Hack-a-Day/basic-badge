@@ -93,7 +93,7 @@ unsigned char cmd_line_buff[30], cmd_line_pointer,cmd_line_key_stat_old,prompt;
 
 jmp_buf buf;
 
-
+extern unsigned char flash_buff[4096];
 extern const unsigned char ram_image[65536];
 extern unsigned char ram_disk[65536];
 
@@ -102,7 +102,7 @@ void init_basic (void);
 void loop_z80 (void);
 void loop_basic (void);
 
-
+unsigned char flash_init = 0;
 
 int main(void)
 {
@@ -114,7 +114,15 @@ int main(void)
     tft_disp_buffer_refresh(disp_buffer,0xFFFFFF,0);
 	stdio_src = STDIO_LOCAL;
 //	stdio_src = STDIO_TTY1;
-	stdio_write("\nBelegrade badge version 0.13\n");
+
+	fl_rst_pb();
+
+	if (flash_init==1)
+		{
+		init_first_x_sects(32);
+		}
+
+	stdio_write("\nBelegrade badge version 0.14\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - BASIC interpreter\n");
 	stdio_write("2 - CP/M @ Z80\n");

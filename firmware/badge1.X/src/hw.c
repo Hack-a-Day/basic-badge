@@ -125,7 +125,7 @@ void hw_init (void)
     SPI1CONbits.CKP = 0;
     SPI1CONbits.SMP = 0;
     SPI1CONbits.CKE = 1;
-    SPI1BRG = 25;
+    SPI1BRG = 1;
     SPI1CONbits.ON = 1;
     
 //    TRISBbits.TRISB13 = 0;

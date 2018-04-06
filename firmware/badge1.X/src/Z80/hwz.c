@@ -145,8 +145,6 @@ if (drive==1)
 	}
 if (drive==2)
 	{
-	if (disk_temp_pointer==0) read_sector(disk_temp,base);
-	temp = disk_temp[disk_temp_pointer];
 	}
 if (drive==3)
 	{
@@ -189,13 +187,9 @@ if (drive==1)
 	}
 if (drive==2)
 	{
-	disk_temp[disk_temp_pointer] = dat;
-	if (disk_temp_pointer==127) 
-		{
-		ee_wren();
-		write_sector(disk_temp,base);
-		}
+	//rom disk, no writes allowed
 	}
+
 if (drive==3)
 	{
 	disk_temp[disk_temp_pointer] = dat;
