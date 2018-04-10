@@ -49,15 +49,6 @@ void wait_ms (unsigned int count);
 unsigned char keyb_tasks (void);
 void hw_init (void);
 
-void fl_write(unsigned long addr,unsigned char data);
-void fl_erase_4k(unsigned long addr);
-void fl_read_4k(unsigned long addr, unsigned char * data);
-void fl_rst_pb(void);
-void fl_wren(void);
-void fl_write_4k(unsigned long addr, unsigned char * data);
-void fl_read_nk(unsigned long addr, unsigned char * data, unsigned int n);
-void fl_read_128(unsigned int sector,unsigned char * data);
-void fl_write_128(unsigned int sector,unsigned char * data);
 
 typedef union
 {

@@ -16,6 +16,7 @@
       </logicalFolder>
       <itemPath>src/disp.h</itemPath>
       <itemPath>src/hw.h</itemPath>
+      <itemPath>src/vt100.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -44,7 +45,8 @@
       <itemPath>src/disp.c</itemPath>
       <itemPath>src/hw.c</itemPath>
       <itemPath>src/images.c</itemPath>
-      <itemPath>src/main_basic.c</itemPath>
+      <itemPath>src/vt100.c</itemPath>
+      <itemPath>src/main.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -160,7 +162,7 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value="256"/>
+        <property key="heap-size" value="128"/>
         <property key="input-libraries" value=""/>
         <property key="kseg-length" value=""/>
         <property key="kseg-origin" value=""/>
@@ -175,7 +177,7 @@
         <property key="report-memory-usage" value="false"/>
         <property key="serial-length" value=""/>
         <property key="serial-origin" value=""/>
-        <property key="stack-size" value="256"/>
+        <property key="stack-size" value="128"/>
         <property key="symbol-stripping" value=""/>
         <property key="trace-symbols" value=""/>
         <property key="warn-section-align" value="false"/>

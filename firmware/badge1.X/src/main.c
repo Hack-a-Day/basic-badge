@@ -12,6 +12,7 @@
 #include "Z80/simglb.h"
 #include "Z80/hwz.h"
 
+#include "vt100.h"
 
 char bprog[1000] =
 "10 gosub 100\n\
@@ -58,8 +59,9 @@ char stdio_src;
 char key_buffer[10];
 unsigned char key_buffer_ptr =0;
 
+char disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 
-char disp_buffer[800];
+//char disp_buffer[800];
 /*
 char uart_buffer[500];
 int uart_buffer_ptr = 0;
@@ -95,7 +97,7 @@ jmp_buf buf;
 
 extern unsigned char flash_buff[4096];
 extern const unsigned char ram_image[65536];
-extern unsigned char ram_disk[65536];
+extern unsigned char ram_disk[RAMDISK_SIZE];
 
 void init_z80 (void);
 void init_basic (void);
@@ -104,17 +106,19 @@ void loop_basic (void);
 
 unsigned char flash_init = 0;
 
+extern volatile uint16_t bufsize;
+
 int main(void)
 {
+
+	
    hw_init();
 	CS_FLASH = 1;
-	for (i=0;i<40;i++)
-		for (j=0;j<20;j++)	
-			disp_buffer[i+(j*40)] = ' ';
-    tft_disp_buffer_refresh(disp_buffer,0xFFFFFF,0);
 	stdio_src = STDIO_LOCAL;
 //	stdio_src = STDIO_TTY1;
 
+	term_init();
+	
 	fl_rst_pb();
 
 	if (flash_init==1)
@@ -122,7 +126,7 @@ int main(void)
 		init_first_x_sects(32);
 		}
 
-	stdio_write("\nBelegrade badge version 0.14\n");
+	stdio_write("\nBelegrade badge version 0.15\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - BASIC interpreter\n");
 	stdio_write("2 - CP/M @ Z80\n");
@@ -181,6 +185,8 @@ void init_basic (void)
 	{
 	stdio_write("BASIC interpreter, type help for help\n");
 	prompt = 1;
+	cmd_line_pointer=0;
+	cmd_line_buff[0] = 0;
 	}
 
 void loop_basic (void)
@@ -195,13 +201,13 @@ void loop_basic (void)
 	    {
 	    stdio_write(sstr);	
 	    if (sstr[0]==0x0A) 
-		{
-		cmd_line_buff[cmd_line_pointer] = 0;
-		cmd_exec (cmd_line_buff);
-		cmd_line_pointer=0;
-		cmd_line_buff[0] = 0;
-		prompt = 1;			
-		}
+			{
+			cmd_line_buff[cmd_line_pointer] = 0;
+			cmd_exec (cmd_line_buff);
+			cmd_line_pointer=0;
+			cmd_line_buff[0] = 0;
+			prompt = 1;			
+			}
 	    else
 		{
 		len = strlen(sstr);
@@ -209,9 +215,10 @@ void loop_basic (void)
 		    {
 		    if (sstr[i]>0x1F) cmd_line_buff[cmd_line_pointer++] = sstr[i];
 		    else if (sstr[i]==BACKSPACE)
-			{
-			if (cmd_line_pointer>0) cmd_line_buff[cmd_line_pointer--]=0;
-			}
+				{
+				if (cmd_line_pointer>0) 
+					cmd_line_buff[cmd_line_pointer--]=0;
+				}
 		    }			
 		}
 	    }	
@@ -232,29 +239,29 @@ unsigned char add_prog_line (char * line, char * prog, int linenum)
 	if (ret==2)
 	    {
 	    if ((linenum>linenum_prev)&(linenum<linenum_now))
-		{
-		cnt = strlen(prog_ptr) +1;
-		prog_ptr_dest = prog_ptr + line_exp_len;
-		memmove(prog_ptr_dest,prog_ptr,cnt);
-		memcpy(prog_ptr,line_exp,line_exp_len);
-		return 0;
-		}
+			{
+			cnt = strlen(prog_ptr) +1;
+			prog_ptr_dest = prog_ptr + line_exp_len;
+			memmove(prog_ptr_dest,prog_ptr,cnt);
+			memcpy(prog_ptr,line_exp,line_exp_len);
+			return 0;
+			}
 	    if (linenum==linenum_now)
-		{
-		prog_ptr_prev = prog_ptr;
-		prog_ptr = strchr(prog_ptr,'\n')+1;
-		cnt = strlen(prog_ptr)+1;
-		memmove(prog_ptr_prev,prog_ptr,cnt);
-		if (strlen(line)>1)
-		    {
-		    prog_ptr = prog_ptr_prev;
-		    cnt = strlen(prog_ptr);
-		    prog_ptr_dest = prog_ptr + line_exp_len;
-		    memmove(prog_ptr_dest,prog_ptr,cnt);
-		    memcpy(prog_ptr,line_exp,line_exp_len);		
-		    }
-		return 0;
-		}
+			{
+			prog_ptr_prev = prog_ptr;
+			prog_ptr = strchr(prog_ptr,'\n')+1;
+			cnt = strlen(prog_ptr)+1;
+			memmove(prog_ptr_prev,prog_ptr,cnt);
+			if (strlen(line)>1)
+				{
+				prog_ptr = prog_ptr_prev;
+				cnt = strlen(prog_ptr);
+				prog_ptr_dest = prog_ptr + line_exp_len;
+				memmove(prog_ptr_dest,prog_ptr,cnt);
+				memcpy(prog_ptr,line_exp,line_exp_len);		
+				}
+			return 0;
+			}
 	    }
 	else
 	    {
@@ -273,12 +280,12 @@ unsigned char cmd_exec (char * cmd)
     char cmd_clean[25];
     int linenum;
     if (isdigit(cmd[0]))
-	{
-	sscanf(cmd,"%d %[^\n]s",&linenum,cmd_clean);
-	add_prog_line (cmd_clean,bprog, linenum);
-//	sprintf(stdio_buff,"cmd L %d %s\n",linenum,cmd_clean);
-//	stdio_write(stdio_buff);
-	}
+		{
+		sscanf(cmd,"%d %[^\n]s",&linenum,cmd_clean);
+		add_prog_line (cmd_clean,bprog, linenum);
+	//	sprintf(stdio_buff,"cmd L %d %s\n",linenum,cmd_clean);
+	//	stdio_write(stdio_buff);
+		}
     else
 	{
 	if (strcmp("help",cmd)==0)
@@ -381,7 +388,16 @@ while (U3STAbits.UTXBF==1);
 unsigned char stdio_write (unsigned char * data)
 {
 if (stdio_src==STDIO_LOCAL)
-	terminal_tasks(data,&vertical_shift);
+	{
+//jar
+//	terminal_tasks(data,&vertical_shift);
+	while (*data!=0x00)
+		{
+		buf_enqueue (*data++);
+		while (bufsize)
+			receive_char(buf_dequeue());	
+		}
+	}
 else if (stdio_src==STDIO_TTY1)
 	{
 	while (*data!=0x00)
@@ -396,7 +412,11 @@ if (stdio_src==STDIO_LOCAL)
 	{
 	tmp[0] = data;
 	tmp[1] = 0;
-	terminal_tasks(tmp,&vertical_shift);
+//jar
+//	terminal_tasks(tmp,&vertical_shift);
+	buf_enqueue (data);
+	while (bufsize)
+		receive_char(buf_dequeue());
 	}
 else if (stdio_src==STDIO_TTY1)
 	tx_write(data);
@@ -428,70 +448,6 @@ else if (stdio_src==STDIO_TTY1)
 		return 0;
 	}
 return 0;
-}
-
-//**********************************************************************************************
-//**********************************************************************************************
-unsigned char term_shift_out (char * dbuff, char * tbuff);
-
-void terminal_init(void)
-{
-term_pointer = 0;
-}
-
-unsigned char terminal_tasks (char * input, UINT16 * shift)
-{
-unsigned char len,i;
-UINT16 sh;
-sh = *shift;
-if (input!=0)
-	{
-	len = strlen(input);
-	for (i=0;i<len;i++)
-		{
-		if (input[i]>(' '-1))
-			term_screen_buffer[term_pointer++] = input[i];
-		else if (input[i]==BACKSPACE) 
-			{
-			if (term_pointer>0)
-				term_screen_buffer[--term_pointer] = ' ';
-			}
-		else if ((input[i]==K_UP)|(input[i]==K_DN)|(input[i]==K_LT)|(input[i]==K_RT))
-			{
-			switch (input[i])
-				{
-				case K_UP: sh++; break;
-				case K_DN: if (sh>0) sh--; break;
-				}
-			}
-		else
-			{
-			while (term_pointer%TERM_WIDTH!=0)
-				term_screen_buffer[term_pointer++] = ' ';
-			}
-		if (term_pointer==TERM_WIDTH*TERM_LINES)
-			{
-			term_shift_out(term_screen_buffer,term_buffer);
-			term_pointer = term_pointer - TERM_WIDTH;
-			}
-		}
-	}
-if (sh<TERM_LINES)
-	{
-	memcpy(disp_buffer,term_buffer+TBUF_LEN-(TERM_WIDTH*sh),TERM_WIDTH*sh);
-	memcpy(disp_buffer+TERM_WIDTH*sh,term_screen_buffer,TERM_WIDTH*(TERM_LINES-sh));
-	}
-else
-	memcpy(disp_buffer,term_buffer+TBUF_LEN-(TERM_WIDTH*sh),TERM_WIDTH*sh);
-*shift = sh;
-}
-
-unsigned char term_shift_out (char * dbuff, char * tbuff)
-{
-memmove (tbuff,tbuff+TERM_WIDTH,TBUF_LEN-TERM_WIDTH);
-memcpy(tbuff+TBUF_LEN-TERM_WIDTH,dbuff,TERM_WIDTH);
-memmove(dbuff,dbuff+TERM_WIDTH,TERM_WIDTH*(TERM_LINES-1));
-memset(dbuff + TERM_WIDTH*(TERM_LINES-1),' ',TERM_WIDTH);
 }
 
 char term_k_stat (void)

@@ -21,4 +21,8 @@
 0.14
 - half of FLASH memory now appears as four disk drives by 512k each in CP/M system. I downloaded ZORK via XMODEM and spent a while playing it.
 
+0.15
+- local display terminal is now accepting VT100 escape sequences. Turbo Pascal or Wordstar under CP/M should now run with sensible output on display, should be better for everything else, too. 
+- fixed bug where first command after starting BASIC interpreter was be mangled, resulting in funny behavior
+
 

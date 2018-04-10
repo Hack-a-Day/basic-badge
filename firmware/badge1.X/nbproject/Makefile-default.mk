@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=src/basic/tokenizer.c src/basic/ubasic.c src/Z80/hwz.c src/Z80/iosim.c src/Z80/sim1.c src/Z80/sim2.c src/Z80/sim3.c src/Z80/sim4.c src/Z80/sim5.c src/Z80/sim6.c src/Z80/sim7.c src/Z80/simfun.c src/Z80/simglb.c src/disp.c src/hw.c src/images.c src/main_basic.c
+SOURCEFILES_QUOTED_IF_SPACED=src/basic/tokenizer.c src/basic/ubasic.c src/Z80/hwz.c src/Z80/iosim.c src/Z80/sim1.c src/Z80/sim2.c src/Z80/sim3.c src/Z80/sim4.c src/Z80/sim5.c src/Z80/sim6.c src/Z80/sim7.c src/Z80/simfun.c src/Z80/simglb.c src/disp.c src/hw.c src/images.c src/vt100.c src/main.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/src/basic/tokenizer.o ${OBJECTDIR}/src/basic/ubasic.o ${OBJECTDIR}/src/Z80/hwz.o ${OBJECTDIR}/src/Z80/iosim.o ${OBJECTDIR}/src/Z80/sim1.o ${OBJECTDIR}/src/Z80/sim2.o ${OBJECTDIR}/src/Z80/sim3.o ${OBJECTDIR}/src/Z80/sim4.o ${OBJECTDIR}/src/Z80/sim5.o ${OBJECTDIR}/src/Z80/sim6.o ${OBJECTDIR}/src/Z80/sim7.o ${OBJECTDIR}/src/Z80/simfun.o ${OBJECTDIR}/src/Z80/simglb.o ${OBJECTDIR}/src/disp.o ${OBJECTDIR}/src/hw.o ${OBJECTDIR}/src/images.o ${OBJECTDIR}/src/main_basic.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/src/basic/tokenizer.o.d ${OBJECTDIR}/src/basic/ubasic.o.d ${OBJECTDIR}/src/Z80/hwz.o.d ${OBJECTDIR}/src/Z80/iosim.o.d ${OBJECTDIR}/src/Z80/sim1.o.d ${OBJECTDIR}/src/Z80/sim2.o.d ${OBJECTDIR}/src/Z80/sim3.o.d ${OBJECTDIR}/src/Z80/sim4.o.d ${OBJECTDIR}/src/Z80/sim5.o.d ${OBJECTDIR}/src/Z80/sim6.o.d ${OBJECTDIR}/src/Z80/sim7.o.d ${OBJECTDIR}/src/Z80/simfun.o.d ${OBJECTDIR}/src/Z80/simglb.o.d ${OBJECTDIR}/src/disp.o.d ${OBJECTDIR}/src/hw.o.d ${OBJECTDIR}/src/images.o.d ${OBJECTDIR}/src/main_basic.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/src/basic/tokenizer.o ${OBJECTDIR}/src/basic/ubasic.o ${OBJECTDIR}/src/Z80/hwz.o ${OBJECTDIR}/src/Z80/iosim.o ${OBJECTDIR}/src/Z80/sim1.o ${OBJECTDIR}/src/Z80/sim2.o ${OBJECTDIR}/src/Z80/sim3.o ${OBJECTDIR}/src/Z80/sim4.o ${OBJECTDIR}/src/Z80/sim5.o ${OBJECTDIR}/src/Z80/sim6.o ${OBJECTDIR}/src/Z80/sim7.o ${OBJECTDIR}/src/Z80/simfun.o ${OBJECTDIR}/src/Z80/simglb.o ${OBJECTDIR}/src/disp.o ${OBJECTDIR}/src/hw.o ${OBJECTDIR}/src/images.o ${OBJECTDIR}/src/vt100.o ${OBJECTDIR}/src/main.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/src/basic/tokenizer.o.d ${OBJECTDIR}/src/basic/ubasic.o.d ${OBJECTDIR}/src/Z80/hwz.o.d ${OBJECTDIR}/src/Z80/iosim.o.d ${OBJECTDIR}/src/Z80/sim1.o.d ${OBJECTDIR}/src/Z80/sim2.o.d ${OBJECTDIR}/src/Z80/sim3.o.d ${OBJECTDIR}/src/Z80/sim4.o.d ${OBJECTDIR}/src/Z80/sim5.o.d ${OBJECTDIR}/src/Z80/sim6.o.d ${OBJECTDIR}/src/Z80/sim7.o.d ${OBJECTDIR}/src/Z80/simfun.o.d ${OBJECTDIR}/src/Z80/simglb.o.d ${OBJECTDIR}/src/disp.o.d ${OBJECTDIR}/src/hw.o.d ${OBJECTDIR}/src/images.o.d ${OBJECTDIR}/src/vt100.o.d ${OBJECTDIR}/src/main.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/src/basic/tokenizer.o ${OBJECTDIR}/src/basic/ubasic.o ${OBJECTDIR}/src/Z80/hwz.o ${OBJECTDIR}/src/Z80/iosim.o ${OBJECTDIR}/src/Z80/sim1.o ${OBJECTDIR}/src/Z80/sim2.o ${OBJECTDIR}/src/Z80/sim3.o ${OBJECTDIR}/src/Z80/sim4.o ${OBJECTDIR}/src/Z80/sim5.o ${OBJECTDIR}/src/Z80/sim6.o ${OBJECTDIR}/src/Z80/sim7.o ${OBJECTDIR}/src/Z80/simfun.o ${OBJECTDIR}/src/Z80/simglb.o ${OBJECTDIR}/src/disp.o ${OBJECTDIR}/src/hw.o ${OBJECTDIR}/src/images.o ${OBJECTDIR}/src/main_basic.o
+OBJECTFILES=${OBJECTDIR}/src/basic/tokenizer.o ${OBJECTDIR}/src/basic/ubasic.o ${OBJECTDIR}/src/Z80/hwz.o ${OBJECTDIR}/src/Z80/iosim.o ${OBJECTDIR}/src/Z80/sim1.o ${OBJECTDIR}/src/Z80/sim2.o ${OBJECTDIR}/src/Z80/sim3.o ${OBJECTDIR}/src/Z80/sim4.o ${OBJECTDIR}/src/Z80/sim5.o ${OBJECTDIR}/src/Z80/sim6.o ${OBJECTDIR}/src/Z80/sim7.o ${OBJECTDIR}/src/Z80/simfun.o ${OBJECTDIR}/src/Z80/simglb.o ${OBJECTDIR}/src/disp.o ${OBJECTDIR}/src/hw.o ${OBJECTDIR}/src/images.o ${OBJECTDIR}/src/vt100.o ${OBJECTDIR}/src/main.o
 
 # Source Files
-SOURCEFILES=src/basic/tokenizer.c src/basic/ubasic.c src/Z80/hwz.c src/Z80/iosim.c src/Z80/sim1.c src/Z80/sim2.c src/Z80/sim3.c src/Z80/sim4.c src/Z80/sim5.c src/Z80/sim6.c src/Z80/sim7.c src/Z80/simfun.c src/Z80/simglb.c src/disp.c src/hw.c src/images.c src/main_basic.c
+SOURCEFILES=src/basic/tokenizer.c src/basic/ubasic.c src/Z80/hwz.c src/Z80/iosim.c src/Z80/sim1.c src/Z80/sim2.c src/Z80/sim3.c src/Z80/sim4.c src/Z80/sim5.c src/Z80/sim6.c src/Z80/sim7.c src/Z80/simfun.c src/Z80/simglb.c src/disp.c src/hw.c src/images.c src/vt100.c src/main.c
 
 
 CFLAGS=
@@ -202,11 +202,17 @@ ${OBJECTDIR}/src/images.o: src/images.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/src/images.o 
 	@${FIXDEPS} "${OBJECTDIR}/src/images.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -DPK4Tool=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/images.o.d" -o ${OBJECTDIR}/src/images.o src/images.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
 	
-${OBJECTDIR}/src/main_basic.o: src/main_basic.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/src/vt100.o: src/vt100.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/src" 
-	@${RM} ${OBJECTDIR}/src/main_basic.o.d 
-	@${RM} ${OBJECTDIR}/src/main_basic.o 
-	@${FIXDEPS} "${OBJECTDIR}/src/main_basic.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -DPK4Tool=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/main_basic.o.d" -o ${OBJECTDIR}/src/main_basic.o src/main_basic.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
+	@${RM} ${OBJECTDIR}/src/vt100.o.d 
+	@${RM} ${OBJECTDIR}/src/vt100.o 
+	@${FIXDEPS} "${OBJECTDIR}/src/vt100.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -DPK4Tool=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/vt100.o.d" -o ${OBJECTDIR}/src/vt100.o src/vt100.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/src/main.o: src/main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/src" 
+	@${RM} ${OBJECTDIR}/src/main.o.d 
+	@${RM} ${OBJECTDIR}/src/main.o 
+	@${FIXDEPS} "${OBJECTDIR}/src/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -DPK4Tool=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/main.o.d" -o ${OBJECTDIR}/src/main.o src/main.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
 	
 else
 ${OBJECTDIR}/src/basic/tokenizer.o: src/basic/tokenizer.c  nbproject/Makefile-${CND_CONF}.mk
@@ -305,11 +311,17 @@ ${OBJECTDIR}/src/images.o: src/images.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/src/images.o 
 	@${FIXDEPS} "${OBJECTDIR}/src/images.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/images.o.d" -o ${OBJECTDIR}/src/images.o src/images.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
 	
-${OBJECTDIR}/src/main_basic.o: src/main_basic.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/src/vt100.o: src/vt100.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/src" 
-	@${RM} ${OBJECTDIR}/src/main_basic.o.d 
-	@${RM} ${OBJECTDIR}/src/main_basic.o 
-	@${FIXDEPS} "${OBJECTDIR}/src/main_basic.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/main_basic.o.d" -o ${OBJECTDIR}/src/main_basic.o src/main_basic.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
+	@${RM} ${OBJECTDIR}/src/vt100.o.d 
+	@${RM} ${OBJECTDIR}/src/vt100.o 
+	@${FIXDEPS} "${OBJECTDIR}/src/vt100.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/vt100.o.d" -o ${OBJECTDIR}/src/vt100.o src/vt100.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/src/main.o: src/main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/src" 
+	@${RM} ${OBJECTDIR}/src/main.o.d 
+	@${RM} ${OBJECTDIR}/src/main.o 
+	@${FIXDEPS} "${OBJECTDIR}/src/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/main.o.d" -o ${OBJECTDIR}/src/main.o src/main.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
 	
 endif
 
@@ -324,12 +336,12 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 dist/${CND_CONF}/${IMAGE_TYPE}/badge1.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE) -g -mdebugger -DPK4Tool=1 -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/badge1.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)   -mreserve=data@0x0:0x1FC -mreserve=boot@0x1FC02000:0x1FC02FEF -mreserve=boot@0x1FC02000:0x1FC0275F  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,-D=__DEBUG_D,--defsym=PK4Tool=1,--defsym=_min_heap_size=256,--defsym=_min_stack_size=256,--no-code-in-dinit,--no-dinit-in-serial-mem,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml
+	${MP_CC} $(MP_EXTRA_LD_PRE) -g -mdebugger -DPK4Tool=1 -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/badge1.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)   -mreserve=data@0x0:0x1FC -mreserve=boot@0x1FC02000:0x1FC02FEF -mreserve=boot@0x1FC02000:0x1FC0275F  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,-D=__DEBUG_D,--defsym=PK4Tool=1,--defsym=_min_heap_size=128,--defsym=_min_stack_size=128,--no-code-in-dinit,--no-dinit-in-serial-mem,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml
 	
 else
 dist/${CND_CONF}/${IMAGE_TYPE}/badge1.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE)  -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/badge1.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=_min_heap_size=256,--defsym=_min_stack_size=256,--no-code-in-dinit,--no-dinit-in-serial-mem,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml
+	${MP_CC} $(MP_EXTRA_LD_PRE)  -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/badge1.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=_min_heap_size=128,--defsym=_min_stack_size=128,--no-code-in-dinit,--no-dinit-in-serial-mem,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml
 	${MP_CC_DIR}/xc32-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/badge1.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} 
 endif
 
