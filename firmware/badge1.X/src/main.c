@@ -14,6 +14,8 @@
 
 #include "vt100.h"
 
+#include "splash.h"
+
 char bprog[1000] =
 "10 gosub 100\n\
 20 for i = 1 to 5\n\
@@ -101,16 +103,20 @@ extern unsigned char ram_disk[RAMDISK_SIZE];
 
 void init_z80 (void);
 void init_basic (void);
+void init_userprog(void);
 void loop_z80 (void);
 void loop_basic (void);
+void loop_userprog(void);
+
+void clr_buffer(void);
 
 unsigned char flash_init = 0;
+unsigned char handle_display = 1;
 
 extern volatile uint16_t bufsize;
 
 int main(void)
 {
-
 	
    hw_init();
 	CS_FLASH = 1;
@@ -130,6 +136,7 @@ int main(void)
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - BASIC interpreter\n");
 	stdio_write("2 - CP/M @ Z80\n");
+	stdio_write("3 - User Program\n");
 	while (1)
 		{
 		get_stat = stdio_get(sstr);
@@ -148,6 +155,11 @@ int main(void)
 					{
 					init_z80();
 					while (1) loop_z80();
+					}			
+				if (strcmp(cmd_line_buff,"3")==0)
+					{
+					init_userprog();
+					while (1) loop_userprog();
 					}			
 				}
 			else
@@ -225,6 +237,52 @@ void loop_basic (void)
 	
 	}
 
+void init_userprog (void)
+{
+    clr_buffer();
+    stdio_write("User Program\n");
+}
+
+void loop_userprog (void)
+{
+    get_stat = stdio_get(sstr);
+    if (get_stat!=0)
+    {
+	//stdio_write("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqurstuwxyz");
+	disp_buffer[4][4] = 'H';
+	delay_us(1000000);
+	disp_buffer[4][5] = 'e';
+	delay_us(1000000);
+	disp_buffer[4][6] = 'l';
+	delay_us(1000000);
+	disp_buffer[4][7] = 'l';
+	delay_us(1000000);
+	disp_buffer[4][8] = 'o';
+
+	for (i=0; i<12; i++)
+	{
+	    for (j=0; j<12; j++)
+	    {
+		if (b_cipher[i] & 1<<j) {
+		    disp_buffer[i][12-j] = 'X';
+		}
+	    }
+	}
+	handle_display = 0;
+	tft_fill_area(40,40,20,20,0x00FF00);
+    }
+}
+
+void clr_buffer (void)
+{
+    for (i=0; i<DISP_BUFFER_HIGH+1; i++)
+    {
+	for (j=0; j<DISP_BUFFER_WIDE; j++)
+	{
+	    disp_buffer[i][j] = 0;
+	}
+    }
+}
 
 unsigned char add_prog_line (char * line, char * prog, int linenum)
     {
@@ -346,9 +404,12 @@ void __ISR(_TIMER_2_VECTOR, ipl3) Timer2Handler(void)
 {
     unsigned char key_temp;
 	IFS0bits.T2IF = 0;
-    tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
-    key_temp = keyb_tasks();
-    if (key_temp>0)
+	if (handle_display)
+	{
+	    tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
+	}
+	key_temp = keyb_tasks();
+	if (key_temp>0)
         {
         key_buffer[key_buffer_ptr++] = key_temp;
         }

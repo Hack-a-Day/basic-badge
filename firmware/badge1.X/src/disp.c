@@ -156,6 +156,17 @@ void tft_print_char (unsigned char val, unsigned int x, unsigned int y, unsigned
 	}
 
 
+void tft_fill_area (unsigned int x, unsigned int y, unsigned int xlen, unsigned int ylen, unsigned int back)
+{
+    unsigned int i,j;
+    tft_set_write_area(x,y,xlen,ylen);
+    TFT_24_7789_Write_Command(0x2C);
+    for (i=0; i<((xlen+1)*(ylen+1)); i++)
+    {
+	TFT_24_7789_Write_Data3((back>>16)&0xFF,(back>>8)&0xFF,(back>>0)&0xFF);
+    }
+}
+
 void tft_set_write_area (unsigned int x, unsigned int y, unsigned int xlen, unsigned int ylen)
 	{
 	TFT_24_7789_Write_Command(0x002A);
