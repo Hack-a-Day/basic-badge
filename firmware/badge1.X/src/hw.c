@@ -138,6 +138,11 @@ void hw_init (void)
     IEC0bits.T2IE = 1;	
     IPC2bits.T2IP = 3;
     
+    PR3 = 750-1;
+    T3CONbits.TCKPS = 0b110;	//Prescale 60 makes 1ms = 750 ticks at 48 MHz
+    T3CONbits.TON = 1;
+    IEC0bits.T3IE = 1;
+    IPC3bits.T3IP = 3;
 	
     INTEnableSystemMultiVectoredInt();
 	

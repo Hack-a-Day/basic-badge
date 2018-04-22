@@ -115,6 +115,8 @@ unsigned char handle_display = 1;
 
 extern volatile uint16_t bufsize;
 
+volatile uint32_t ticks = 0;	// millisecond timer incremented in ISR
+
 int main(void)
 {
 	
@@ -250,6 +252,21 @@ void loop_userprog (void)
     {
 	handle_display = 0; //Shut off auto-scanning of character buffer
 	show_splash();
+	while(stdio_get(sstr) == 0) { ;; }  //wait for button press
+	handle_display = 1; //Go back to character display
+    }
+
+    static unsigned int delay_until = 0;
+    static unsigned char count = '0';
+
+    if (ticks>=delay_until)
+    {
+	disp_buffer[10][10] = count++;
+	if (count > '9')
+	{
+	    count = '0';
+	}
+	delay_until = ticks+1000;
     }
 }
 
@@ -383,16 +400,23 @@ unsigned char cmd_exec (char * cmd)
 void __ISR(_TIMER_2_VECTOR, ipl3) Timer2Handler(void)
 {
     unsigned char key_temp;
-	IFS0bits.T2IF = 0;
-	if (handle_display)
-	{
-	    tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
-	}
-	key_temp = keyb_tasks();
-	if (key_temp>0)
-        {
-        key_buffer[key_buffer_ptr++] = key_temp;
-        }
+    IFS0bits.T2IF = 0;
+    if (handle_display)
+    {
+	tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
+    }
+    key_temp = keyb_tasks();
+    if (key_temp>0)
+    {
+	key_buffer[key_buffer_ptr++] = key_temp;
+    }
+
+}
+
+void __ISR(_TIMER_3_VECTOR, ipl3) Timer3Handler(void)
+{
+    IFS0bits.T3IF = 0;
+    ++ticks;
 }
 
 
