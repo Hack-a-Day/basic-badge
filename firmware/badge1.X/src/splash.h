@@ -15,6 +15,8 @@
 #define CIPHER_SPACE        5
 #define CIPHER_COLOR        0xEE3530
 
+void show_splash(void);
+
 const unsigned int b_cipher[12] = {
     0b0000101010111101,
     0b0000010111100110,
