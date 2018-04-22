@@ -115,11 +115,11 @@ unsigned char handle_display = 1;
 
 extern volatile uint16_t bufsize;
 
-volatile uint32_t ticks = 0;	// millisecond timer incremented in ISR
+extern volatile uint32_t ticks;	// millisecond timer incremented in ISR
 
 int main(void)
 {
-	
+    ticks = 0;
    hw_init();
 	CS_FLASH = 1;
 	stdio_src = STDIO_LOCAL;
@@ -251,6 +251,7 @@ void loop_userprog (void)
     if (get_stat!=0)
     {
 	handle_display = 0; //Shut off auto-scanning of character buffer
+	animate_splash();
 	show_splash();
 	while(stdio_get(sstr) == 0) { ;; }  //wait for button press
 	handle_display = 1; //Go back to character display

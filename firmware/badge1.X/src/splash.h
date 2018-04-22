@@ -16,6 +16,8 @@
 #define CIPHER_COLOR        0xEE3530
 
 void show_splash(void);
+void draw_vert_line(unsigned int x, unsigned char y, unsigned char height, unsigned int color);
+void animate_splash(void);
 
 const unsigned int b_cipher[12] = {
     0b0000101010111101,
