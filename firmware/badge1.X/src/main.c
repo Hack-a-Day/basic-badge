@@ -240,7 +240,7 @@ void loop_basic (void)
 void init_userprog (void)
 {
     clr_buffer();
-    stdio_write("User Program\n");
+    stdio_write("Press any key to show splash screen.\n");
 }
 
 void loop_userprog (void)
@@ -248,28 +248,20 @@ void loop_userprog (void)
     get_stat = stdio_get(sstr);
     if (get_stat!=0)
     {
-	//stdio_write("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqurstuwxyz");
-	disp_buffer[4][4] = 'H';
-	delay_us(1000000);
-	disp_buffer[4][5] = 'e';
-	delay_us(1000000);
-	disp_buffer[4][6] = 'l';
-	delay_us(1000000);
-	disp_buffer[4][7] = 'l';
-	delay_us(1000000);
-	disp_buffer[4][8] = 'o';
-
+	handle_display = 0; //Shut off auto-scanning of character buffer
+	tft_fill_area(0,0,320,240,0x000000);    //Make display black
 	for (i=0; i<12; i++)
 	{
 	    for (j=0; j<12; j++)
 	    {
 		if (b_cipher[i] & 1<<j) {
-		    disp_buffer[i][12-j] = 'X';
+		    unsigned int curX = CIPHER_X0+((12-j)*CIPHER_CHAR_WIDTH)-((j/3)*CIPHER_SPACE);
+		    unsigned char curY = CIPHER_Y0+(i*CIPHER_CHAR_WIDTH)+((i/3)*CIPHER_SPACE);
+		    //FIXME: Why do I need these -1 adjustments?
+		    tft_fill_area(curX,curY,CIPHER_CHAR_WIDTH-1,CIPHER_CHAR_WIDTH-1,CIPHER_COLOR);
 		}
 	    }
-	}
-	handle_display = 0;
-	tft_fill_area(40,40,20,20,0x00FF00);
+	}	
     }
 }
 

@@ -161,6 +161,7 @@ void tft_fill_area (unsigned int x, unsigned int y, unsigned int xlen, unsigned 
     unsigned int i,j;
     tft_set_write_area(x,y,xlen,ylen);
     TFT_24_7789_Write_Command(0x2C);
+    //FIXME: Why do I need these +1 adjustments. Off-by-one in tft_set_write_area?
     for (i=0; i<((xlen+1)*(ylen+1)); i++)
     {
 	TFT_24_7789_Write_Data3((back>>16)&0xFF,(back>>8)&0xFF,(back>>0)&0xFF);

@@ -6,12 +6,14 @@
  *  Original spacing is 347px letters with 32px spaces
  *  Combining character with spaces calls for 8.44% space
  *  240px screen, 4 characters
- *  Characters should be 55px with 5px spacing and 3px on top
+ *  Characters should be 54px (18px subchars each) with 5px spacing and 3px on top
  */
 
 #define CIPHER_X0           42
 #define CIPHER_Y0           2
-#define CIPHER_CHAR_WIDTH   55-1
+#define CIPHER_CHAR_WIDTH   18
+#define CIPHER_SPACE        5
+#define CIPHER_COLOR        0xEE3530
 
 const unsigned int b_cipher[12] = {
     0b0000101010111101,
