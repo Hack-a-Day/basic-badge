@@ -9,15 +9,20 @@
  *  Characters should be 54px (18px subchars each) with 5px spacing and 3px on top
  */
 
+#include <stdint.h>
+
 #define CIPHER_X0           42
 #define CIPHER_Y0           2
 #define CIPHER_CHAR_WIDTH   18
 #define CIPHER_SPACE        5
 #define CIPHER_COLOR        0xEE3530
+#define CIPHER_BACKGROUND   0x000000
+#define CIPHER_CURSOR       0xFFFFFF
 
 void show_splash(void);
 void draw_vert_line(unsigned int x, unsigned char y, unsigned char height, unsigned int color);
 void animate_splash(void);
+uint8_t overlaps_logo(int16_t x, uint8_t row);
 
 const unsigned int b_cipher[12] = {
     0b0000101010111101,

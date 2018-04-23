@@ -252,7 +252,7 @@ void loop_userprog (void)
     {
 	handle_display = 0; //Shut off auto-scanning of character buffer
 	animate_splash();
-	show_splash();
+	//show_splash();
 	while(stdio_get(sstr) == 0) { ;; }  //wait for button press
 	handle_display = 1; //Go back to character display
     }
