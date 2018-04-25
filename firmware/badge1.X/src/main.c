@@ -14,6 +14,8 @@
 
 #include "vt100.h"
 
+#include "splash.h"
+
 char bprog[1000] =
 "10 gosub 100\n\
 20 for i = 1 to 5\n\
@@ -101,17 +103,23 @@ extern unsigned char ram_disk[RAMDISK_SIZE];
 
 void init_z80 (void);
 void init_basic (void);
+void init_userprog(void);
 void loop_z80 (void);
 void loop_basic (void);
+void loop_userprog(void);
+
+void clr_buffer(void);
 
 unsigned char flash_init = 0;
+unsigned char handle_display = 1;
 
 extern volatile uint16_t bufsize;
 
+extern volatile uint32_t ticks;	// millisecond timer incremented in ISR
+
 int main(void)
 {
-
-	
+    ticks = 0;
    hw_init();
 	CS_FLASH = 1;
 	stdio_src = STDIO_LOCAL;
@@ -130,6 +138,7 @@ int main(void)
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - BASIC interpreter\n");
 	stdio_write("2 - CP/M @ Z80\n");
+	stdio_write("3 - User Program\n");
 	while (1)
 		{
 		get_stat = stdio_get(sstr);
@@ -148,6 +157,11 @@ int main(void)
 					{
 					init_z80();
 					while (1) loop_z80();
+					}			
+				if (strcmp(cmd_line_buff,"3")==0)
+					{
+					init_userprog();
+					while (1) loop_userprog();
 					}			
 				}
 			else
@@ -225,6 +239,48 @@ void loop_basic (void)
 	
 	}
 
+void init_userprog (void)
+{
+    clr_buffer();
+    stdio_write("Press any key to show splash screen.\n");
+}
+
+void loop_userprog (void)
+{
+    get_stat = stdio_get(sstr);
+    if (get_stat!=0)
+    {
+	handle_display = 0; //Shut off auto-scanning of character buffer
+	animate_splash();
+	//show_splash();
+	while(stdio_get(sstr) == 0) { ;; }  //wait for button press
+	handle_display = 1; //Go back to character display
+    }
+
+    static unsigned int delay_until = 0;
+    static unsigned char count = '0';
+
+    if (ticks>=delay_until)
+    {
+	disp_buffer[10][10] = count++;
+	if (count > '9')
+	{
+	    count = '0';
+	}
+	delay_until = ticks+1000;
+    }
+}
+
+void clr_buffer (void)
+{
+    for (i=0; i<DISP_BUFFER_HIGH+1; i++)
+    {
+	for (j=0; j<DISP_BUFFER_WIDE; j++)
+	{
+	    disp_buffer[i][j] = 0;
+	}
+    }
+}
 
 unsigned char add_prog_line (char * line, char * prog, int linenum)
     {
@@ -345,13 +401,23 @@ unsigned char cmd_exec (char * cmd)
 void __ISR(_TIMER_2_VECTOR, ipl3) Timer2Handler(void)
 {
     unsigned char key_temp;
-	IFS0bits.T2IF = 0;
-    tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
+    IFS0bits.T2IF = 0;
+    if (handle_display)
+    {
+	tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
+    }
     key_temp = keyb_tasks();
     if (key_temp>0)
-        {
-        key_buffer[key_buffer_ptr++] = key_temp;
-        }
+    {
+	key_buffer[key_buffer_ptr++] = key_temp;
+    }
+
+}
+
+void __ISR(_TIMER_3_VECTOR, ipl3) Timer3Handler(void)
+{
+    IFS0bits.T3IF = 0;
+    ++ticks;
 }
 
 
