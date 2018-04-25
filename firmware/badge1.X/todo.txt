@@ -1,11 +1,13 @@
+- basic load/save to FLASH
 - switching of consoles - tty versus local
 - api for user code
 - remove dependancy from PLIB
-- basic load/save via serial
-- basic load/save to FLASH
 - POST
+- basic load/save via serial
 - some kind of IO pin control from BASIC code, there is already reserved work for it
 - decrease RAM usage - shrink Z80 RAM disk, script to rebuild Z80 CP/M sources
 - code restructure
 - code cleanup
+- add https://github.com/maly/arduino8080basic - this should be easy, there is already Z80 virtual machine on board
+
 
