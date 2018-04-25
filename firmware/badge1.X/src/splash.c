@@ -36,7 +36,7 @@ void move_box_right(struct Cipher_box *b)
 {
     uint8_t y = CIPHER_Y0 + (b->row * CIPHER_CHAR_WIDTH)+((b->row / 3) * CIPHER_SPACE);
 
-    if (b->x<320)
+    if ((b->x<320) && (b->x>=0))
     {
 	//Draw leading edge
 	draw_vert_line(b->x,y,CIPHER_CHAR_WIDTH,CIPHER_CURSOR);

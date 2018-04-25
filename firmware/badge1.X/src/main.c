@@ -16,6 +16,9 @@
 
 #include "splash.h"
 
+//Set SHOW_SPLASH to 0 to skip splash screen at boot
+#define SHOW_SPLASH	0
+
 /* parameters for tune - note1(see below), note2(see below), note3(see below), duration (in ms)
  * 0 - no sound
  * 1 - G0
@@ -132,6 +135,7 @@ void init_userprog(void);
 void loop_z80 (void);
 void loop_basic (void);
 void loop_userprog(void);
+void boot_animation(void);
 
 void clr_buffer(void);
 
@@ -155,6 +159,10 @@ int main(void)
 	
 	if (flash_init==1)
 		init_first_x_sects(32);
+
+	if (SHOW_SPLASH)
+		boot_animation();
+
 	stdio_write("\nBelegrade badge version 0.17\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - BASIC interpreter\n");
@@ -291,6 +299,16 @@ void loop_userprog (void)
 	delay_until = ticks+1000;
     }
 }
+
+void boot_animation(void)
+	{
+	handle_display = 0; //Shut off auto-scanning of character buffer
+	animate_splash();
+	uint16_t waitfor = ticks+1000;	//Wait for 1 second
+	while (ticks<waitfor) { ;; }
+	tft_fill_area(0,0,320,240,0x000000);    //Make display black
+	handle_display = 1; //Go back to character display
+	}
 
 void clr_buffer (void)
 {
