@@ -433,6 +433,27 @@ char str_out[40];
 }
 /*---------------------------------------------------------------------------*/
 static void
+tune_statement(void)
+{
+char str_out[40];
+int tone1,tone2,tone3,duration;
+
+	accept(TOKENIZER_TUNE);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) tone1 =  expr();
+	accept(TOKENIZER_COMMA);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) tone2 =  expr();
+	accept(TOKENIZER_COMMA);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) tone3 =  expr();
+	accept(TOKENIZER_COMMA);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) duration =  expr();
+	//sprintf(str_out,"playing %d %d %d for %d\n",tone1,tone2,tone3,duration);
+	//stdio_write(str_out);
+	//now perform the actual beep
+	sound_play_notes(tone1,tone2,tone3,duration);
+	tokenizer_next();
+}
+/*---------------------------------------------------------------------------*/
+static void
 statement(void)
 {
   int token;
@@ -466,6 +487,9 @@ statement(void)
     break;
   case TOKENIZER_OUT:
     out_statement();
+    break;
+  case TOKENIZER_TUNE:
+    tune_statement();
     break;
   case TOKENIZER_LET:
     accept(TOKENIZER_LET);

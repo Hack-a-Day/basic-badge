@@ -30,6 +30,12 @@
 #ifndef __TOKENIZER_H__
 #define __TOKENIZER_H__
 
+
+
+
+
+
+
 enum {
   TOKENIZER_ERROR,
   TOKENIZER_ENDOFINPUT,
@@ -65,6 +71,7 @@ enum {
   TOKENIZER_EQ,
   TOKENIZER_CR,
   TOKENIZER_OUT,
+  TOKENIZER_TUNE,
 };
 
 void tokenizer_init(const char *program);

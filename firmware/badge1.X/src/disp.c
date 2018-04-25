@@ -229,11 +229,11 @@ void TFT_24_7789_Init(void)
 LCD_RD = 1;
 LCD_WR = 1;
 LCD_RES = 0;
-delay_us(100);
+wait_ms(2);
 LCD_RES = 1;
-delay_us(100);
+wait_ms(2);
 TFT_24_7789_Write_Command(0x0029);//exit SLEEP mode
-delay_us(100);
+wait_ms(2);
 TFT_24_7789_Write_Command(0x0036);
 TFT_24_7789_Write_Data(0x70);//MADCTL: memory data access control
 TFT_24_7789_Write_Command(0x003A);

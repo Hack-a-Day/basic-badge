@@ -16,6 +16,35 @@
 
 #include "splash.h"
 
+/* parameters for tune - note1(see below), note2(see below), note3(see below), duration (in ms)
+ * 0 - no sound
+ * 1 - G0
+ * 2 - G#1
+ * 3 - A1 (55Hz)
+ * ...
+ * 12 - F#1
+ * 13 - G1
+ * 14 - G$1
+ * 15 - A2 (110Hz)
+ * ...
+ * 39 - A4 (440Hz)
+ * ...
+ * 61 - G6
+ * 62 - G#6
+ * 63 - A6 (1760Hz)
+ */
+
+char bprog[1000] =
+"10 tune 37, 46, 49, 400\n\
+20 tune 37, 41, 44, 400\n\
+30 tune 35, 39, 42, 400\n\
+39 tune 0, 0, 0, 100\n\
+40 tune 54, 0, 0, 100\n\
+41 tune 56, 0, 0, 100\n\
+43 tune 54, 0, 0, 100\n\
+50 tune 0, 0, 0, 5\n\
+";
+/*
 char bprog[1000] =
 "10 gosub 100\n\
 20 for i = 1 to 5\n\
@@ -26,16 +55,9 @@ char bprog[1000] =
 100 print \"subroutine\"\n\
 105 out 5\n\
 110 return\n";
-
-/*
-char bprog[1000] =
-"10 print 1+1\n"\
-;
 */
 
 int prog_ptr;
-
-//char bprog[1000] = "print 1+7\n";
 char tprog[100];
 
 void delay_us (unsigned long howmuch);
@@ -53,42 +75,15 @@ unsigned char cmd_exec (char * cmd);
 
 char term_buffer[TBUF_LEN];
 char term_screen_buffer[TERM_WIDTH*TERM_LINES];
+//a lot of magic numbers here, should be done properly
 char stdio_buff[25];
 char term_input[50],term_input_p,term_key_stat_old;
 UINT16 term_pointer,vertical_shift;
-char stdio_src;
-
 char key_buffer[10];
+char stdio_src;
 unsigned char key_buffer_ptr =0;
 
 char disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
-
-//char disp_buffer[800];
-/*
-char uart_buffer[500];
-int uart_buffer_ptr = 0;
-*/
-/*
-static const char program[] =
-"10 out 9\n\
-20 let a=5\n\
-30 print a+7\n\
-";
-*/
-//static const char program[] = "print 1+7";
-
-
-/*
-static const char program[] =
-"10 gosub 100\n\
-20 for i = 1 to 10\n\
-30 print i\n\
-40 next i\n\
-50 print \"end\"\n\
-60 end\n\
-100 print \"subroutine\"\n\
-110 return\n";
-*/
 
 int i,j,len;
 unsigned char get_stat;
@@ -117,11 +112,12 @@ extern volatile uint16_t bufsize;
 
 extern volatile uint32_t ticks;	// millisecond timer incremented in ISR
 
+volatile int a,b,c,d;
+
 int main(void)
 {
     ticks = 0;
-   hw_init();
-	CS_FLASH = 1;
+	hw_init();
 	stdio_src = STDIO_LOCAL;
 //	stdio_src = STDIO_TTY1;
 
@@ -130,11 +126,8 @@ int main(void)
 	fl_rst_pb();
 
 	if (flash_init==1)
-		{
 		init_first_x_sects(32);
-		}
-
-	stdio_write("\nBelegrade badge version 0.15\n");
+	stdio_write("\nBelegrade badge version 0.16\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - BASIC interpreter\n");
 	stdio_write("2 - CP/M @ Z80\n");
@@ -398,10 +391,27 @@ unsigned char cmd_exec (char * cmd)
     
     }
 
-void __ISR(_TIMER_2_VECTOR, ipl3) Timer2Handler(void)
+
+void __ISR(_TIMER_2_VECTOR, ipl6) Timer2Handler(void)
+	{
+    IFS0bits.T2IF = 0;
+	GEN_0_PIN = ~ GEN_0_PIN;
+	}
+void __ISR(_TIMER_3_VECTOR, ipl6) Timer3Handler(void)
+	{
+    IFS0bits.T3IF = 0;
+	GEN_1_PIN = ~ GEN_1_PIN;
+	}
+void __ISR(_TIMER_4_VECTOR, ipl6) Timer4Handler(void)
+	{
+    IFS0bits.T4IF = 0;
+	GEN_2_PIN = ~ GEN_2_PIN;
+	}
+
+void __ISR(_TIMER_5_VECTOR, ipl3) Timer5Handler(void)
 {
     unsigned char key_temp;
-    IFS0bits.T2IF = 0;
+    IFS0bits.T5IF = 0;
     if (handle_display)
     {
 	tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
@@ -414,9 +424,9 @@ void __ISR(_TIMER_2_VECTOR, ipl3) Timer2Handler(void)
 
 }
 
-void __ISR(_TIMER_3_VECTOR, ipl3) Timer3Handler(void)
+void __ISR(_TIMER_1_VECTOR, ipl4) Timer1Handler(void)
 {
-    IFS0bits.T3IF = 0;
+    IFS0bits.T1IF = 0;
     ++ticks;
 }
 

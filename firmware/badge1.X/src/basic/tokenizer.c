@@ -67,6 +67,7 @@ static const struct keyword_token keywords[] = {
   {"call", TOKENIZER_CALL},
   {"end", TOKENIZER_END},
   {"out", TOKENIZER_OUT},
+  {"tune", TOKENIZER_TUNE},
   {NULL, TOKENIZER_ERROR}
 };
 

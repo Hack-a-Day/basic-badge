@@ -1,7 +1,7 @@
 #include "splash.h"
 #include <stdint.h>
 
-volatile uint32_t ticks;
+extern volatile uint32_t ticks;
 
 struct Cipher_box
 {

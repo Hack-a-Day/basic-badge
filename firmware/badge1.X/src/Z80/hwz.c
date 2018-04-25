@@ -310,32 +310,6 @@ CS_MEM = 1;
 
 
 
-
-void wait_ms (unsigned int count)
-{
-unsigned int i;
-for (i=0;i<count;i++) wait_1ms();
-}
-
-void wait_1ms (void)
-{
-T1CONbits.TON = 1;
-T1CONbits.TCKPS = 0b01;
-PR1 = 10000;
-TMR1=0;
-while (IFS0bits.T1IF==0);
-IFS0bits.T1IF=0;
-}
-
-void wait_cyc (unsigned int cyc)
-{
-T1CONbits.TON = 1;
-PR1 = cyc;
-TMR1=0;
-while (IFS0bits.T1IF==0);
-IFS0bits.T1IF=0;
-}
-
 unsigned char fl_rdsr(void)
 {
 volatile unsigned char temp;

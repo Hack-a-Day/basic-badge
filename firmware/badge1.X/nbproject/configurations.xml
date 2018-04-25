@@ -17,6 +17,7 @@
       <itemPath>src/disp.h</itemPath>
       <itemPath>src/hw.h</itemPath>
       <itemPath>src/vt100.h</itemPath>
+      <itemPath>src/splash.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -47,6 +48,7 @@
       <itemPath>src/images.c</itemPath>
       <itemPath>src/vt100.c</itemPath>
       <itemPath>src/main.c</itemPath>
+      <itemPath>src/splash.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -65,9 +67,9 @@
         <targetDevice>PIC32MX370F512H</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>PICkit3PlatformTool</platformTool>
+        <platformTool>PK4Tool</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion>2.05</languageToolchainVersion>
+        <languageToolchainVersion>1.44</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <compileType>

@@ -40,6 +40,11 @@
 #define		FLASH_WP	LATDbits.LATD8
 #define		FLASH_HOLD	LATCbits.LATC12
 
+#define		GEN_0_PIN	LATDbits.LATD1
+#define		GEN_1_PIN	LATDbits.LATD2
+#define		GEN_2_PIN	LATDbits.LATD3
+#define		GEN_ENABLE	LATDbits.LATD11
+
 
 #define	FLASH_BUFFERING
 
@@ -48,7 +53,9 @@ void wait_1ms (void);
 void wait_ms (unsigned int count);
 unsigned char keyb_tasks (void);
 void hw_init (void);
-
+void sound_set_note (unsigned char note, unsigned char generator);
+void sound_set_generator (unsigned int period, unsigned char generator);
+void sound_play_notes (unsigned char note1, unsigned char note2, unsigned char note3, unsigned int wait);
 
 typedef union
 {

@@ -25,4 +25,10 @@
 - local display terminal is now accepting VT100 escape sequences. Turbo Pascal or Wordstar under CP/M should now run with sensible output on display, should be better for everything else, too. 
 - fixed bug where first command after starting BASIC interpreter was be mangled, resulting in funny behavior
 
+0.16
+- merged pull request from Mike
+- music generator, available from BASIC interpreter
+- had to rework timer/delay structure to allow music
+- todo.txt started :-)
+
 

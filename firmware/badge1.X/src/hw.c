@@ -1,6 +1,8 @@
 #include <xc.h>
 #include "hw.h"
+#include "Z80/hwz.h"
 #include <plib.h>
+#include <stdint.h>
 
 // DEVCFG3
 // USERID = No Setting
@@ -35,6 +37,8 @@
 #pragma config CP = OFF                 // Code Protect (Protection Disabled)
 
 unsigned char key_state=0,key_last,key;
+volatile uint32_t ticks;	// millisecond timer incremented in ISR
+
 const char keys_normal[50] = 
 	{
 	'3','4','2','5','1','9','6','7','0','8',
@@ -64,6 +68,124 @@ const char keys_shift_r[50] =
 char key_char;
 
 
+const unsigned int tone_pr_table[64] = 
+	{
+	0	,
+	61224	,
+	57788	,
+	54544	,
+	51483	,
+	48593	,
+	45866	,
+	43292	,
+	40862	,
+	38568	,
+	36404	,
+	34360	,
+	32432	,
+	30612	,
+	28893	,
+	27272	,
+	25741	,
+	24296	,
+	22933	,
+	21645	,
+	20430	,
+	19284	,
+	18201	,
+	17180	,
+	16215	,
+	15305	,
+	14446	,
+	13635	,
+	12870	,
+	12148	,
+	11466	,
+	10822	,
+	10215	,
+	9641	,
+	9100	,
+	8589	,
+	8107	,
+	7652	,
+	7223	,
+	6817	,
+	6435	,
+	6073	,
+	5732	,
+	5411	,
+	5107	,
+	4820	,
+	4550	,
+	4294	,
+	4053	,
+	3826	,
+	3611	,
+	3408	,
+	3217	,
+	3036	,
+	2866	,
+	2705	,
+	2553	,
+	2410	,
+	2274	,
+	2147	,
+	2026	,
+	1912	,
+	1805	,
+	1704	,
+
+	};
+
+void sound_play_notes (unsigned char note1, unsigned char note2, unsigned char note3, unsigned int wait)
+	{
+	IEC0bits.T5IE = 0;		//sound is a bit shaky without this
+							//quick hack, needs more debugging
+	sound_set_note(note1,0);
+	sound_set_note(note2,1);
+	sound_set_note(note3,2);
+	wait_ms(wait);
+	IEC0bits.T5IE = 1;
+	}
+
+void sound_set_note (unsigned char note, unsigned char generator)
+	{
+	sound_set_generator(tone_pr_table[note],generator);
+	}
+
+void sound_set_generator (unsigned int period, unsigned char generator)
+	{
+	if (generator==0)
+		{
+		T2CONbits.TON = 0;
+		PR2 = period;
+		T2CONbits.TCKPS = 0b011;
+		if (period!=0)
+			T2CONbits.TON = 1;
+		else
+			GEN_0_PIN = 0;
+		}
+	if (generator==1)
+		{
+		T3CONbits.TON = 0;
+		PR3 = period;
+		T3CONbits.TCKPS = 0b011;
+		if (period!=0)
+			T3CONbits.TON = 1;
+		else
+			GEN_1_PIN = 0;
+		}
+	if (generator==2)
+		{
+		T4CONbits.TON = 0;
+		PR4 = period;
+		T4CONbits.TCKPS = 0b011;
+		if (period!=0)
+			T4CONbits.TON = 1;
+		else
+			GEN_2_PIN = 0;
+		}
+	}
 
 
 void hw_init (void)
@@ -94,6 +216,7 @@ void hw_init (void)
 	TRISDbits.TRISD8 = 0;
 	FLASH_WP = 1;
 	FLASH_HOLD = 1;
+	CS_FLASH = 1;
     /*
     MOSI	F3	
     MISO	F5	
@@ -102,10 +225,11 @@ void hw_init (void)
 			C14	
      */
     PPSUnLock;
-    PPSOutput(4, RPF3, SDO1);
-	PPSInput(1, SDI1, RPF5);
-	PPSInput(1, U3RX, RPC13);
-	PPSOutput(1, RPC14, U3TX);	
+    PPSOutput(4, RPF3, SDO1);	//MOSI for FLASH
+	PPSInput(1, SDI1, RPF5);	//MISO for FLASH
+								//SCK is fixed
+	PPSInput(1, U3RX, RPC13);	//RX pin
+	PPSOutput(1, RPC14, U3TX);	//TX pin
     PPSLock;
 
 	U3MODEbits.ON = 1;
@@ -128,25 +252,36 @@ void hw_init (void)
     LATFbits.LATF0 = 0;
     LATCbits.LATC15 = 0;
 	TRISCbits.TRISC15 = 0;
-    TFT_24_7789_Init();
-    tft_set_write_area(0,0,320,240);
+
   
 	
-    PR2 = 10 *(FPB / 64 / 1000);
-    T2CONbits.TCKPS = 0b110;
-    T2CONbits.TON = 1;
+    PR5 = 10 *(FPB / 64 / 1000);
+    T5CONbits.TCKPS = 0b110;
+    T5CONbits.TON = 1;
+    IEC0bits.T5IE = 1;	
+    IPC5bits.T5IP = 3;
+
     IEC0bits.T2IE = 1;	
-    IPC2bits.T2IP = 3;
-    
-    PR3 = 750-1;
-    T3CONbits.TCKPS = 0b110;	//Prescale 60 makes 1ms = 750 ticks at 48 MHz
-    T3CONbits.TON = 1;
-    IEC0bits.T3IE = 1;
-    IPC3bits.T3IP = 3;
-	
+    IPC2bits.T2IP = 6;
+    IEC0bits.T3IE = 1;	
+    IPC3bits.T3IP = 6;
+    IEC0bits.T4IE = 1;	
+    IPC4bits.T4IP = 6;
+
+    PR1 = 1500-1;
+    T1CONbits.TCKPS = 0b10;	//Prescale 64 makes 1ms = 750 ticks at 48 MHz
+    T1CONbits.TON = 1;
+    IEC0bits.T1IE = 1;
+    IPC1bits.T1IP = 4;
+
+	sound_set_generator(0,0);
+	sound_set_generator(0,1);
+	sound_set_generator(0,2);
+	GEN_ENABLE = 1;
     INTEnableSystemMultiVectoredInt();
 	
-	
+    TFT_24_7789_Init();
+    tft_set_write_area(0,0,320,240);	
 	}
 
 
@@ -199,30 +334,15 @@ unsigned char keyb_tasks (void)
 
 void delay_us (unsigned long howmuch)
 	{
-	T1CONbits.TON = 1;
-	T1CONbits.TCKPS = 0b01;
-	PR1 = howmuch * PB_CLK/(1000000*8);
-	TMR1=0;
-	while (IFS0bits.T1IF==0);
-	IFS0bits.T1IF=0;
+//nope, need to rework
 	}
-
-
-void wait_1ms (void)
-{
-T1CONbits.TON = 1;
-T1CONbits.TCKPS = 0b01;
-PR1 = PB_CLK/(1000*8);
-TMR1=0;
-while (IFS0bits.T1IF==0);
-IFS0bits.T1IF=0;
-}
 
 
 void wait_ms (unsigned int count)
 {
-unsigned int i;
-for (i=0;i<count;i++) wait_1ms();
+	unsigned int ticks_wait;
+	ticks_wait = ticks + count;
+	while (ticks<= ticks_wait);
 }
 
 unsigned char	SPI_dat (unsigned char data)
