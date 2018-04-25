@@ -9,6 +9,9 @@
 #define		LCD_DC_SET	PORTGSET = (1<<8)
 #define		LCD_DC_CLR	PORTGCLR = (1<<8)
 
+#define		LCD_BKLT	LATFbits.LATF0
+#define		LCD_PWR		LATCbits.LATC15
+
 #define     K_R5        LATFbits.LATF4
 #define     K_R4        LATBbits.LATB15
 #define     K_R3        LATBbits.LATB14

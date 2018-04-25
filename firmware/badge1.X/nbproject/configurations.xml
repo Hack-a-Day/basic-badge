@@ -69,7 +69,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PK4Tool</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion>1.44</languageToolchainVersion>
+        <languageToolchainVersion>2.05</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <compileType>

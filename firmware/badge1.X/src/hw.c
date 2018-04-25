@@ -249,8 +249,8 @@ void hw_init (void)
     SPI1CONbits.ON = 1;
     
 //    TRISBbits.TRISB13 = 0;
-    LATFbits.LATF0 = 0;
-    LATCbits.LATC15 = 0;
+    LCD_BKLT = 1;
+    LCD_PWR = 0;
 	TRISCbits.TRISC15 = 0;
 
   
@@ -281,7 +281,10 @@ void hw_init (void)
     INTEnableSystemMultiVectoredInt();
 	
     TFT_24_7789_Init();
-    tft_set_write_area(0,0,320,240);	
+	tft_fill_area(0,0,320,240,0);	//fill with black color
+	wait_ms(40);					//wait a moment to avoid flicker
+	LCD_BKLT = 0;					//turn backlight on
+	fl_rst_pb();	
 	}
 
 

@@ -45,7 +45,7 @@
 #include <stdlib.h> /* exit() */
 #include <setjmp.h>
 
-extern jmp_buf buf;
+extern jmp_buf jbuf;
 char err_msg[40];
 
 static char const *program_ptr;
@@ -87,11 +87,11 @@ static void
 accept(int token)
 {
   if(token != tokenizer_token()) {
-    sprintf(err_msg,"Token not what was expected (expected %d, got %d)\n",
+    sprintf(err_msg,"Error: expected %d, got %d\n",
 		 token, tokenizer_token());
 	stdio_write(err_msg);
     tokenizer_error_print();
-	longjmp(buf,1);             // jumps back to where setjmp was called - making setjmp now return 1
+	longjmp(jbuf,1);             // jumps back to where setjmp was called - making setjmp now return 1
     exit(1);
   }
   DEBUG_PRINTF("Expected %d, got it\n", token);
@@ -501,7 +501,7 @@ statement(void)
     sprintf(err_msg,"statement(): not implemented %d\n", token);
 	stdio_write(err_msg);
     //exit(1);
-	longjmp(buf,1);             // jumps back to where setjmp was called - making setjmp now return 1
+	longjmp(jbuf,1);             // jumps back to where setjmp was called - making setjmp now return 1
   }
 }
 /*---------------------------------------------------------------------------*/

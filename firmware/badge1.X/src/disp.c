@@ -226,10 +226,10 @@ LCD_WR_SET;
 /*******************************************************************************/
 void TFT_24_7789_Init(void)
 {
+LCD_RES = 0;
 LCD_RD = 1;
 LCD_WR = 1;
-LCD_RES = 0;
-wait_ms(2);
+//wait_ms(2);
 LCD_RES = 1;
 wait_ms(2);
 TFT_24_7789_Write_Command(0x0029);//exit SLEEP mode
@@ -302,7 +302,6 @@ TFT_24_7789_Write_Data(0x0000);
 TFT_24_7789_Write_Data(0x0000);
 TFT_24_7789_Write_Data(0x0000);
 TFT_24_7789_Write_Data(0x00EF);//Y address set
-delay_us(10);
 TFT_24_7789_Write_Command(0x11);
 TFT_24_7789_Write_Command(0x38);
 TFT_24_7789_Write_Command(0x13);

@@ -35,14 +35,44 @@
  */
 
 char bprog[1000] =
-"10 tune 37, 46, 49, 400\n\
-20 tune 37, 41, 44, 400\n\
-30 tune 35, 39, 42, 400\n\
-39 tune 0, 0, 0, 100\n\
-40 tune 54, 0, 0, 100\n\
-41 tune 56, 0, 0, 100\n\
-43 tune 54, 0, 0, 100\n\
-50 tune 0, 0, 0, 5\n\
+"100 tune 25,0,44,120\n\
+102 tune 32,41,44,100\n\
+104 tune 0,0,44,20\n\
+106 tune 32,41,44,100\n\
+108 tune 0,0,44,20\n\
+110 tune 20,0,41,120\n\
+112 tune 29,37,41,100\n\
+114 tune 0,0,41,20\n\
+116 tune 29,37,41,100\n\
+118 tune 29,37,41,20\n\
+120 tune 0,0,37,120\n\
+122 tune 17,0,37,100\n\
+124 tune 25,32,37,20\n\
+126 tune 0,0,37,100\n\
+128 tune 25,32,37,20\n\
+130 tune 0,0,32,120\n\
+132 tune 13,0,32,100\n\
+134 tune 25,29,32,20\n\
+136 tune 0,0,32,100\n\
+138 tune 25,29,32,20\n\
+140 tune 0,0,34,120\n\
+150 tune 0,0,36,120\n\
+160 tune 0,0,37,120\n\
+170 tune 0,0,34,240\n\
+180 tune 0,0,37,120\n\
+190 tune 0,0,32,600\n\
+200 tune 0,0,0,120\n\
+210 tune 0,0,39,360\n\
+220 tune 0,0,44,360\n\
+230 tune 0,0,41,360\n\
+240 tune 0,0,37,360\n\
+250 tune 0,0,34,120\n\
+260 tune 0,0,36,120\n\
+270 tune 0,0,37,120\n\
+280 tune 0,0,39,240\n\
+290 tune 0,0,41,120\n\
+300 tune 0,0,39,480\n\
+310 tune 0,0,0,5\n\
 ";
 /*
 char bprog[1000] =
@@ -90,7 +120,7 @@ unsigned char get_stat;
 char sstr[3];
 unsigned char cmd_line_buff[30], cmd_line_pointer,cmd_line_key_stat_old,prompt;
 
-jmp_buf buf;
+jmp_buf jbuf;
 
 extern unsigned char flash_buff[4096];
 extern const unsigned char ram_image[65536];
@@ -114,20 +144,18 @@ extern volatile uint32_t ticks;	// millisecond timer incremented in ISR
 
 volatile int a,b,c,d;
 
+
 int main(void)
 {
     ticks = 0;
 	hw_init();
 	stdio_src = STDIO_LOCAL;
 //	stdio_src = STDIO_TTY1;
-
 	term_init();
 	
-	fl_rst_pb();
-
 	if (flash_init==1)
 		init_first_x_sects(32);
-	stdio_write("\nBelegrade badge version 0.16\n");
+	stdio_write("\nBelegrade badge version 0.17\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - BASIC interpreter\n");
 	stdio_write("2 - CP/M @ Z80\n");
@@ -357,7 +385,7 @@ unsigned char cmd_exec (char * cmd)
 	    ubasic_init(bprog);
 	    do 
 		    {
-		    if (!setjmp(buf))
+		    if (!setjmp(jbuf))
 				{
 				ubasic_run();
 				}
@@ -375,7 +403,7 @@ unsigned char cmd_exec (char * cmd)
 	    ubasic_init(tprog);
 	    do 
 		    {
-		    if (!setjmp(buf))
+		    if (!setjmp(jbuf))
 				{
 				ubasic_run();
 				}

@@ -31,4 +31,6 @@
 - had to rework timer/delay structure to allow music
 - todo.txt started :-)
 
-
+0.17
+- fixed v0.12 error reports broken by v0.15
+- minor changes in display init to prevent flickering when resetting
