@@ -47,7 +47,7 @@
 - fixed XY printing via setxy command
 
 0.21
-- fixed tyos
+- fixed typos
 
 0.22
 - display update should be smoother now
