@@ -91,9 +91,10 @@ void loop_z80_cpm (void);
 void loop_basic (void);
 void loop_userprog(void);
 void boot_animation(void);
-void init_8080_basio (void);
-void loop_8080_basio (void);
+void init_8080_basic (void);
+void loop_8080_basic (void);
 void clr_buffer(void);
+void loop_badge(void);
 
 unsigned char flash_init = 0;
 unsigned char handle_display = 1;
@@ -115,7 +116,7 @@ int main(void)
 		boot_animation();
 	if (flash_init==1)
 		init_first_x_sects(32);
-	stdio_write("\nBelegrade badge version 0.22\n");
+	stdio_write("\nBelegrade badge version 0.23\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - Hackaday BASIC\n");
 	stdio_write("2 - CP/M @ Z80\n");
@@ -142,8 +143,8 @@ int main(void)
 					}			
 				if (strcmp(cmd_line_buff,"3")==0)
 					{
-					init_8080_basio();
-					while (1) loop_8080_basio();
+					init_8080_basic();
+					while (1) loop_8080_basic();
 					}
 				if (strcmp(cmd_line_buff,"4")==0)
 					{
@@ -167,7 +168,22 @@ int main(void)
 		}
 	}
 
-void init_8080_basio (void)
+
+//housekeeping stuff. call this function often
+void loop_badge(void)
+	{
+	if (K_PWR==0)
+		{
+		while (K_PWR==0);
+		wait_ms(100);
+		hw_sleep();
+		wait_ms(30);
+		while (K_PWR==0);
+		wait_ms(300);
+		}
+	}
+
+void init_8080_basic (void)
 	{
 	for (i=0;i<2048;i++) ram[i] = b2_rom[i];
 	for (i=0;i<30;i++) ram[i+0x1000] = ram_init[i];
@@ -175,7 +191,7 @@ void init_8080_basio (void)
 	init_io(IO_BASIC_MODE);
 	}
 
-void loop_8080_basio (void)
+void loop_8080_basic (void)
 	{
 	cpu_error = NONE;
 	cpu();	
@@ -423,18 +439,17 @@ void __ISR(_TIMER_5_VECTOR, ipl3) Timer5Handler(void)
 {
     unsigned char key_temp;
     IFS0bits.T5IF = 0;
+	loop_badge();
     if (handle_display)
-    {
-		LATGbits.LATG3 = 1;
-	tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
-	tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
-	LATGbits.LATG3 = 0;
-    }
+		{
+		tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
+		tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
+		}
     key_temp = keyb_tasks();
     if (key_temp>0)
-    {
-	key_buffer[key_buffer_ptr++] = key_temp;
-    }
+		{
+		key_buffer[key_buffer_ptr++] = key_temp;
+		}
 
 }
 
@@ -444,6 +459,10 @@ void __ISR(_TIMER_1_VECTOR, ipl4) Timer1Handler(void)
     ++ticks;
 }
 
+void __ISR(_EXTERNAL_2_VECTOR, ipl4) Int2Handler(void)
+	{
+	IEC0bits.INT2IE = 0;
+	}
 
 //*****************************************************************************/
 

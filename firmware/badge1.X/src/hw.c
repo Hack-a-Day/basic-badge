@@ -187,6 +187,71 @@ void sound_set_generator (unsigned int period, unsigned char generator)
 		}
 	}
 
+void hw_sleep (void)
+	{
+	T1CONbits.TON = 0;
+	T2CONbits.TON = 0;
+	T3CONbits.TON = 0;
+	T4CONbits.TON = 0;
+	T5CONbits.TON = 0;
+	SPI1CONbits.ON = 0;
+	U3MODEbits.ON = 0;
+	LCD_PWR = 1;
+	LCD_BKLT = 1;
+	LCD_PORT = 0;
+	LCD_DC = 0;
+	LCD_RD = 0;
+	LCD_RES = 0;
+	LCD_WR = 0;
+	GEN_0_PIN = 0;
+	GEN_1_PIN = 0;
+	GEN_2_PIN = 0;
+	TRISBbits.TRISB0 = 0;
+	TRISBbits.TRISB1 = 0;
+	TRISG = 0;
+	TRISGbits.TRISG9 = 1;
+	TRISGbits.TRISG6 = 1;
+	TRISC = 0;
+	LATC = 0;
+	TRISD = 0;
+	LATD = 0;
+	TRISDbits.TRISD9 = 1;
+	TRISDbits.TRISD10 = 1;
+    CNPUDbits.CNPUD10 = 1;
+    CNPUDbits.CNPUD9 = 1;
+	TRISE = 0;
+	LATE = 0;	
+	TRISF = 0;
+	K_R1 = 1;
+	K_R2 = 1;
+	K_R3 = 1;
+	K_R4 = 1;
+	K_R5 = 1;
+	PMD1 = 0xFFFFFFFF;
+	PMD2 = 0xFFFFFFFF;
+	PMD3 = 0xFFFFFFFF;
+	PMD4 = 0xFFFFFFFF;
+	PMD5 = 0xFFFFFFFF;
+	PMD6 = 0xFFFFFFFF;
+	SYSKEY = 0x0;            // Write invalid key to force lock
+	SYSKEY = 0xAA996655;     // Write Key1 to SYSKEY
+	SYSKEY = 0x556699AA;     // Write Key2 to SYSKEY
+	OSCCONSET = 0x10; // set Power-Saving mode to Slee
+	SYSKEY = 0x0; // Write invalid key to force lock
+
+	IFS0bits.INT2IF = 0;
+	IEC0bits.INT2IE = 1;
+	IPC2bits.INT2IP = 4;
+	asm volatile("wait"); 
+	IEC0bits.INT2IE = 0;
+	PMD1 = 0;
+	PMD2 = 0;
+	PMD3 = 0;
+	PMD4 = 0;
+	PMD5 = 0;
+	PMD6 = 0;
+	hw_init();
+	}
 
 void hw_init (void)
 	{
@@ -206,6 +271,8 @@ void hw_init (void)
 	LEDB = 0;
     TRISE = 0;
     TRISG = 0;
+	TRISGbits.TRISG6 = 1;
+	TRISGbits.TRISG9 = 1;
     TRISF = 0;
 	TRISFbits.TRISF5 = 1;
     TRISB = 0x0FFF; 
@@ -230,6 +297,7 @@ void hw_init (void)
 								//SCK is fixed
 	PPSInput(1, U3RX, RPC13);	//RX pin
 	PPSOutput(1, RPC14, U3TX);	//TX pin
+	PPSInput(3, INT2, RPG6);	//power on/off
     PPSLock;
 
 	U3MODEbits.ON = 1;

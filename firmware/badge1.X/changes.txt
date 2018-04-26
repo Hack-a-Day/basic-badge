@@ -52,3 +52,8 @@
 0.22
 - display update should be smoother now
 - fixed bug where empty line in BASIC will throw error
+
+0.23
+- implemented primitive power button function. sleep current isn't that much awesome by now (~1mA), I'll investigate how to decrease it. badge will return to previous state after power up
+
+

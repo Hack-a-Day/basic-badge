@@ -30,6 +30,7 @@
 #define     K_C10        PORTBbits.RB2
 #define     K_SHIFTL    PORTDbits.RD9
 #define     K_SHIFTR    PORTDbits.RD10
+#define		K_PWR		PORTGbits.RG6
 
 #define		SYS_CLK		48000000UL
 #define		PB_CLK		48000000UL
@@ -59,6 +60,8 @@ void hw_init (void);
 void sound_set_note (unsigned char note, unsigned char generator);
 void sound_set_generator (unsigned int period, unsigned char generator);
 void sound_play_notes (unsigned char note1, unsigned char note2, unsigned char note3, unsigned int wait);
+void hw_sleep (void);
+
 
 typedef union
 {
