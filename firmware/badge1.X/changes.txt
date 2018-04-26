@@ -49,4 +49,6 @@
 0.21
 - fixed tyos
 
-
+0.22
+- display update should be smoother now
+- fixed bug where empty line in BASIC will throw error

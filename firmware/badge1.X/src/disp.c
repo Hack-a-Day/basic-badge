@@ -127,30 +127,70 @@ void tft_disp_buffer_refresh_part(unsigned char * buff, unsigned int col, unsign
 
 
 
-void tft_print_char (unsigned char val, unsigned int x, unsigned int y, unsigned int col, unsigned int back)
+inline void tft_print_char (unsigned char val, unsigned int x, unsigned int y, unsigned int col, unsigned int back)
 	{
 	unsigned int fl,i,j;
+	unsigned int c1,c2,c3,b1,b2,b3;
+	c1 = (col>>16)&0xFF;
+	c2 = (col>>8)&0xFF;
+	c3 = (col>>0)&0xFF;
+	b1 = (back>>16)&0xFF;
+	b2 = (back>>8)&0xFF;
+	b3 = (back>>0)&0xFF;
 	tft_set_write_area(x,y,7,11);
 	TFT_24_7789_Write_Command(0x2C);
 	if (val<' ')
 		{
 		for (i=0;i<12;i++)
-			for (j=0;j<8;j++)
-				TFT_24_7789_Write_Data3((back>>16)&0xFF,(back>>8)&0xFF,(back>>0)&0xFF);
+			{
+			TFT_24_7789_Write_Data3(b1,b2,b3);
+			TFT_24_7789_Write_Data3(b1,b2,b3);
+			TFT_24_7789_Write_Data3(b1,b2,b3);
+			TFT_24_7789_Write_Data3(b1,b2,b3);
+			TFT_24_7789_Write_Data3(b1,b2,b3);
+			TFT_24_7789_Write_Data3(b1,b2,b3);
+			TFT_24_7789_Write_Data3(b1,b2,b3);
+			TFT_24_7789_Write_Data3(b1,b2,b3);
+			}
+				
 		}
 	else
 		{
 		for (i=0;i<12;i++)
 			{
 			fl = font[i+12*(val-' ')];
-			for (j=0;j<8;j++)
-				{
-				if (fl&0x80)
-					TFT_24_7789_Write_Data3((col>>16)&0xFF,(col>>8)&0xFF,(col>>0)&0xFF);
-				else
-					TFT_24_7789_Write_Data3((back>>16)&0xFF,(back>>8)&0xFF,(back>>0)&0xFF);
-				fl = fl<<1;
-				}
+			if (fl&0x80)
+				TFT_24_7789_Write_Data3(c1,c2,c3);
+			else
+				TFT_24_7789_Write_Data3(b1,b2,b3);
+			if (fl&0x40)
+				TFT_24_7789_Write_Data3(c1,c2,c3);
+			else
+				TFT_24_7789_Write_Data3(b1,b2,b3);
+			if (fl&0x20)
+				TFT_24_7789_Write_Data3(c1,c2,c3);
+			else
+				TFT_24_7789_Write_Data3(b1,b2,b3);
+			if (fl&0x10)
+				TFT_24_7789_Write_Data3(c1,c2,c3);
+			else
+				TFT_24_7789_Write_Data3(b1,b2,b3);
+			if (fl&0x08)
+				TFT_24_7789_Write_Data3(c1,c2,c3);
+			else
+				TFT_24_7789_Write_Data3(b1,b2,b3);
+			if (fl&0x04)
+				TFT_24_7789_Write_Data3(c1,c2,c3);
+			else
+				TFT_24_7789_Write_Data3(b1,b2,b3);				
+			if (fl&0x02)
+				TFT_24_7789_Write_Data3(c1,c2,c3);
+			else
+				TFT_24_7789_Write_Data3(b1,b2,b3);
+			if (fl&0x01)
+				TFT_24_7789_Write_Data3(c1,c2,c3);
+			else
+				TFT_24_7789_Write_Data3(b1,b2,b3);	
 			}
 		}
 	}
@@ -168,7 +208,7 @@ void tft_fill_area (unsigned int x, unsigned int y, unsigned int xlen, unsigned 
     }
 }
 
-void tft_set_write_area (unsigned int x, unsigned int y, unsigned int xlen, unsigned int ylen)
+inline void tft_set_write_area (unsigned int x, unsigned int y, unsigned int xlen, unsigned int ylen)
 	{
 	TFT_24_7789_Write_Command(0x002A);
 	TFT_24_7789_Write_Data((x>>8)&0xFF);
@@ -192,16 +232,11 @@ LCD_DC = 0;
 LCD_WR_CLR;
 LCD_PORT = command;
 LCD_WR_SET;
+LCD_DC = 1;
 }
 /*******************************************************************************/
 inline void TFT_24_7789_Write_Data(unsigned int data1)
 {
-LCD_DC = 1;
-//LCD_WR = 0;
-//LCD_PORT = data1;
-//LCD_WR = 1;
-
-//LCD_DC_SET;
 LCD_WR_CLR;
 LCD_PORT = data1;
 LCD_WR_SET;
@@ -209,9 +244,6 @@ LCD_WR_SET;
 
 inline void TFT_24_7789_Write_Data3(unsigned int data1,unsigned int data2, unsigned int data3)
 {
-LCD_DC = 1;
-
-//LCD_DC_SET;
 LCD_WR_CLR;
 LCD_PORT = data1;
 LCD_WR_SET;

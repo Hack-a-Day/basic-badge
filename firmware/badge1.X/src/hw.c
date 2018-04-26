@@ -255,7 +255,7 @@ void hw_init (void)
 
   
 	
-    PR5 = 10 *(FPB / 64 / 1000);
+    PR5 = 12 *(FPB / 64 / 1000);
     T5CONbits.TCKPS = 0b110;
     T5CONbits.TON = 1;
     IEC0bits.T5IE = 1;	

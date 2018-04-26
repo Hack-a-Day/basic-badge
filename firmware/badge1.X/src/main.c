@@ -115,7 +115,7 @@ int main(void)
 		boot_animation();
 	if (flash_init==1)
 		init_first_x_sects(32);
-	stdio_write("\nBelegrade badge version 0.21\n");
+	stdio_write("\nBelegrade badge version 0.22\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - Hackaday BASIC\n");
 	stdio_write("2 - CP/M @ Z80\n");
@@ -380,21 +380,23 @@ unsigned char cmd_exec (char * cmd)
 	    }
 	else 
 	    {
-	    sprintf(tprog,"10 %s\n",cmd);
-	    ubasic_init(tprog);
-	    do 
-		    {
-		    if (!setjmp(jbuf))
+		if (strlen(cmd)>0)
+			{
+			sprintf(tprog,"10 %s\n",cmd);
+			ubasic_init(tprog);
+			do 
 				{
-				ubasic_run();
-				}
-			else
-				{
-				stdio_write("BASIC error\n");
-				break;
-				}
-		    } 	while(!ubasic_finished());	
-	    
+				if (!setjmp(jbuf))
+					{
+					ubasic_run();
+					}
+				else
+					{
+					stdio_write("BASIC error\n");
+					break;
+					}
+				} 	while(!ubasic_finished());	
+			}		
 	    }
 	}
     
@@ -423,7 +425,10 @@ void __ISR(_TIMER_5_VECTOR, ipl3) Timer5Handler(void)
     IFS0bits.T5IF = 0;
     if (handle_display)
     {
+		LATGbits.LATG3 = 1;
 	tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
+	tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
+	LATGbits.LATG3 = 0;
     }
     key_temp = keyb_tasks();
     if (key_temp>0)

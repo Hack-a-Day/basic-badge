@@ -1,0 +1,15 @@
+PRINT
+IF
+GOTO
+GOSUB
+RETURN
+FOR
+NEXT
+END
+LET
+OUT X not completely implemented yet
+TUNE A,B,C,D - plays tones A, B, C for duration D
+SETXY X,Y - set cursor at X,Y
+TERMT X - set terminal type X
+CLRSCR - clear screen
+WAIT X - wait for X ms
