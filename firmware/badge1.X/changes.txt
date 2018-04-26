@@ -1,0 +1,44 @@
+0.10
+- you can now enter new lines into the source buffer, though for now only appending at the end of program, you can't insert it in the middle - that is high in TODO list
+- help command - writes out help
+- clr command - clears program buffer, so you can write new program
+- first numbered revision, 0.10 now. A lot of revision numbers available up to 1.00
+
+0.11
+-  allow inserting new lines of code anywhere, as well as overwriting previously entered lines.
+
+0.12
+- moved to github
+- allowed deleting line by inserting zero length line at line number
+- interpreter now should fail gracefully, without hard crash, error report isn't much helpful by now
+
+0.13
+- a lot of new things
+- Z80 interpreter from Udo Munk added, along with CP/M binaries and my CP/M BIOS tailored for virtual machines like this one. I can now run CP/M on the badge. There is 50kB RAM disk and 128kB ROM disk, containing useful stuff like ED, DDT, XMODEM, UNARC or MBASIC. I can send new binaries to CP/M machine via serial port and XMODEM protocol. Optionally, those can be ARC-ed on PC and un-ARC-ed on CP/M machine. Lots of possibilities to come with this one. FLASH disks don't work by now, probably in next version.
+- BASIC interpreter got some more tweaks and it's now better separated from other tasks. Major cleanup/separation of sources is needed, though.
+- primitive menu on start, allowing to choose either BASIC interpreter or CP/M machine.
+
+0.14
+- half of FLASH memory now appears as four disk drives by 512k each in CP/M system. I downloaded ZORK via XMODEM and spent a while playing it.
+
+0.15
+- local display terminal is now accepting VT100 escape sequences. Turbo Pascal or Wordstar under CP/M should now run with sensible output on display, should be better for everything else, too. 
+- fixed bug where first command after starting BASIC interpreter was be mangled, resulting in funny behavior
+
+0.16
+- merged pull request from Mike
+- music generator, available from BASIC interpreter
+- had to rework timer/delay structure to allow music
+- todo.txt started :-)
+
+0.17
+- fixed v0.12 error reports broken by v0.15
+- minor changes in display init to prevent flickering when resetting
+
+0.18
+- fixed timer issue
+- added some BASIC words: termt, setxy, clrscr, wait
+- added binary of "TINY BASIC FOR INTEL 8080", it runs fine on Z80 emulator, modified IO routines for this one
+
+0.19
+- minor changes
