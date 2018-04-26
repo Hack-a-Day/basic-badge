@@ -76,6 +76,7 @@ struct
 unsigned char CHAR;
 }kspec_var; 
 
+#define	NEWLINE	0x0A
 #define	K_ENT	0x0A
 #define	K_ECR	0x0D
 
@@ -96,6 +97,7 @@ unsigned char CHAR;
 #define	STDIO_LOCAL	0
 #define	STDIO_TTY1	1
 
+void init_io(unsigned char mode);
 unsigned char stdio_write (unsigned char * data);
 unsigned char stdio_c (unsigned char data);
 unsigned char stdio_in (unsigned char block);

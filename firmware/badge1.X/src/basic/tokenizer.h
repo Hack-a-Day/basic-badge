@@ -72,6 +72,10 @@ enum {
   TOKENIZER_CR,
   TOKENIZER_OUT,
   TOKENIZER_TUNE,
+  TOKENIZER_TERMT,
+  TOKENIZER_SETXY,
+  TOKENIZER_CLRSCR,
+  TOKENIZER_WAIT,
 };
 
 void tokenizer_init(const char *program);

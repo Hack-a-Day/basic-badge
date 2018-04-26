@@ -2,7 +2,7 @@
 #define	USE_ROMDISK
 //#define		REMOVE_MAINLOOP
 
-#define	RAMDISK_SIZE	51200
+#define	RAMDISK_SIZE	41200
 
 
 //#define	PB_CLK	80000					//xkHz
@@ -60,3 +60,6 @@ void fl_read_128(unsigned int sector,unsigned char * data);
 void fl_write_128(unsigned int sector,unsigned char * data);
 void init_first_x_sects (unsigned char i);
 
+
+#define		IO_CPM_MODE		0
+#define		IO_BASIC_MODE	1

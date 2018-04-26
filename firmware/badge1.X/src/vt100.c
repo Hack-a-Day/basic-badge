@@ -42,6 +42,20 @@ extern char disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 volatile uint8_t buf[MAX_BUF];
 
 
+void write_direct(unsigned char x, unsigned char y, unsigned char * str)
+	{
+	while (*str!=0)
+		{
+		disp_buffer[y][x] = *str++;
+		x++;
+		if (x==DISP_BUFFER_WIDE)
+			{
+			x=0;
+			y++;
+			}
+		}
+	}
+
 void term_init (void)
 	{
 	video_reset_margins();

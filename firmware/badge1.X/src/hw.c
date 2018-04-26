@@ -268,7 +268,7 @@ void hw_init (void)
     IEC0bits.T4IE = 1;	
     IPC4bits.T4IP = 6;
 
-    PR1 = 1500-1;
+    PR1 = (1*(FPB / 64 / 1000)) - 1;
     T1CONbits.TCKPS = 0b10;	//Prescale 64 makes 1ms = 750 ticks at 48 MHz
     T1CONbits.TON = 1;
     IEC0bits.T1IE = 1;

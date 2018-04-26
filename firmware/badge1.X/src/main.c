@@ -7,73 +7,28 @@
 #include <ctype.h>
 #include "hw.h"
 #include <setjmp.h>
-
 #include "Z80/sim.h"
 #include "Z80/simglb.h"
 #include "Z80/hwz.h"
-
 #include "vt100.h"
-
 #include "splash.h"
 
-/* parameters for tune - note1(see below), note2(see below), note3(see below), duration (in ms)
- * 0 - no sound
- * 1 - G0
- * 2 - G#1
- * 3 - A1 (55Hz)
- * ...
- * 12 - F#1
- * 13 - G1
- * 14 - G$1
- * 15 - A2 (110Hz)
- * ...
- * 39 - A4 (440Hz)
- * ...
- * 61 - G6
- * 62 - G#6
- * 63 - A6 (1760Hz)
- */
 
 char bprog[1000] =
-"100 tune 25,0,44,120\n\
-102 tune 32,41,44,100\n\
-104 tune 0,0,44,20\n\
-106 tune 32,41,44,100\n\
-108 tune 0,0,44,20\n\
-110 tune 20,0,41,120\n\
-112 tune 29,37,41,100\n\
-114 tune 0,0,41,20\n\
-116 tune 29,37,41,100\n\
-118 tune 29,37,41,20\n\
-120 tune 0,0,37,120\n\
-122 tune 17,0,37,100\n\
-124 tune 25,32,37,20\n\
-126 tune 0,0,37,100\n\
-128 tune 25,32,37,20\n\
-130 tune 0,0,32,120\n\
-132 tune 13,0,32,100\n\
-134 tune 25,29,32,20\n\
-136 tune 0,0,32,100\n\
-138 tune 25,29,32,20\n\
-140 tune 0,0,34,120\n\
-150 tune 0,0,36,120\n\
-160 tune 0,0,37,120\n\
-170 tune 0,0,34,240\n\
-180 tune 0,0,37,120\n\
-190 tune 0,0,32,600\n\
-200 tune 0,0,0,120\n\
-210 tune 0,0,39,360\n\
-220 tune 0,0,44,360\n\
-230 tune 0,0,41,360\n\
-240 tune 0,0,37,360\n\
-250 tune 0,0,34,120\n\
-260 tune 0,0,36,120\n\
-270 tune 0,0,37,120\n\
-280 tune 0,0,39,240\n\
-290 tune 0,0,41,120\n\
-300 tune 0,0,39,480\n\
-310 tune 0,0,0,5\n\
+"\
+10 print 123\n\
+20 print 234\n\
+21 let a=9\n\
+22 wait 1000\n\
+30 termt 0\n\
+31 clrscr\n\
+40 setxy a,a\n\
+50 print 567\n\
+60 setxy 2,2\n\
+70 print 1234\n\
+71 wait 1000\n\
 ";
+
 /*
 char bprog[1000] =
 "10 gosub 100\n\
@@ -126,12 +81,14 @@ extern unsigned char flash_buff[4096];
 extern const unsigned char ram_image[65536];
 extern unsigned char ram_disk[RAMDISK_SIZE];
 
-void init_z80 (void);
+void init_z80_cpm (void);
 void init_basic (void);
 void init_userprog(void);
-void loop_z80 (void);
+void init_8080_basic(void);
+void loop_z80_cpm (void);
 void loop_basic (void);
 void loop_userprog(void);
+void loop_8080_basic(void);
 
 void clr_buffer(void);
 
@@ -139,34 +96,34 @@ unsigned char flash_init = 0;
 unsigned char handle_display = 1;
 
 extern volatile uint16_t bufsize;
-
 extern volatile uint32_t ticks;	// millisecond timer incremented in ISR
 
-volatile int a,b,c,d;
-
+extern const unsigned char b2_rom[2048];
+extern const unsigned char ram_init [20];
 
 int main(void)
-{
+	{
     ticks = 0;
 	hw_init();
 	stdio_src = STDIO_LOCAL;
 //	stdio_src = STDIO_TTY1;
 	term_init();
-	
+
 	if (flash_init==1)
 		init_first_x_sects(32);
-	stdio_write("\nBelegrade badge version 0.17\n");
+	stdio_write("\nBelegrade badge version 0.18\n");
 	stdio_write("Type your choice and hit ENTER\n");
-	stdio_write("1 - BASIC interpreter\n");
+	stdio_write("1 - Hackaday BASIC\n");
 	stdio_write("2 - CP/M @ Z80\n");
-	stdio_write("3 - User Program\n");
+	stdio_write("3 - Tiny Basic @ 8080\n");
+	stdio_write("4 - User Program\n");
 	while (1)
 		{
 		get_stat = stdio_get(sstr);
 		if (get_stat!=0)
 			{
 			stdio_write(sstr);	
-			if (sstr[0]==0x0A) 
+			if (sstr[0]==NEWLINE) 
 				{
 				cmd_line_buff[cmd_line_pointer] = 0;
 				if (strcmp(cmd_line_buff,"1")==0)
@@ -176,10 +133,15 @@ int main(void)
 					}
 				if (strcmp(cmd_line_buff,"2")==0)
 					{
-					init_z80();
-					while (1) loop_z80();
+					init_z80_cpm();
+					while (1) loop_z80_cpm();
 					}			
 				if (strcmp(cmd_line_buff,"3")==0)
+					{
+					init_8080_basio();
+					while (1) loop_8080_basio();
+					}
+				if (strcmp(cmd_line_buff,"4")==0)
 					{
 					init_userprog();
 					while (1) loop_userprog();
@@ -190,7 +152,7 @@ int main(void)
 				len = strlen(sstr);
 				for (i=0;i<len;i++)
 					{
-					if (sstr[i]>0x1F) cmd_line_buff[cmd_line_pointer++] = sstr[i];
+					if (sstr[i]>=' ') cmd_line_buff[cmd_line_pointer++] = sstr[i];
 					else if (sstr[i]==BACKSPACE)
 						{
 						if (cmd_line_pointer>0) cmd_line_buff[cmd_line_pointer--]=0;
@@ -201,16 +163,31 @@ int main(void)
 		}
 	}
 
-void init_z80 (void)
+void init_8080_basio (void)
+	{
+	for (i=0;i<2048;i++) ram[i] = b2_rom[i];
+	for (i=0;i<20;i++) ram[i+0x1000] = ram_init[i];
+	wrk_ram	= PC = STACK = ram;
+	init_io(IO_BASIC_MODE);
+	}
+
+void loop_8080_basio (void)
+	{
+	cpu_error = NONE;
+	cpu();	
+	}
+
+void init_z80_cpm (void)
 	{
 #ifdef	USE_RAM_IMAGE	
 	for (i=0;i<65536;i++) ram[i] = ram_image[i];
 #endif	
 	for (i=0;i<51200;i++) ram_disk[i] = 0xE5;
 	wrk_ram	= PC = STACK = ram;
+	init_io(IO_CPM_MODE);
 	}
 
-void loop_z80 (void)
+void loop_z80_cpm (void)
 	{
 	cpu_error = NONE;
 	cpu();	
@@ -235,7 +212,7 @@ void loop_basic (void)
 	if (get_stat!=0)
 	    {
 	    stdio_write(sstr);	
-	    if (sstr[0]==0x0A) 
+	    if (sstr[0]==NEWLINE) 
 			{
 			cmd_line_buff[cmd_line_pointer] = 0;
 			cmd_exec (cmd_line_buff);
@@ -248,7 +225,7 @@ void loop_basic (void)
 		len = strlen(sstr);
 		for (i=0;i<len;i++)
 		    {
-		    if (sstr[i]>0x1F) cmd_line_buff[cmd_line_pointer++] = sstr[i];
+		    if (sstr[i]>=' ') cmd_line_buff[cmd_line_pointer++] = sstr[i];
 		    else if (sstr[i]==BACKSPACE)
 				{
 				if (cmd_line_pointer>0) 

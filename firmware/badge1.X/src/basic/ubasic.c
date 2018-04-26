@@ -70,6 +70,9 @@ static int variables[MAX_VARNUM];
 
 static int ended;
 
+unsigned char term_vt100=1;
+unsigned int term_x=0,term_y=0;
+
 static int expr(void);
 static void line_statement(void);
 static void statement(void);
@@ -81,6 +84,7 @@ ubasic_init(const char *program)
   for_stack_ptr = gosub_stack_ptr = 0;
   tokenizer_init(program);
   ended = 0;
+  term_vt100=1;
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -281,7 +285,10 @@ char str_out[40];
     }
   } while(tokenizer_token() != TOKENIZER_CR &&
 	  tokenizer_token() != TOKENIZER_ENDOFINPUT);
-  stdio_write(str_out);
+  if (term_vt100==1)
+	stdio_write(str_out);
+  else
+	write_direct(term_x,term_y,str_out);
   DEBUG_PRINTF("End of print\n");
   tokenizer_next();
 }
@@ -453,6 +460,47 @@ int tone1,tone2,tone3,duration;
 	tokenizer_next();
 }
 /*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+static void
+setxy_statement(void)
+{
+	accept(TOKENIZER_SETXY);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) term_x =  expr();
+	accept(TOKENIZER_COMMA);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) term_y =  expr();
+	tokenizer_next();
+}
+/*---------------------------------------------------------------------------*/
+static void
+termt_statement(void)
+{
+int type;
+	accept(TOKENIZER_TERMT);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) type =  expr();
+	if (type==0) term_vt100 = 0;
+	else term_vt100 = 1;
+	tokenizer_next();
+}
+/*---------------------------------------------------------------------------*/
+static void
+clrscr_statement(void)
+{
+int type;
+	accept(TOKENIZER_CLRSCR);
+	video_clrscr();
+	tokenizer_next();
+}
+/*---------------------------------------------------------------------------*/
+static void
+wait_statement(void)
+{
+int time;
+	accept(TOKENIZER_WAIT);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) time =  expr();
+	wait_ms(time);
+	tokenizer_next();
+}
+/*---------------------------------------------------------------------------*/
 static void
 statement(void)
 {
@@ -497,6 +545,18 @@ statement(void)
   case TOKENIZER_VARIABLE:
     let_statement();
     break;
+  case TOKENIZER_SETXY:
+    setxy_statement();
+    break;
+  case TOKENIZER_TERMT:
+    termt_statement();
+    break;
+  case TOKENIZER_CLRSCR:
+    clrscr_statement();
+    break;
+  case TOKENIZER_WAIT:
+    wait_statement();
+    break;	
   default:
     sprintf(err_msg,"statement(): not implemented %d\n", token);
 	stdio_write(err_msg);

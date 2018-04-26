@@ -34,3 +34,8 @@
 0.17
 - fixed v0.12 error reports broken by v0.15
 - minor changes in display init to prevent flickering when resetting
+
+0.18
+- fixed timer issue
+- added some BASIC words: termt, setxy, clrscr, wait
+- added binary of "TINY BASIC FOR INTEL 8080", it runs fine on Z80 emulator, modified IO routines for this one

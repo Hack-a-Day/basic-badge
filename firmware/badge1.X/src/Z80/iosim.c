@@ -35,6 +35,7 @@
 #include "hwz.h"
 #include "../hw.h"
 
+unsigned char iosim_mode;
 
 /*
  *	This function is to initiate the I/O devices.
@@ -45,9 +46,9 @@
  *	unused port with an error trap handler, so that
  *	simulation stops at I/O on the unused ports.
  */
-void init_io()
+void init_io(unsigned char mode)
 {
-
+iosim_mode = mode;
 }
 
 /*
@@ -69,42 +70,60 @@ BYTE adr;
 {
 char sstr[3];
 unsigned char test,test2;
-if (adr==0x01)	
-	{								//const
-//	return rx_sta();
-	return stdio_get_state();
-	}
-if (adr==0x02)						//conin
-	{
-	while (stdio_get_state()==0);
-	stdio_get(sstr);
-	return sstr[0];
-	}
-if (adr==0x07)
-	{
-	return read_disk_byte();
-	}
+if (iosim_mode==IO_CPM_MODE)
+	{	
+	if (adr==0x01)	
+		{								//const
+	//	return rx_sta();
+		return stdio_get_state();
+		}
+	if (adr==0x02)						//conin
+		{
+		while (stdio_get_state()==0);
+		stdio_get(sstr);
+		return sstr[0];
+		}
+	if (adr==0x07)
+		{
+		return read_disk_byte();
+		}
 
-if (adr==0x0A)						//reader device
-	{
-//	while (rx_sta()==0x00);
-//	return rx_read();
-	}
+	if (adr==0x0A)						//reader device
+		{
+	//	while (rx_sta()==0x00);
+	//	return rx_read();
+		}
 
-if (adr==0x68)
-	{
-//	return rxm_read();
-	return rx_read();
+	if (adr==0x68)
+		{
+	//	return rxm_read();
+		return rx_read();
+		}
+	if (adr==0x6D)
+		{
+		test=0x20;
+		//if (rxm_sta()==0xFF) test = test|0x01;
+		if (rx_sta()==0xFF) test = test|0x01;
+		return test;
+		}
 	}
-if (adr==0x6D)
+if (iosim_mode==IO_BASIC_MODE)
 	{
-	test=0x20;
-	//if (rxm_sta()==0xFF) test = test|0x01;
-	if (rx_sta()==0xFF) test = test|0x01;
-	return test;
+//	IN 0 returns serial status: 0x02 for no data on input buffer, 0x22 means data are available
+//  IN 1 reads data from serial port
+	if (adr==0x00)	
+		{		
+		if (stdio_get_state()==0)
+			return 0x02;
+		else
+			return 0x22;
+		}	
+	if (adr==0x01)	
+		{		
+		stdio_get(sstr);
+		return sstr[0];
+		}
 	}
-
-
 }
 
 /*
@@ -116,43 +135,53 @@ BYTE io_out(adr, data)
 BYTE adr, data;
 {
 unsigned char test;
-if (adr==0x03)						//concout device
-	{
-	stdio_c(data);
+if (iosim_mode==IO_CPM_MODE)
+	{		
+	if (adr==0x03)						//concout device
+		{
+		stdio_c(data);
+		}
+	if (adr==0x04)
+		{
+		set_drive(data);
+		}
+	if (adr==0x05)
+		{
+		set_track(data);
+		}
+	if (adr==0x06)
+		{
+		set_sector(data);
+		}
+	if (adr==0x08)
+		{
+		write_disk_byte(data);
+		}
+	if (adr==0x09)					//punch device
+		{
+	//	tx_write(data);
+		}
+	if (adr==0x0B)					//list device
+		{
+	//	tx_write(data);
+		}
+	if (adr==0x68)
+		{
+		tx_write(data);
+	//	txm_write(data);
+		}
+
+	if (adr==0xFF)
+		{
+		reload_cpm_warm();
+		}
 	}
-if (adr==0x04)
+if (iosim_mode==IO_BASIC_MODE)
 	{
-	set_drive(data);
-	}
-if (adr==0x05)
-	{
-	set_track(data);
-	}
-if (adr==0x06)
-	{
-	set_sector(data);
-	}
-if (adr==0x08)
-	{
-	write_disk_byte(data);
-	}
-if (adr==0x09)					//punch device
-	{
-//	tx_write(data);
-	}
-if (adr==0x0B)					//list device
-	{
-//	tx_write(data);
-	}
-if (adr==0x68)
-	{
-	tx_write(data);
-//	txm_write(data);
-	}
-	
-if (adr==0xFF)
-	{
-	reload_cpm_warm();
+	if (adr==0x01)						//concout device
+		{
+		stdio_c(data);
+		}	
 	}
 }
 

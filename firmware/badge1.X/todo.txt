@@ -9,6 +9,5 @@
 - decrease RAM usage - shrink Z80 RAM disk, script to rebuild Z80 CP/M sources
 - code restructure
 - code cleanup
-- add https://github.com/maly/arduino8080basic - this should be easy, there is already Z80 virtual machine on board
 
 
