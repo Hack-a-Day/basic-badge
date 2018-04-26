@@ -46,4 +46,7 @@
 0.20
 - fixed XY printing via setxy command
 
+0.21
+- fixed tyos
+
 

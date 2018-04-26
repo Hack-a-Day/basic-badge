@@ -282,7 +282,7 @@ void hw_init (void)
 	
     TFT_24_7789_Init();
 	tft_fill_area(0,0,320,240,0);	//fill with black color
-	wait_ms(40);					//wait a moment to avoid flicker
+	wait_ms(80);					//wait a moment to avoid flicker
 	LCD_BKLT = 0;					//turn backlight on
 	fl_rst_pb();	
 	}

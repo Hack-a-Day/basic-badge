@@ -115,7 +115,7 @@ int main(void)
 		boot_animation();
 	if (flash_init==1)
 		init_first_x_sects(32);
-	stdio_write("\nBelegrade badge version 0.19\n");
+	stdio_write("\nBelegrade badge version 0.21\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - Hackaday BASIC\n");
 	stdio_write("2 - CP/M @ Z80\n");
