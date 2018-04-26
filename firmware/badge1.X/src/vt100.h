@@ -138,5 +138,5 @@ static void _video_scrollup_lin(unsigned char lin);
 static void _video_scrolldown_lin(unsigned char line);
 
 
-void write_direct(unsigned char x, unsigned char y, unsigned char * str);
+void write_direct(unsigned int * x, unsigned int * y, unsigned char * str);
 void term_init (void);

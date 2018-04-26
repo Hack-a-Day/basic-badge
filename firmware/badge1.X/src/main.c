@@ -14,7 +14,7 @@
 #include "splash.h"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
-#define SHOW_SPLASH	1
+#define SHOW_SPLASH	0
 
 char bprog[1000] =
 "\
@@ -25,7 +25,8 @@ char bprog[1000] =
 30 termt 0\n\
 31 clrscr\n\
 40 setxy a,a\n\
-50 print 567\n\
+50 print 4567\n\
+50 print 89\n\
 60 setxy 2,2\n\
 70 print 1234\n\
 71 wait 1000\n\
@@ -114,7 +115,7 @@ int main(void)
 		boot_animation();
 	if (flash_init==1)
 		init_first_x_sects(32);
-	stdio_write("\nBelegrade badge version 0.18\n");
+	stdio_write("\nBelegrade badge version 0.19\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - Hackaday BASIC\n");
 	stdio_write("2 - CP/M @ Z80\n");

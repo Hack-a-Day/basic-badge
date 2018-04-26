@@ -288,7 +288,7 @@ char str_out[40];
   if (term_vt100==1)
 	stdio_write(str_out);
   else
-	write_direct(term_x,term_y,str_out);
+	write_direct(&term_x,&term_y,str_out);
   DEBUG_PRINTF("End of print\n");
   tokenizer_next();
 }

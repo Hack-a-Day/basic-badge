@@ -42,3 +42,8 @@
 
 0.19
 - minor changes
+
+0.20
+- fixed XY printing via setxy command
+
+

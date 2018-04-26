@@ -42,18 +42,23 @@ extern char disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 volatile uint8_t buf[MAX_BUF];
 
 
-void write_direct(unsigned char x, unsigned char y, unsigned char * str)
+void write_direct(unsigned int * x, unsigned int * y, unsigned char * str)
 	{
-	while (*str!=0)
+	unsigned int xt,yt;
+	xt = *x;
+	yt = *y;
+	while (*str>=' ')
 		{
-		disp_buffer[y][x] = *str++;
-		x++;
-		if (x==DISP_BUFFER_WIDE)
+		disp_buffer[yt][xt] = *str++;
+		xt++;
+		if (xt==DISP_BUFFER_WIDE)
 			{
-			x=0;
-			y++;
+			xt=0;
+			yt++;
 			}
 		}
+	*x = xt;
+	*y = yt;
 	}
 
 void term_init (void)
