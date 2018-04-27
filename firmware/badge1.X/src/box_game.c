@@ -1,13 +1,4 @@
-#include "cambadge.h"
-#include "globals.h"
-
-/*
- * TODO: Fix 8-bit color in 3595_LCD.c (seems to be backwards??)
- * 			http://en.wikipedia.org/wiki/8-bit_color
- *
- * TODO: Clean this place up!
- */
-
+#include "hw.h"
 
 /*
 Program flow:
@@ -46,8 +37,8 @@ Program flow:
 
 #define array_size (((BOX_board_bottom+8)/8) * (BOX_board_right + 1))
 
-#define default_fg_color	primarycol[1]
-#define default_bg_color	primarycol[0]
+#define default_fg_color	#FF0000
+#define default_bg_color	#000000
 
 unsigned short *tetrapuzz_cursorbuf = (unsigned short *) &cambuffer_s[128*128];
 
@@ -357,10 +348,11 @@ void BOX_erase(unsigned char X, unsigned char Y)
 }
 
 void BOX_pregame(void)
-{
-  printf(top butcol "EXIT" tabx4 taby4 whi "Click to play");
-  printf(tabx4 taby5 "BadgeTris" butcol bot "<-      Rotate     ->");
-}
+	{
+	//TODO: Clear screen and setup board
+	//printf(top butcol "EXIT" tabx4 taby4 whi "Click to play");
+	//printf(tabx4 taby5 "BadgeTris" butcol bot "<-      Rotate     ->");
+	}
 
 void BOX_start_game(void)
 {
@@ -385,13 +377,14 @@ unsigned char BOX_end_game(void)
 }
 
 void BOX_update_score(void)
-{
-  //add right side boundary
-  plotblock((BOX_multiplier*(BOX_board_right+1)),0,2,128, primarycol[7]);
-  //Update the score on the display
-  printf(tabx14 taby10 "Lines");
-  printf(tabx16 taby11 "%3d", score);
-}
+	{
+	//FIXME: Show score on screen
+	//add right side boundary
+	//plotblock((BOX_multiplier*(BOX_board_right+1)),0,2,128, primarycol[7]);
+	//Update the score on the display
+	//printf(tabx14 taby10 "Lines");
+	//printf(tabx16 taby11 "%3d", score);
+	}
 
 /**********************************
  * End Display specific functions *
