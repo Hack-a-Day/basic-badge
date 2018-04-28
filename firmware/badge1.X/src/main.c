@@ -12,6 +12,7 @@
 #include "Z80/hwz.h"
 #include "vt100.h"
 #include "splash.h"
+#include "tetrapuzz.h"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
@@ -269,6 +270,7 @@ void loop_userprog (void)
     if (get_stat!=0)
     {
 	handle_display = 0; //Shut off auto-scanning of character buffer
+	tetrapuzz();
 	animate_splash();
 	//show_splash();
 	while(stdio_get(sstr) == 0) { ;; }  //wait for button press

@@ -1,13 +1,18 @@
 #indluce "hw.h"
 #include "tetrapuzz.h"
 
+extern volatile uint32_t ticks;
+
 //FIXME: these should probably not be globals
+unsigned long wait_until = ticks+1000;
 unsigned char drop_timer_flag = 0;
 unsigned int state;
 
 void tetrapuzz(unsigned int action)
 	{
 
+	tetrapuzz_init();
+	
 	while(1)
 		{
 		
@@ -27,6 +32,11 @@ void tetrapuzz(unsigned int action)
 		//TODO: There needs to be a delayed loop here
 		//TODO: Service the loop on a non-blocking delay here
 		//if(!tick) return(0); //This is deprecated form camera badge
+		if (ticks > wait_until)
+			{
+			wait_until = ticks+1000;
+			tetrapuzz_loop();
+			}
 		}
 	return(0);
 	}
@@ -68,7 +78,7 @@ void tetrapuzz_pause(void)
 		return(0);
 		}
 	*/
-	return 0
+	return 0;
 	}
 
 void tetrapuzz_gameover(void)

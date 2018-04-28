@@ -7,3 +7,6 @@
 
 void tetrapuzz(unsigned int action);
 void tetrapuzz_init(void);
+void tetrapuzz_loop(void);
+void tetrapuzz_pause(void);
+void tetrapuzz_gameover(void);
