@@ -22,14 +22,7 @@ void tetrapuzz(void)
 		//because it gets called more often than the boxes are dropped
 		BOX_inc_random();
 		
-		//TODO:Service button inputs as necessary
-		/*
-		if(butpress & but1) BOX_lt();
-		if(butpress & but2) BOX_rotate(1);
-		if(butpress & but3) BOX_rt();
-		if(butpress & but5) BOX_dn();
-		if(butpress & powerbut) return(""); // exit with nonzero value to indicate we want to quit
-		*/
+		//Service button inputs as necessary
 		unsigned char get_stat = stdio_get(sstr);
 		if (get_stat!=0)
 			{
@@ -38,9 +31,8 @@ void tetrapuzz(void)
 			if (sstr[0]=='d') {	BOX_rt();	}
 			if (sstr[0]=='s') {	BOX_dn();	}
 			}
-		//TODO: There needs to be a delayed loop here
-		//TODO: Service the loop on a non-blocking delay here
-		//if(!tick) return(0); //This is deprecated form camera badge
+
+		//Service the loop on a non-blocking delay here
 		if (ticks > wait_until)
 			{
 			wait_until = ticks+1000;
@@ -74,7 +66,7 @@ void tetrapuzz_loop(void)
 			//FIXME: print game ending information
 			//printf(tabx14 taby6 "Game");
 			//printf(tabx14 taby7 "Over");
-			state = s_gameover;
+			//state = s_gameover;
 		}
 	}
 
