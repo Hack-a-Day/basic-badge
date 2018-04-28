@@ -43,6 +43,9 @@ void tetrapuzz(void)
  
 void tetrapuzz_init(void)
 	{
+	//Pull TMR1 value for a bit of not-really-but-kinda-random number
+	int timer1val = *(char*)0xBF800610;
+	BOX_seed_random((unsigned char) timer1val&0xF);
 	BOX_pregame();
 	drop_timer_flag = 0;
 	wait_until = ticks+1000;

@@ -1,4 +1,5 @@
 //Prototypes
+void BOX_seed_random(unsigned char);
 void BOX_inc_random(void);
 unsigned char BOX_get_score(void);
 void BOX_draw(unsigned char X, unsigned char Y, unsigned int color);

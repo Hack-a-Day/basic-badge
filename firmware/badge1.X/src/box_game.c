@@ -295,6 +295,11 @@ const unsigned char message4[] = { "Lines:" };
  *   be used.                  *
  *******************************/
 
+void BOX_seed_random(unsigned char seed)
+	{
+	if (seed > 6) random_piece = 0;
+	else random_piece = seed;
+	}
 void BOX_inc_random(void)
 	{
 	if (++random_piece > 6) random_piece = 0;
