@@ -284,6 +284,7 @@ static unsigned char game_over = 0;
 const unsigned char message1[] = { "Tetrapuzz!" };
 const unsigned char message2[] = { "click to start" };
 const unsigned char message3[] = { "Game Over" };
+const unsigned char message4[] = { "Lines:" };
 
 //Functions
 
@@ -359,12 +360,33 @@ void BOX_start_game(void)
 
 void BOX_update_score(void)
 	{
-	//FIXME: Show score on screen
-	//add right side boundary
-	//plotblock((BOX_multiplier*(BOX_board_right+1)),0,2,128, primarycol[7]);
-	//Update the score on the display
-	//printf(tabx14 taby10 "Lines");
-	//printf(tabx16 taby11 "%3d", score);
+	//Show score on screen
+	//FIXME: Make locations and colors #define values
+	
+	unsigned char i = 0;
+	while (message4[i] != 0)
+		{
+		tft_print_char(message4[i],160+(i*8),48,0xFFFFFF,0x000000);
+		++i;
+		}
+	
+	//This hack turns score numbers into a string
+	char mystring[4] = {'0',0,0,0};
+	i=0;
+	unsigned char hundred, ten, one;
+	hundred = score/100;
+	ten = (score%100)/10;
+	one = (score%100)%10;
+	if (hundred) mystring[i++] = hundred+'0';
+	if (ten) mystring[i++] = ten+'0';
+	if (one) mystring[i++] = one+'0';
+	
+	i=0;
+	while (mystring[i] != 0)
+		{
+		tft_print_char(mystring[i],160+(8*8)+(i*8),48,0xFFFFFF,0x000000);
+		++i;
+		}
 	}
 
 /**********************************
