@@ -5,7 +5,7 @@
 
 #define DROPRATE  19
 
-void tetrapuzz(unsigned int action);
+void tetrapuzz(void);
 void tetrapuzz_init(void);
 void tetrapuzz_loop(void);
 void tetrapuzz_pause(void);

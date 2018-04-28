@@ -1,14 +1,14 @@
-#indluce "hw.h"
+#include "hw.h"
 #include "tetrapuzz.h"
 
-extern volatile uint32_t ticks;
+extern volatile unsigned long ticks;
 
 //FIXME: these should probably not be globals
-unsigned long wait_until = ticks+1000;
+unsigned long wait_until;
 unsigned char drop_timer_flag = 0;
 unsigned int state;
 
-void tetrapuzz(unsigned int action)
+void tetrapuzz(void)
 	{
 
 	tetrapuzz_init();
@@ -38,13 +38,13 @@ void tetrapuzz(unsigned int action)
 			tetrapuzz_loop();
 			}
 		}
-	return(0);
 	}
  
 void tetrapuzz_init(void)
 	{
 	BOX_pregame();
 	drop_timer_flag = 0;
+	wait_until = ticks+1000;
 	}
 
 void tetrapuzz_loop(void)
@@ -78,7 +78,6 @@ void tetrapuzz_pause(void)
 		return(0);
 		}
 	*/
-	return 0;
 	}
 
 void tetrapuzz_gameover(void)
@@ -91,5 +90,4 @@ void tetrapuzz_gameover(void)
 		state=s_run;
 	}
 	*/
-	return 0;
 	}

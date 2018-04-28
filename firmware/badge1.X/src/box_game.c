@@ -37,10 +37,10 @@ Program flow:
 
 #define array_size (((BOX_board_bottom+8)/8) * (BOX_board_right + 1))
 
-#define default_fg_color	#FF0000
-#define default_bg_color	#000000
+#define default_fg_color	0xFF0000
+#define default_bg_color	0x000000
 
-unsigned short *tetrapuzz_cursorbuf = (unsigned short *) &cambuffer_s[128*128];
+//unsigned short *tetrapuzz_cursorbuf = (unsigned short *) &cambuffer_s[128*128];
 
 static unsigned char cursor_x, cursor_y;
 
@@ -49,7 +49,7 @@ volatile unsigned char random_piece = 0;	//Used to select a piece "randomly" (bu
 //Prototypes
 void BOX_inc_random(void);
 unsigned char BOX_get_score(void);
-void BOX_draw(unsigned char X, unsigned char Y, unsigned char color);
+void BOX_draw(unsigned char X, unsigned char Y, unsigned int color);
 void BOX_erase(unsigned char X, unsigned char Y);
 void BOX_pregame(void);
 void BOX_start_game(void);
@@ -64,7 +64,7 @@ void BOX_load_reference(unsigned char piece, unsigned char rotation);
 void BOX_rotate(unsigned char direction);
 void BOX_write_piece(void);
 void BOX_clear_piece(void);
-void BOX_rewrite_display(unsigned char fgcolor, unsigned char bgcolor);
+void BOX_rewrite_display(unsigned int fgcolor, unsigned int bgcolor);
 void BOX_update_screen(void);
 void BOX_spawn(void);
 unsigned char BOX_check(signed char X_offset, signed char Y_offset);
@@ -325,27 +325,44 @@ unsigned char BOX_get_score(void) {
   return score;
 }
 
-void BOX_draw(unsigned char X, unsigned char Y, unsigned char color)
-{
-  //Draw box
-  unsigned int row, col;
-  for (row = Y*BOX_multiplier; row < (Y*BOX_multiplier)+BOX_multiplier; row++) {
-    for (col = X*BOX_multiplier; col < (X*BOX_multiplier)+BOX_multiplier; col++) {
-      cambuffer_s[col+(row*(BOX_multiplier*(BOX_board_right+1)))] = default_fg_color; //color;
-    }
-  }
-}
+void BOX_draw(unsigned char X, unsigned char Y, unsigned int color)
+	{
+	//Draw box
+	unsigned char row = Y*BOX_multiplier;
+	unsigned int col = X*BOX_multiplier;
+	
+	tft_fill_area(col, row, BOX_multiplier-1, BOX_multiplier-1, color);
+	
+	/* deprecated
+	for (row = Y*BOX_multiplier; row < (Y*BOX_multiplier)+BOX_multiplier; row++)
+		{
+		for (col = X*BOX_multiplier; col < (X*BOX_multiplier)+BOX_multiplier; col++)
+			{
+			cambuffer_s[col+(row*(BOX_multiplier*(BOX_board_right+1)))] = default_fg_color; //color;
+			}
+		}
+	 */
+	}
 
 void BOX_erase(unsigned char X, unsigned char Y)
-{
-  //Erase box
-  unsigned int row, col;
-  for (row = Y*BOX_multiplier; row < (Y*BOX_multiplier)+BOX_multiplier; row++) {
-    for (col = X*BOX_multiplier; col < (X*BOX_multiplier)+BOX_multiplier; col++) {
-      cambuffer_s[col+(row*(BOX_multiplier*(BOX_board_right+1)))] = default_bg_color;
-    }
-  }
-}
+	{
+	//Erase box
+	unsigned char row = Y*BOX_multiplier;
+	unsigned int col = X*BOX_multiplier;
+	
+	tft_fill_area(col, row, BOX_multiplier-1, BOX_multiplier-1, default_bg_color);
+	
+	/* deprecated
+	unsigned int row, col;
+	for (row = Y*BOX_multiplier; row < (Y*BOX_multiplier)+BOX_multiplier; row++)
+		{
+		for (col = X*BOX_multiplier; col < (X*BOX_multiplier)+BOX_multiplier; col++)
+			{
+			cambuffer_s[col+(row*(BOX_multiplier*(BOX_board_right+1)))] = default_bg_color;
+			}
+		}
+	*/
+	}
 
 void BOX_pregame(void)
 	{
@@ -361,11 +378,13 @@ void BOX_start_game(void)
   
   //Fclear frame buffer
   unsigned int i;
-  for (i=0; i<128*128; i++) cambuffer_s[i] = default_bg_color;
+  
+  tft_fill_area(0, 0, BOX_board_right-1, BOX_board_bottom-1, default_bg_color);
+
    
   for (i=0; i<array_size; i++) { BOX_location[i] = 0x00; }
 
-  BOX_rewrite_display(primarycol[4], primarycol[7]);
+  BOX_rewrite_display(0x00FF00, 0xFFFFFF);
   BOX_spawn();
   BOX_update_score();
 }
@@ -568,9 +587,9 @@ void BOX_clear_piece(void)  //Clears piece from display
   }
 }
 
-void BOX_rewrite_display(unsigned char fgcolor, unsigned char bgcolor)	//Rewrites entire playing area
+void BOX_rewrite_display(unsigned int fgcolor, unsigned int bgcolor)	//Rewrites entire playing area
 {
-  printf(cls);
+  //printf(cls);
   unsigned char cols, rows;
   for (cols=0; cols<=BOX_board_right; cols++)
   {
@@ -583,7 +602,8 @@ void BOX_rewrite_display(unsigned char fgcolor, unsigned char bgcolor)	//Rewrite
 }
 
 void BOX_update_screen(void) {
-  dispimage(0,0,BOX_multiplier*(BOX_board_right+1), 128, img_rgb565, (char *) cambuffer);
+  //dispimage(0,0,BOX_multiplier*(BOX_board_right+1), 128, img_rgb565, (char *) cambuffer);
+	BOX_rewrite_display(default_fg_color, default_bg_color);
 }
 
 void BOX_spawn(void)
@@ -737,7 +757,7 @@ void BOX_line_check(void)
 	  }
   }
 
-  BOX_rewrite_display(primarycol[4], default_bg_color);
+  BOX_rewrite_display(0x00FF00, default_bg_color);
   BOX_update_score();
 }
 
@@ -759,7 +779,7 @@ void BOX_dn(void)
   if (BOX_check(0, 1))
   {
     //Set piece here and spawn a new one
-    BOX_rewrite_display(primarycol[4], default_bg_color);
+    BOX_rewrite_display(0x00FF00, default_bg_color);
     BOX_line_check();
     BOX_spawn();
     BOX_update_score();
