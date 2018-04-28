@@ -445,7 +445,7 @@ void __ISR(_TIMER_5_VECTOR, ipl3) Timer5Handler(void)
     if (handle_display)
 		{
 		tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
-		tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
+		//tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
 		}
     key_temp = keyb_tasks();
     if (key_temp>0)
