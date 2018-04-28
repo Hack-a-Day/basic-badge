@@ -310,6 +310,12 @@ unsigned char BOX_get_score(void)
 	return score;
 	}
 
+void BOX_clearscreen(void)
+	{
+	//Draw black on the display
+	tft_fill_area(0, 0, 319, 239, 0x000000);
+	}
+
 void BOX_draw(unsigned char X, unsigned char Y, unsigned int color)
 	{
 	//Draw box
