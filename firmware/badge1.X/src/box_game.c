@@ -362,17 +362,11 @@ void BOX_update_score(void)
 	{
 	//Show score on screen
 	//FIXME: Make locations and colors #define values
-	
-	unsigned char i = 0;
-	while (message4[i] != 0)
-		{
-		tft_print_char(message4[i],160+(i*8),48,0xFFFFFF,0x000000);
-		++i;
-		}
-	
+	BOX_print_string(message4,160,48,0xFFFFFF,0x000000);
+
 	//This hack turns score numbers into a string
 	char mystring[4] = {'0',0,0,0};
-	i=0;
+	unsigned char i = 0;
 	unsigned char hundred, ten, one;
 	hundred = score/100;
 	ten = (score%100)/10;
@@ -381,10 +375,15 @@ void BOX_update_score(void)
 	if (ten) mystring[i++] = ten+'0';
 	if (one) mystring[i++] = one+'0';
 	
-	i=0;
-	while (mystring[i] != 0)
+	BOX_print_string(mystring, 224,48,0xFFFFFF,0x000000);
+	}
+
+void BOX_print_string(const char * buf, unsigned int x_pixel, unsigned char y_pixel, unsigned int fgcolor, unsigned int bgcolor)
+	{
+	unsigned char i=0;
+	while (buf[i] != 0)
 		{
-		tft_print_char(mystring[i],160+(8*8)+(i*8),48,0xFFFFFF,0x000000);
+		tft_print_char(buf[i],x_pixel+(i*8),y_pixel,fgcolor,bgcolor);
 		++i;
 		}
 	}
