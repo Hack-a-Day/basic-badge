@@ -50,11 +50,12 @@ void tetrapuzz_init(void)
 
 void tetrapuzz_loop(void)
 	{
+	//FIXME: Speed up as more rows are completed
 	unsigned char droplimit;
 	if (BOX_get_score()/4 < DROPRATE) droplimit = DROPRATE - (BOX_get_score()/4);
 	else droplimit = 1;
 
-	if (++drop_timer_flag > droplimit)
+	if (1)//++drop_timer_flag > droplimit)
 		{
 			drop_timer_flag = 0;
 			BOX_dn();
