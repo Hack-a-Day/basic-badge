@@ -9,6 +9,8 @@ unsigned long wait_until;
 unsigned char drop_timer_flag = 0;
 unsigned int state;
 
+char sstr[3];
+
 void tetrapuzz(void)
 	{
 	tetrapuzz_init();
@@ -28,7 +30,14 @@ void tetrapuzz(void)
 		if(butpress & but5) BOX_dn();
 		if(butpress & powerbut) return(""); // exit with nonzero value to indicate we want to quit
 		*/
-		
+		unsigned char get_stat = stdio_get(sstr);
+		if (get_stat!=0)
+			{
+			if (sstr[0]=='w') {	BOX_rotate(1);	}
+			if (sstr[0]=='a') {	BOX_lt();	}
+			if (sstr[0]=='d') {	BOX_rt();	}
+			if (sstr[0]=='s') {	BOX_dn();	}
+			}
 		//TODO: There needs to be a delayed loop here
 		//TODO: Service the loop on a non-blocking delay here
 		//if(!tick) return(0); //This is deprecated form camera badge
