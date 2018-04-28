@@ -1,5 +1,6 @@
 #include "hw.h"
 #include "tetrapuzz.h"
+#include "box_game.h"
 
 extern volatile unsigned long ticks;
 
@@ -10,7 +11,6 @@ unsigned int state;
 
 void tetrapuzz(void)
 	{
-
 	tetrapuzz_init();
 	
 	while(1)
@@ -45,6 +45,7 @@ void tetrapuzz_init(void)
 	BOX_pregame();
 	drop_timer_flag = 0;
 	wait_until = ticks+1000;
+	BOX_start_game();
 	}
 
 void tetrapuzz_loop(void)
