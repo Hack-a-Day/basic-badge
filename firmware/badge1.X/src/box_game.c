@@ -38,6 +38,9 @@ Program flow:
 #define BOX_board_right		9
 //Pixel size of each box
 #define BOX_multiplier          11
+//Pixel offsets from left and top of screen
+#define BOX_xoffset	4
+#define BOX_yoffset 0
 
 #define array_size (((BOX_board_bottom+8)/8) * (BOX_board_right + 1))
 
@@ -307,7 +310,7 @@ void BOX_draw(unsigned char X, unsigned char Y, unsigned int color)
 	unsigned char row = Y*BOX_multiplier;
 	unsigned int col = X*BOX_multiplier;
 	
-	tft_fill_area(col, row, BOX_multiplier-1, BOX_multiplier-1, color);
+	tft_fill_area(col+BOX_xoffset, row+BOX_yoffset, BOX_multiplier-1, BOX_multiplier-1, color);
 	}
 
 void BOX_erase(unsigned char X, unsigned char Y)
@@ -316,7 +319,7 @@ void BOX_erase(unsigned char X, unsigned char Y)
 	unsigned char row = Y*BOX_multiplier;
 	unsigned int col = X*BOX_multiplier;
 	
-	tft_fill_area(col, row, BOX_multiplier-1, BOX_multiplier-1, default_bg_color);
+	tft_fill_area(col+BOX_xoffset, row+BOX_yoffset, BOX_multiplier-1, BOX_multiplier-1, default_bg_color);
 	}
 
 void BOX_pregame(void)
@@ -333,8 +336,13 @@ void BOX_start_game(void)
 
 	unsigned int i;
   
+	//Draw grid area background
 	tft_fill_area(0, 0, BOX_board_right-1, BOX_board_bottom-1, default_bg_color);
-
+	
+	//Draw frame around grid -- this is coded with magic numbers and will need changing if #defines change
+	tft_fill_area(0, 0, 3, 220, 0xFFFFFF);
+	tft_fill_area(0, 220, 117, 3, 0xFFFFFF);
+	tft_fill_area(114, 0, 3, 220, 0xFFFFFF);
    
 	for (i=0; i<array_size; i++) { BOX_location[i] = 0x00; }
 
@@ -544,6 +552,7 @@ void BOX_clear_piece(void)  //Clears piece from display
 void BOX_rewrite_display(unsigned int fgcolor, unsigned int bgcolor)	//Rewrites entire playing area
 	{
 	//printf(cls);
+	
 	unsigned char cols, rows;
 	for (cols=0; cols<=BOX_board_right; cols++)
 		{
@@ -557,7 +566,8 @@ void BOX_rewrite_display(unsigned int fgcolor, unsigned int bgcolor)	//Rewrites 
 
 void BOX_update_screen(void)
 	{
-	BOX_rewrite_display(default_fg_color, default_bg_color);
+	//This function call is not needed when a screen buffer isn't used
+	//BOX_rewrite_display(default_fg_color, default_bg_color);
 	}
 
 void BOX_spawn(void)
