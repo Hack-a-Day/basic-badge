@@ -351,6 +351,18 @@ void BOX_start_game(void)
 	//Draw grid area background
 	tft_fill_area(0, 0, BOX_board_right-1, BOX_board_bottom-1, default_bg_color);
 	
+	tft_set_write_area(0,0,319,239);
+	TFT_24_7789_Write_Command(0x2C);
+	unsigned int patternx, patterny, hue;
+	for (patterny = 0; patterny<240; patterny++)
+		{
+		for (patternx = 0; patternx<320; patternx++)
+			{
+			hue = patternx ^ patterny;
+			TFT_24_7789_Write_Data3(hue,40,hue);
+			}
+		}
+	
 	//Draw frame around grid -- this is coded with magic numbers and will need changing if #defines change
 	tft_fill_area(0, 0, 3, 220, 0xFFFFFF);
 	tft_fill_area(0, 220, 117, 3, 0xFFFFFF);
