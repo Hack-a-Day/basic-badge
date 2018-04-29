@@ -7,6 +7,7 @@ void BOX_draw(unsigned char X, unsigned char Y, unsigned int color);
 void BOX_erase(unsigned char X, unsigned char Y);
 void BOX_pregame(void);
 void BOX_start_game(void);
+void BOX_show_gameover(void);
 unsigned char BOX_end_game(void);
 void BOX_update_score(void);
 void BOX_print_string(const char * buf, unsigned int x_pixel, unsigned char y_pixel, unsigned int fgcolor, unsigned int bgcolor);

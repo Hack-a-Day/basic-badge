@@ -68,11 +68,8 @@ void tetrapuzz_loop(void)
 		}
 	if (BOX_end_game())
 		{
-			//FIXME: print game ending information
-			//printf(tabx14 taby6 "Game");
-			//printf(tabx14 taby7 "Over");
-			//state = s_gameover;
-		BOX_print_string("Game Over", 160,72,0xFFFFFF,0xFF0000);
+		//Print game ending information
+		BOX_show_gameover();
 		//Loop until a button is pushed
 		while (stdio_get(sstr) == 0) {;;}
 		//Start game over

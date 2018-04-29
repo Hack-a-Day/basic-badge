@@ -46,6 +46,13 @@ Program flow:
 #define BOX_FRAMEY				0
 #define BOX_FRAME_THICKNESS		4
 #define BOX_FRAMECOLOR			0xFFFFFF
+//Values for frame around score
+#define BOX_GAMETITLE_Y			30
+#define BOX_GAMEOVER_Y			98
+#define BOX_SCOREBOX_X			178
+#define BOX_SCOREBOX_Y			64
+#define BOX_SCOREBOX_WIDTH		110
+#define BOX_SCOREBOX_HEIGHT		22
 
 #define ARRAY_SIZE (((BOX_BOARD_BOTTOM+8)/8) * (BOX_BOARD_RIGHT + 1))
 
@@ -287,7 +294,7 @@ static unsigned char score = 0;		//Track the number of rows completed
 static unsigned char game_over = 0;
 
 //Messages
-const unsigned char message1[] = { "Tetrapuzz!" };
+const unsigned char message1[] = { "Badgetris!" };
 const unsigned char message2[] = { "click to start" };
 const unsigned char message3[] = { "Game Over" };
 const unsigned char message4[] = { "Lines:" };
@@ -353,10 +360,7 @@ void BOX_start_game(void)
 	game_over = 0;
 
 	unsigned int i;
-  
-	//Draw grid area background
-	//tft_fill_area(0, 0, BOX_BOARD_RIGHT-1, BOX_BOARD_BOTTOM-1, DEFAULT_BG_COLOR);
-	
+ 
 	//Draw fancy background
 	tft_set_write_area(0,0,319,239);
 	TFT_24_7789_Write_Command(0x2C);
@@ -372,17 +376,36 @@ void BOX_start_game(void)
 	
 	//Draw frame around grid
 	tft_fill_area(BOX_FRAMEX, BOX_FRAMEY, BOX_FRAME_THICKNESS-1, BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), BOX_FRAMECOLOR);
-	tft_fill_area(BOX_FRAMEX, BOX_FRAMEY+BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), (BOX_MULTIPLIER*(BOX_BOARD_RIGHT + 1))+(BOX_FRAME_THICKNESS*2), BOX_FRAME_THICKNESS-1, 0xFFFFFF);
-	tft_fill_area(BOX_FRAMEX+(BOX_MULTIPLIER*(BOX_BOARD_RIGHT+1))+BOX_FRAME_THICKNESS, BOX_FRAMEY, BOX_FRAME_THICKNESS, BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), 0xFFFFFF);
+	tft_fill_area(BOX_FRAMEX, BOX_FRAMEY+BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), (BOX_MULTIPLIER*(BOX_BOARD_RIGHT + 1))+(BOX_FRAME_THICKNESS*2)-1, BOX_FRAME_THICKNESS-1, 0xFFFFFF);
+	tft_fill_area(BOX_FRAMEX+(BOX_MULTIPLIER*(BOX_BOARD_RIGHT+1))+BOX_FRAME_THICKNESS, BOX_FRAMEY, BOX_FRAME_THICKNESS-1, BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), 0xFFFFFF);
    
+	//Show game title
+	tft_fill_area(BOX_SCOREBOX_X, BOX_GAMETITLE_Y, BOX_SCOREBOX_WIDTH, BOX_SCOREBOX_HEIGHT, BOX_FRAMECOLOR);
+	tft_fill_area(BOX_SCOREBOX_X+BOX_FRAME_THICKNESS, BOX_GAMETITLE_Y+BOX_FRAME_THICKNESS, BOX_SCOREBOX_WIDTH-(2*BOX_FRAME_THICKNESS), BOX_SCOREBOX_HEIGHT-(2*BOX_FRAME_THICKNESS), DEFAULT_BG_COLOR);
+	BOX_print_string(message1,BOX_SCOREBOX_X+12,BOX_GAMETITLE_Y+BOX_FRAME_THICKNESS+2,0xFFFFFF,DEFAULT_BG_COLOR);
+	
+	//Get score area ready
+	tft_fill_area(BOX_SCOREBOX_X, BOX_SCOREBOX_Y, BOX_SCOREBOX_WIDTH, BOX_SCOREBOX_HEIGHT, BOX_FRAMECOLOR);
+	tft_fill_area(BOX_SCOREBOX_X+BOX_FRAME_THICKNESS, BOX_SCOREBOX_Y+BOX_FRAME_THICKNESS, BOX_SCOREBOX_WIDTH-(2*BOX_FRAME_THICKNESS), BOX_SCOREBOX_HEIGHT-(2*BOX_FRAME_THICKNESS), DEFAULT_BG_COLOR);
+	
+	//Set up blank array
 	for (i=0; i<ARRAY_SIZE; i++) { BOX_location[i] = 0x00; }
 
+	//Show game area (should be blank)
 	BOX_rewrite_display(DEFAULT_FG_COLOR);
 	BOX_spawn();
 	BOX_update_score();
 	}
 
-	unsigned char BOX_end_game(void)
+void BOX_show_gameover(void)
+	{
+	//Show game title
+	tft_fill_area(BOX_SCOREBOX_X, BOX_GAMEOVER_Y, BOX_SCOREBOX_WIDTH, BOX_SCOREBOX_HEIGHT, BOX_FRAMECOLOR);
+	tft_fill_area(BOX_SCOREBOX_X+BOX_FRAME_THICKNESS, BOX_GAMEOVER_Y+BOX_FRAME_THICKNESS, BOX_SCOREBOX_WIDTH-(2*BOX_FRAME_THICKNESS), BOX_SCOREBOX_HEIGHT-(2*BOX_FRAME_THICKNESS), 0xFF0000);
+	BOX_print_string(message3,BOX_SCOREBOX_X+12,BOX_GAMEOVER_Y+BOX_FRAME_THICKNESS+2,0xFFFF00,0xFF0000);
+	}
+
+unsigned char BOX_end_game(void)
 	{
 	//FIXME: What happens when game ends?
 	return game_over;
@@ -392,7 +415,7 @@ void BOX_update_score(void)
 	{
 	//Show score on screen
 	//FIXME: Make locations and colors #define values
-	BOX_print_string(message4,160,48,0xFFFFFF,0x000000);
+	BOX_print_string(message4,BOX_SCOREBOX_X+12,BOX_SCOREBOX_Y+BOX_FRAME_THICKNESS+2,0xFFFFFF,DEFAULT_BG_COLOR);
 
 	//This hack turns score numbers into a string
 	char mystring[4] = {'0',0,0,0};
@@ -405,7 +428,7 @@ void BOX_update_score(void)
 	if (ten) mystring[i++] = ten+'0';
 	if (one) mystring[i++] = one+'0';
 	
-	BOX_print_string(mystring, 224,48,0xFFFFFF,0x000000);
+	BOX_print_string(mystring, BOX_SCOREBOX_X+76,BOX_SCOREBOX_Y+BOX_FRAME_THICKNESS+2,0xFFFFFF,DEFAULT_BG_COLOR);
 	}
 
 void BOX_print_string(const char * buf, unsigned int x_pixel, unsigned char y_pixel, unsigned int fgcolor, unsigned int bgcolor)
