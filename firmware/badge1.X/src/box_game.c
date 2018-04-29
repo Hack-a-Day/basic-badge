@@ -39,10 +39,10 @@ Program flow:
 //Pixel size of each box
 #define BOX_MULTIPLIER          11
 //Pixel offsets from left and top of screen
-#define BOX_XOFFSET	4
+#define BOX_XOFFSET	44
 #define BOX_YOFFSET 0
 //Values for frame around grid
-#define BOX_FRAMEX				0
+#define BOX_FRAMEX				40
 #define BOX_FRAMEY				0
 #define BOX_FRAME_THICKNESS		4
 #define BOX_FRAMECOLOR			0xFFFFFF
@@ -51,6 +51,7 @@ Program flow:
 
 #define DEFAULT_FG_COLOR	0xFF0000
 #define DEFAULT_BG_COLOR	0x000000
+#define DEFAULT_STONE_COLOR	0x00FF00
 
 static unsigned char cursor_x, cursor_y;
 
@@ -354,8 +355,9 @@ void BOX_start_game(void)
 	unsigned int i;
   
 	//Draw grid area background
-	tft_fill_area(0, 0, BOX_BOARD_RIGHT-1, BOX_BOARD_BOTTOM-1, DEFAULT_BG_COLOR);
+	//tft_fill_area(0, 0, BOX_BOARD_RIGHT-1, BOX_BOARD_BOTTOM-1, DEFAULT_BG_COLOR);
 	
+	//Draw fancy background
 	tft_set_write_area(0,0,319,239);
 	TFT_24_7789_Write_Command(0x2C);
 	unsigned int patternx, patterny, hue;
@@ -370,12 +372,12 @@ void BOX_start_game(void)
 	
 	//Draw frame around grid
 	tft_fill_area(BOX_FRAMEX, BOX_FRAMEY, BOX_FRAME_THICKNESS-1, BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), BOX_FRAMECOLOR);
-	tft_fill_area(BOX_FRAMEX, BOX_FRAMEY+BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), BOX_FRAMEX+(BOX_MULTIPLIER*(BOX_BOARD_RIGHT + 1))+(BOX_FRAME_THICKNESS*2), BOX_FRAME_THICKNESS-1, 0xFFFFFF);
+	tft_fill_area(BOX_FRAMEX, BOX_FRAMEY+BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), (BOX_MULTIPLIER*(BOX_BOARD_RIGHT + 1))+(BOX_FRAME_THICKNESS*2), BOX_FRAME_THICKNESS-1, 0xFFFFFF);
 	tft_fill_area(BOX_FRAMEX+(BOX_MULTIPLIER*(BOX_BOARD_RIGHT+1))+BOX_FRAME_THICKNESS, BOX_FRAMEY, BOX_FRAME_THICKNESS, BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), 0xFFFFFF);
    
 	for (i=0; i<ARRAY_SIZE; i++) { BOX_location[i] = 0x00; }
 
-	BOX_rewrite_display(0x00FF00, 0xFFFFFF);
+	BOX_rewrite_display(DEFAULT_FG_COLOR);
 	BOX_spawn();
 	BOX_update_score();
 	}
@@ -598,7 +600,7 @@ void BOX_clear_piece(void)  //Clears piece from display
 		}
 	}
 
-void BOX_rewrite_display(unsigned int fgcolor, unsigned int bgcolor)	//Rewrites entire playing area
+void BOX_rewrite_display(unsigned int fgcolor)	//Rewrites entire playing area
 	{
 	//printf(cls);
 	
@@ -769,7 +771,7 @@ void BOX_line_check(void)
 			}
 		}
 
-	BOX_rewrite_display(0x00FF00, DEFAULT_BG_COLOR);
+	BOX_rewrite_display(DEFAULT_STONE_COLOR);
 	BOX_update_score();
 	}
 
@@ -791,7 +793,7 @@ void BOX_dn(void)
 	if (BOX_check(0, 1))
 		{
 		//Set piece here and spawn a new one
-		BOX_rewrite_display(0x00FF00, DEFAULT_BG_COLOR);
+		BOX_rewrite_display(DEFAULT_STONE_COLOR);
 		BOX_line_check();
 		BOX_spawn();
 		BOX_update_score();

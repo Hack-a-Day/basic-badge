@@ -19,7 +19,7 @@ void BOX_load_reference(unsigned char piece, unsigned char rotation);
 void BOX_rotate(unsigned char direction);
 void BOX_write_piece(void);
 void BOX_clear_piece(void);
-void BOX_rewrite_display(unsigned int fgcolor, unsigned int bgcolor);
+void BOX_rewrite_display(unsigned int fgcolor);
 void BOX_update_screen(void);
 void BOX_spawn(void);
 unsigned char BOX_check(signed char X_offset, signed char Y_offset);
