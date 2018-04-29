@@ -35,7 +35,7 @@ void tetrapuzz(void)
 		//Service the loop on a non-blocking delay here
 		if (ticks > wait_until)
 			{
-			wait_until = ticks+1000;
+			wait_until = ticks+BOX_get_delay();
 			tetrapuzz_loop();
 			}
 		}
@@ -50,22 +50,14 @@ void tetrapuzz_init(void)
 	BOX_clearscreen();
 	BOX_pregame();
 	drop_timer_flag = 0;
-	wait_until = ticks+1000;
+	wait_until = ticks;
 	BOX_start_game();
 	}
 
 void tetrapuzz_loop(void)
 	{
-	//FIXME: Speed up as more rows are completed
-	unsigned char droplimit;
-	if (BOX_get_score()/4 < DROPRATE) droplimit = DROPRATE - (BOX_get_score()/4);
-	else droplimit = 1;
-
-	if (1)//++drop_timer_flag > droplimit)
-		{
-			drop_timer_flag = 0;
-			BOX_dn();
-		}
+	BOX_dn();
+	
 	if (BOX_end_game())
 		{
 		//Print game ending information

@@ -60,6 +60,8 @@ Program flow:
 #define DEFAULT_BG_COLOR	0x000000
 #define DEFAULT_STONE_COLOR	0x00FF00
 
+#define DEFAULT_DROP_DELAY	1000
+
 static unsigned char cursor_x, cursor_y;
 
 volatile unsigned char random_piece = 0;	//Used to select a piece "randomly" (but not really)
@@ -321,6 +323,23 @@ void BOX_inc_random(void)
 unsigned char BOX_get_score(void)
 	{
 	return score;
+	}
+
+unsigned int BOX_get_delay(void)
+	{
+	if (BOX_get_score)
+		{
+		unsigned char level = BOX_get_score()/4;
+		unsigned int dropdelay = DEFAULT_DROP_DELAY;
+		while(level)
+			{
+			dropdelay -= (dropdelay/5);
+			--level;
+			if (dropdelay<200) return 200;	//Keep speed from becoming insane
+			}
+		return dropdelay;
+		}
+	return DEFAULT_DROP_DELAY;
 	}
 
 void BOX_clearscreen(void)
