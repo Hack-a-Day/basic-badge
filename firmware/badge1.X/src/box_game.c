@@ -33,23 +33,24 @@ Program flow:
 ******************************************/
 
 //Total rows-1 (max row-number, zero indexed)
-#define BOX_board_bottom	19
+#define BOX_BOARD_BOTTOM	19
 //Total columns-1 (max column-number, zero indexed)
-#define BOX_board_right		9
+#define BOX_BOARD_RIGHT		9
 //Pixel size of each box
-#define BOX_multiplier          11
+#define BOX_MULTIPLIER          11
 //Pixel offsets from left and top of screen
-#define BOX_xoffset	4
-#define BOX_yoffset 0
+#define BOX_XOFFSET	4
+#define BOX_YOFFSET 0
 //Values for frame around grid
-#define BOX_framex				0
-#define BOX_framey				0
-#define BOX_frame_thickness		4
+#define BOX_FRAMEX				0
+#define BOX_FRAMEY				0
+#define BOX_FRAME_THICKNESS		4
+#define BOX_FRAMECOLOR			0xFFFFFF
 
-#define array_size (((BOX_board_bottom+8)/8) * (BOX_board_right + 1))
+#define ARRAY_SIZE (((BOX_BOARD_BOTTOM+8)/8) * (BOX_BOARD_RIGHT + 1))
 
-#define default_fg_color	0xFF0000
-#define default_bg_color	0x000000
+#define DEFAULT_FG_COLOR	0xFF0000
+#define DEFAULT_BG_COLOR	0x000000
 
 static unsigned char cursor_x, cursor_y;
 
@@ -277,7 +278,7 @@ const unsigned char BOX_reference[7][4][4] = {
 };
 
 //Variables
-unsigned char BOX_location[array_size];
+unsigned char BOX_location[ARRAY_SIZE];
 unsigned char x_loc, y_loc;     //Bottom left index of each piece
 unsigned char cur_piece = 0;	//Index for BOX_reference
 unsigned char rotate = 0;		//Index for piece rotation
@@ -323,19 +324,19 @@ void BOX_clearscreen(void)
 void BOX_draw(unsigned char X, unsigned char Y, unsigned int color)
 	{
 	//Draw box
-	unsigned char row = Y*BOX_multiplier;
-	unsigned int col = X*BOX_multiplier;
+	unsigned char row = Y*BOX_MULTIPLIER;
+	unsigned int col = X*BOX_MULTIPLIER;
 	
-	tft_fill_area(col+BOX_xoffset, row+BOX_yoffset, BOX_multiplier-1, BOX_multiplier-1, color);
+	tft_fill_area(col+BOX_XOFFSET, row+BOX_YOFFSET, BOX_MULTIPLIER-1, BOX_MULTIPLIER-1, color);
 	}
 
 void BOX_erase(unsigned char X, unsigned char Y)
 	{
 	//Erase box
-	unsigned char row = Y*BOX_multiplier;
-	unsigned int col = X*BOX_multiplier;
+	unsigned char row = Y*BOX_MULTIPLIER;
+	unsigned int col = X*BOX_MULTIPLIER;
 	
-	tft_fill_area(col+BOX_xoffset, row+BOX_yoffset, BOX_multiplier-1, BOX_multiplier-1, default_bg_color);
+	tft_fill_area(col+BOX_XOFFSET, row+BOX_YOFFSET, BOX_MULTIPLIER-1, BOX_MULTIPLIER-1, DEFAULT_BG_COLOR);
 	}
 
 void BOX_pregame(void)
@@ -353,7 +354,7 @@ void BOX_start_game(void)
 	unsigned int i;
   
 	//Draw grid area background
-	tft_fill_area(0, 0, BOX_board_right-1, BOX_board_bottom-1, default_bg_color);
+	tft_fill_area(0, 0, BOX_BOARD_RIGHT-1, BOX_BOARD_BOTTOM-1, DEFAULT_BG_COLOR);
 	
 	tft_set_write_area(0,0,319,239);
 	TFT_24_7789_Write_Command(0x2C);
@@ -367,12 +368,12 @@ void BOX_start_game(void)
 			}
 		}
 	
-	//Draw frame around grid -- this is coded with magic numbers and will need changing if #defines change
-	tft_fill_area(BOX_framex, BOX_framey, BOX_frame_thickness-1, BOX_multiplier*(BOX_board_bottom+1), 0xFFFFFF);
-	tft_fill_area(BOX_framex, BOX_framey+BOX_multiplier*(BOX_board_bottom+1), BOX_framex+(BOX_multiplier*(BOX_board_right + 1))+(BOX_frame_thickness*2), BOX_frame_thickness-1, 0xFFFFFF);
-	tft_fill_area(BOX_framex+(BOX_multiplier*(BOX_board_right+1))+BOX_frame_thickness, BOX_framey, BOX_frame_thickness, BOX_multiplier*(BOX_board_bottom+1), 0xFFFFFF);
+	//Draw frame around grid
+	tft_fill_area(BOX_FRAMEX, BOX_FRAMEY, BOX_FRAME_THICKNESS-1, BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), BOX_FRAMECOLOR);
+	tft_fill_area(BOX_FRAMEX, BOX_FRAMEY+BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), BOX_FRAMEX+(BOX_MULTIPLIER*(BOX_BOARD_RIGHT + 1))+(BOX_FRAME_THICKNESS*2), BOX_FRAME_THICKNESS-1, 0xFFFFFF);
+	tft_fill_area(BOX_FRAMEX+(BOX_MULTIPLIER*(BOX_BOARD_RIGHT+1))+BOX_FRAME_THICKNESS, BOX_FRAMEY, BOX_FRAME_THICKNESS, BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), 0xFFFFFF);
    
-	for (i=0; i<array_size; i++) { BOX_location[i] = 0x00; }
+	for (i=0; i<ARRAY_SIZE; i++) { BOX_location[i] = 0x00; }
 
 	BOX_rewrite_display(0x00FF00, 0xFFFFFF);
 	BOX_spawn();
@@ -429,7 +430,7 @@ void BOX_print_string(const char * buf, unsigned int x_pixel, unsigned char y_pi
 unsigned char BOX_loc_return_bit(unsigned char X, unsigned char Y)
 	{
 	//Calculate array index and shift amount
-	unsigned char array_index_offset = ((Y)/8)*(BOX_board_right+1);
+	unsigned char array_index_offset = ((Y)/8)*(BOX_BOARD_RIGHT+1);
 	unsigned char shift_index = (Y)%8;		//How much to shift for our bit mask
 
 	if (BOX_location[X+array_index_offset] & 1<<shift_index) return 1;
@@ -439,7 +440,7 @@ unsigned char BOX_loc_return_bit(unsigned char X, unsigned char Y)
 void BOX_loc_set_bit(unsigned char X, unsigned char Y)
 	{
 	//Calculate array index and shift amount
-	unsigned char array_index_offset = ((Y)/8)*(BOX_board_right+1);
+	unsigned char array_index_offset = ((Y)/8)*(BOX_BOARD_RIGHT+1);
 	unsigned char shift_index = (Y)%8;		//How much to shift for our bit mask
 
 	BOX_location[X+array_index_offset] |= 1<<shift_index;
@@ -448,7 +449,7 @@ void BOX_loc_set_bit(unsigned char X, unsigned char Y)
 void BOX_loc_clear_bit(unsigned char X, unsigned char Y)
 	{
 	//Calculate array index and shift amount
-	unsigned char array_index_offset = ((Y)/8)*(BOX_board_right+1);
+	unsigned char array_index_offset = ((Y)/8)*(BOX_BOARD_RIGHT+1);
 	unsigned char shift_index = (Y)%8;		//How much to shift for our bit mask
 
 	BOX_location[X+array_index_offset] &= ~(1<<shift_index);
@@ -468,13 +469,13 @@ void BOX_store_loc(void)
 	for (temp_col=0; temp_col<4; temp_col++)
 		{
 		//Only if x_loc is not out of bounds
-		 if ((unsigned char)(x_loc+temp_col) <= BOX_board_right)
+		 if ((unsigned char)(x_loc+temp_col) <= BOX_BOARD_RIGHT)
 			{
 			//Step through 4 rows
 			for (temp_row=0; temp_row<4; temp_row++)
 				{
 				//Only if y_loc is not out of bounds
-				if (y_loc-temp_row <= BOX_board_bottom)
+				if (y_loc-temp_row <= BOX_BOARD_BOTTOM)
 					{
 					if (BOX_piece[temp_col] & 1<<(temp_row))	//Checks nibbles in Box_piece array
 						{
@@ -493,13 +494,13 @@ void BOX_clear_loc(void)
 	for (temp_col=0; temp_col<4; temp_col++)
 		{
 		//Only if x_loc is not out of bounds
-		if ((unsigned char)(x_loc+temp_col) <= BOX_board_right)
+		if ((unsigned char)(x_loc+temp_col) <= BOX_BOARD_RIGHT)
 			{
 			//Step through 4 rows
 			for (temp_row=0; temp_row<4; temp_row++)
 				{
 				//Only if y_loc is not out of bounds
-				if (y_loc-temp_row <= BOX_board_bottom)
+				if (y_loc-temp_row <= BOX_BOARD_BOTTOM)
 					{
 					if (BOX_piece[temp_col] & 1<<(temp_row))	//Checks nibbles in Box_piece array
 						{
@@ -570,7 +571,7 @@ void BOX_write_piece(void)  //Writes piece to display
 				if (BOX_piece[i] & 1<<j)
 					{
 					//TODO: change this for different colored playing pieces
-					BOX_draw(x_loc+i, y_loc-j, default_fg_color);
+					BOX_draw(x_loc+i, y_loc-j, DEFAULT_FG_COLOR);
 					}
 				}
 			}
@@ -602,9 +603,9 @@ void BOX_rewrite_display(unsigned int fgcolor, unsigned int bgcolor)	//Rewrites 
 	//printf(cls);
 	
 	unsigned char cols, rows;
-	for (cols=0; cols<=BOX_board_right; cols++)
+	for (cols=0; cols<=BOX_BOARD_RIGHT; cols++)
 		{
-		for (rows=0; rows<=BOX_board_bottom; rows++)
+		for (rows=0; rows<=BOX_BOARD_BOTTOM; rows++)
 			{
 			if(BOX_loc_return_bit(cols,rows)) BOX_draw(cols,rows,fgcolor);
 			else BOX_erase(cols,rows);
@@ -654,14 +655,14 @@ unsigned char BOX_check(signed char X_offset, signed char Y_offset)
 	for (i=0; i<4; i++)
 		{
 		//if out of bounds on the x axis
-		if ((unsigned char)(x_loc+X_offset+i) > BOX_board_right) temp_area[i] = 0x0F;
+		if ((unsigned char)(x_loc+X_offset+i) > BOX_BOARD_RIGHT) temp_area[i] = 0x0F;
 		else
 			{
 			unsigned char j;
 			for (j=0; j<4; j++)
 				{
 				//if we're out of bounds on the y axis
-				if (((unsigned char)(y_loc+Y_offset-j) > BOX_board_bottom) ||
+				if (((unsigned char)(y_loc+Y_offset-j) > BOX_BOARD_BOTTOM) ||
 					(BOX_loc_return_bit((unsigned char)(x_loc+X_offset+i),(unsigned char)(y_loc+Y_offset-j))))
 					{
 					temp_area[i] |= 1<<j;
@@ -688,13 +689,13 @@ void BOX_line_check(void)
 	unsigned char temp_index = 0;		//Index for complete_lines[]
   
 	unsigned char board_rows;
-	for (board_rows=0; board_rows<=BOX_board_bottom; board_rows++)
+	for (board_rows=0; board_rows<=BOX_BOARD_BOTTOM; board_rows++)
 		{
 		unsigned char board_cols=0;
-		while ((board_cols<=BOX_board_right) && (BOX_loc_return_bit(board_cols,board_rows)))
+		while ((board_cols<=BOX_BOARD_RIGHT) && (BOX_loc_return_bit(board_cols,board_rows)))
 			{
 			//Complete row found, record in complete_lines[]
-			if (board_cols == BOX_board_right) complete_lines[temp_index++] = board_rows;
+			if (board_cols == BOX_BOARD_RIGHT) complete_lines[temp_index++] = board_rows;
 			++board_cols;
 			}
 		}
@@ -710,8 +711,8 @@ void BOX_line_check(void)
 	--temp_index;	//This was incremented one too many times earlier, get it back to the proper index.
 
 	//Rewrite BOX_location[] data without completed lines
-	unsigned char read_from_row = BOX_board_bottom;
-	unsigned char write_to_row = BOX_board_bottom;
+	unsigned char read_from_row = BOX_BOARD_BOTTOM;
+	unsigned char write_to_row = BOX_BOARD_BOTTOM;
 
 	//When we have read from all rows, this will be set to 0 and
 	//remaining bits cleared from BOX_location[]
@@ -719,7 +720,7 @@ void BOX_line_check(void)
 
 	//Use variable i to iterate through every row of the board
 	unsigned char i=0;
-	while (i <= BOX_board_bottom)
+	while (i <= BOX_BOARD_BOTTOM)
 		{
 		//If the current row is a complete line
 		if (read_from_row == complete_lines[temp_index])
@@ -730,7 +731,7 @@ void BOX_line_check(void)
 				rows_left_to_read = 0;
 
 				//Change complete_lines[0] so we don't do this again
-				complete_lines[0] = BOX_board_bottom;
+				complete_lines[0] = BOX_BOARD_BOTTOM;
 				}
 			else
 				{
@@ -743,7 +744,7 @@ void BOX_line_check(void)
 			{
 			//Write data to all columns of current row
 			unsigned char col;
-			for (col=0; col<=BOX_board_right; col++)
+			for (col=0; col<=BOX_BOARD_RIGHT; col++)
 				{
 				//If there are rows left to read from, do so.
 				if (rows_left_to_read)
@@ -768,7 +769,7 @@ void BOX_line_check(void)
 			}
 		}
 
-	BOX_rewrite_display(0x00FF00, default_bg_color);
+	BOX_rewrite_display(0x00FF00, DEFAULT_BG_COLOR);
 	BOX_update_score();
 	}
 
@@ -790,7 +791,7 @@ void BOX_dn(void)
 	if (BOX_check(0, 1))
 		{
 		//Set piece here and spawn a new one
-		BOX_rewrite_display(0x00FF00, default_bg_color);
+		BOX_rewrite_display(0x00FF00, DEFAULT_BG_COLOR);
 		BOX_line_check();
 		BOX_spawn();
 		BOX_update_score();
