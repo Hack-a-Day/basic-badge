@@ -41,6 +41,10 @@ Program flow:
 //Pixel offsets from left and top of screen
 #define BOX_xoffset	4
 #define BOX_yoffset 0
+//Values for frame around grid
+#define BOX_framex				0
+#define BOX_framey				0
+#define BOX_frame_thickness		4
 
 #define array_size (((BOX_board_bottom+8)/8) * (BOX_board_right + 1))
 
@@ -364,9 +368,9 @@ void BOX_start_game(void)
 		}
 	
 	//Draw frame around grid -- this is coded with magic numbers and will need changing if #defines change
-	tft_fill_area(0, 0, 3, 220, 0xFFFFFF);
-	tft_fill_area(0, 220, 117, 3, 0xFFFFFF);
-	tft_fill_area(114, 0, 3, 220, 0xFFFFFF);
+	tft_fill_area(BOX_framex, BOX_framey, BOX_frame_thickness-1, BOX_multiplier*(BOX_board_bottom+1), 0xFFFFFF);
+	tft_fill_area(BOX_framex, BOX_framey+BOX_multiplier*(BOX_board_bottom+1), BOX_framex+(BOX_multiplier*(BOX_board_right + 1))+(BOX_frame_thickness*2), BOX_frame_thickness-1, 0xFFFFFF);
+	tft_fill_area(BOX_framex+(BOX_multiplier*(BOX_board_right+1))+BOX_frame_thickness, BOX_framey, BOX_frame_thickness, BOX_multiplier*(BOX_board_bottom+1), 0xFFFFFF);
    
 	for (i=0; i<array_size; i++) { BOX_location[i] = 0x00; }
 
