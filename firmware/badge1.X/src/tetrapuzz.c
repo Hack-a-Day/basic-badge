@@ -26,10 +26,10 @@ void tetrapuzz(void)
 		unsigned char get_stat = stdio_get(sstr);
 		if (get_stat!=0)
 			{
-			if (sstr[0]=='w') {	BOX_rotate(1);	}
-			if (sstr[0]=='a') {	BOX_lt();	}
-			if (sstr[0]=='d') {	BOX_rt();	}
-			if (sstr[0]=='s') {	BOX_dn();	}
+			if (sstr[0]==K_UP) {	BOX_rotate(1);	}
+			if (sstr[0]==K_LT) {	BOX_lt();	}
+			if (sstr[0]==K_RT) {	BOX_rt();	}
+			if (sstr[0]==K_DN) {	BOX_dn();	}
 			}
 
 		//Service the loop on a non-blocking delay here
