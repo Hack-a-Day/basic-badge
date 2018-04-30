@@ -137,6 +137,16 @@ const unsigned int tone_pr_table[64] =
 
 	};
 
+void set_led (unsigned char led_n, unsigned char led_v)
+	{
+	if (led_n==0)
+		LED_R = led_v;
+	if (led_n==1)
+		LED_G = led_v;	
+	if (led_n==2)
+		LED_B = led_v;	
+	}
+
 void sound_play_notes (unsigned char note1, unsigned char note2, unsigned char note3, unsigned int wait)
 	{
 	IEC0bits.T5IE = 0;		//sound is a bit shaky without this
@@ -297,7 +307,7 @@ void hw_init (void)
 								//SCK is fixed
 	PPSInput(1, U3RX, RPC13);	//RX pin
 	PPSOutput(1, RPC14, U3TX);	//TX pin
-	PPSInput(3, INT2, RPG6);	//power on/off
+	PPSInput(3, INT2, RPG6);	//power on/off, tie to external interrupt2
     PPSLock;
 
 	U3MODEbits.ON = 1;

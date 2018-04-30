@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/hw.h</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/hw.c</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/main.c</file>
             <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/disp.c</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/Z80/iosim.c</file>
             <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/Z80/sim1.c</file>
+            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/Z80/iosim.c</file>
         </group>
     </open-files>
 </project-private>

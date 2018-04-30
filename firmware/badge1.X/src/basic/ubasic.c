@@ -47,6 +47,7 @@
 
 extern jmp_buf jbuf;
 char err_msg[40];
+int last_linenum;
 
 static char const *program_ptr;
 #define MAX_STRINGLEN 40
@@ -85,14 +86,14 @@ ubasic_init(const char *program)
   tokenizer_init(program);
   ended = 0;
   term_vt100=1;
+  last_linenum = 0;
 }
 /*---------------------------------------------------------------------------*/
 static void
 accept(int token)
 {
   if(token != tokenizer_token()) {
-    sprintf(err_msg,"Error: expected %d, got %d\n",
-		 token, tokenizer_token());
+	sprintf(err_msg,"Bad token %d at line %d\n", token,last_linenum);
 	stdio_write(err_msg);
     tokenizer_error_print();
 	longjmp(jbuf,1);             // jumps back to where setjmp was called - making setjmp now return 1
@@ -502,6 +503,18 @@ int time;
 }
 /*---------------------------------------------------------------------------*/
 static void
+led_statement(void)
+{
+int led_p,led_v;
+	accept(TOKENIZER_LED);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) led_p =  expr();
+	accept(TOKENIZER_COMMA);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) led_v =  expr();
+	//now set up led_p to value led_v
+	set_led(led_p,led_v);
+	tokenizer_next();
+}/*---------------------------------------------------------------------------*/
+static void
 statement(void)
 {
   int token;
@@ -557,8 +570,11 @@ statement(void)
   case TOKENIZER_WAIT:
     wait_statement();
     break;	
+  case TOKENIZER_LED:
+    led_statement();
+    break;	  
   default:
-    sprintf(err_msg,"statement(): not implemented %d\n", token);
+    sprintf(err_msg,"Bad token %d at line %d\n", token,last_linenum);
 	stdio_write(err_msg);
     //exit(1);
 	longjmp(jbuf,1);             // jumps back to where setjmp was called - making setjmp now return 1
@@ -569,7 +585,7 @@ static void
 line_statement(void)
 {
   DEBUG_PRINTF("----------- Line number %d ---------\n", tokenizer_num());
-  /*    current_linenum = tokenizer_num();*/
+  last_linenum = tokenizer_num();
   accept(TOKENIZER_NUMBER);
   statement();
   return;

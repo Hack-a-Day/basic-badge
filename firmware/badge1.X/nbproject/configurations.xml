@@ -49,6 +49,8 @@
       <itemPath>src/vt100.c</itemPath>
       <itemPath>src/main.c</itemPath>
       <itemPath>src/splash.c</itemPath>
+      <itemPath>src/tetrapuzz.c</itemPath>
+      <itemPath>src/box_game.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -70,7 +72,7 @@
         <platformTool>PK4Tool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.05</languageToolchainVersion>
-        <platform>2</platform>
+        <platform>3</platform>
       </toolsSet>
       <compileType>
         <linkerTool>

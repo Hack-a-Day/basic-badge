@@ -76,6 +76,7 @@ enum {
   TOKENIZER_SETXY,
   TOKENIZER_CLRSCR,
   TOKENIZER_WAIT,
+  TOKENIZER_LED,
 };
 
 void tokenizer_init(const char *program);

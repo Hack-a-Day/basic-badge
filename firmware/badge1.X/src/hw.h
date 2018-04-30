@@ -31,6 +31,7 @@
 #define     K_SHIFTL    PORTDbits.RD9
 #define     K_SHIFTR    PORTDbits.RD10
 #define		K_PWR		PORTGbits.RG6
+#define		KEY_BRK		PORTGbits.RG9
 
 #define		SYS_CLK		48000000UL
 #define		PB_CLK		48000000UL
@@ -49,6 +50,9 @@
 #define		GEN_2_PIN	LATDbits.LATD3
 #define		GEN_ENABLE	LATDbits.LATD11
 
+#define		LED_R		LATDbits.LATD6
+#define		LED_G		LATFbits.LATF1
+#define		LED_B		LATDbits.LATD7
 
 #define	FLASH_BUFFERING
 
@@ -61,6 +65,7 @@ void sound_set_note (unsigned char note, unsigned char generator);
 void sound_set_generator (unsigned int period, unsigned char generator);
 void sound_play_notes (unsigned char note1, unsigned char note2, unsigned char note3, unsigned int wait);
 void hw_sleep (void);
+void set_led (unsigned char led_n, unsigned char led_v);
 
 
 typedef union
