@@ -68,4 +68,8 @@
 0.26
 - fixed more BASIC crashes
 
+0.27
+- the crashes are now really fixed
+- setxy now works in VT100 mode too
+
 

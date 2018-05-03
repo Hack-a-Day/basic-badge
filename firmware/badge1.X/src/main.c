@@ -19,8 +19,14 @@
 
 char bprog[4097] =
 "\
-20 gotoxy 10,14\n\
+10 clrscr\n\
+20 setxy 5,5\n\
 30 print 123\n\
+31 print 456\n\
+40 termt 0\n\
+50 setxy 5,7\n\
+60 print 345\n\
+70 print 678\n\
 ";
 
 /*
@@ -109,7 +115,7 @@ int main(void)
 		boot_animation();
 	if (flash_init==1)
 		init_first_x_sects(32);
-	stdio_write("\nBelegrade badge version 0.26\n");
+	stdio_write("\nBelegrade badge version 0.27\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - Hackaday BASIC\n");
 	stdio_write("2 - CP/M @ Z80\n");

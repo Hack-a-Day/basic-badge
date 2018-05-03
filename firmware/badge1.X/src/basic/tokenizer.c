@@ -121,8 +121,15 @@ static int
 get_next_token(void)
 {
   struct keyword_token const *kt;
+  char token_string[20];
   int i;
-
+  char *ptr2;
+  
+  strncpy(token_string,ptr,sizeof(token_string));
+  ptr2 = strchr(token_string, ' ');
+  if (ptr2!=0) *ptr2 = 0;
+  ptr2 = strchr(token_string, '\n');
+  if (ptr2!=0) *ptr2 = 0;
   DEBUG_PRINTF("get_next_token(): '%s'\n", ptr);
 
   if(*ptr == 0) {
@@ -159,8 +166,7 @@ get_next_token(void)
     return TOKENIZER_STRING;
   } else {
     for(kt = keywords; kt->keyword != NULL; ++kt) {
-//      if(strncmp(ptr, kt->keyword, strlen(kt->keyword)) == 0) {
-	if(strncmp(ptr, kt->keyword, strlen(ptr)) == 0) {
+      if(strncmp(token_string, kt->keyword, strlen(token_string)) == 0) {
 	nextptr = ptr + strlen(kt->keyword);
 	return kt->token;
       }

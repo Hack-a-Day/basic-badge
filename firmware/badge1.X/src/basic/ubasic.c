@@ -465,11 +465,19 @@ int tone1,tone2,tone3,duration;
 static void
 setxy_statement(void)
 {
+	int x_temp,y_temp;
 	accept(TOKENIZER_SETXY);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) term_x =  expr();
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) x_temp =  expr();
 	accept(TOKENIZER_COMMA);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) term_y =  expr();
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) y_temp =  expr();
 	tokenizer_next();
+	if (term_vt100 == 1)
+		video_gotoxy(x_temp,y_temp);
+	else
+		{
+		term_x = x_temp;
+		term_y = y_temp;
+		}
 }
 /*---------------------------------------------------------------------------*/
 static void
