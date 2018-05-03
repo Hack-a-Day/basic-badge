@@ -17,7 +17,7 @@
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
 
-char bprog[1000] =
+char bprog[4097] =
 "\
 10 print 123\n\
 20 print 234\n\
@@ -72,7 +72,8 @@ unsigned char rx_sta (void);
 unsigned char rx_read (void);
 void tx_write (unsigned char data);
 unsigned char cmd_exec (char * cmd);
-
+unsigned char basic_save_program (unsigned char * data, unsigned char slot);
+unsigned char basic_load_program (unsigned char * data, unsigned char slot);
 
 char term_buffer[TBUF_LEN];
 char term_screen_buffer[TERM_WIDTH*TERM_LINES];
@@ -130,7 +131,7 @@ int main(void)
 		boot_animation();
 	if (flash_init==1)
 		init_first_x_sects(32);
-	stdio_write("\nBelegrade badge version 0.24\n");
+	stdio_write("\nBelegrade badge version 0.25\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - Hackaday BASIC\n");
 	stdio_write("2 - CP/M @ Z80\n");
@@ -220,7 +221,7 @@ void init_z80_cpm (void)
 #ifdef	USE_RAM_IMAGE	
 	for (i=0;i<65536;i++) ram[i] = ram_image[i];
 #endif	
-	for (i=0;i<51200;i++) ram_disk[i] = 0xE5;
+	for (i=0;i<RAMDISK_SIZE;i++) ram_disk[i] = 0xE5;
 	wrk_ram	= PC = STACK = ram;
 	init_io(IO_CPM_MODE);
 	}
@@ -372,7 +373,7 @@ unsigned char add_prog_line (char * line, char * prog, int linenum)
 unsigned char cmd_exec (char * cmd)
     {
     char cmd_clean[25];
-    int linenum;
+    int linenum,prognum;
     if (isdigit(cmd[0]))
 		{
 		sscanf(cmd,"%d %[^\n]s",&linenum,cmd_clean);
@@ -397,6 +398,26 @@ unsigned char cmd_exec (char * cmd)
 	    {
 	    bprog[0]=0;
 	    }
+	else if (strncmp("load",cmd,4)==0)
+	    {
+	    sscanf (cmd+4,"%d",&prognum);
+		if ((prognum>=0)&(prognum<BASIC_SAVNUM))
+			{
+			stdio_write("loading...");
+			basic_load_program(bprog,prognum);
+			stdio_write("OK\n");
+			}
+	    }
+	else if (strncmp("save",cmd,4)==0)
+	    {
+	    sscanf (cmd+4,"%d",&prognum);
+		if ((prognum>=0)&(prognum<BASIC_SAVNUM))
+			{
+			stdio_write("saving...");
+			basic_save_program(bprog,prognum);
+			stdio_write("OK\n");
+			}
+	    }	
 	else if (strcmp("run",cmd)==0)
 	    {
 	    ubasic_init(bprog);
@@ -443,6 +464,28 @@ unsigned char cmd_exec (char * cmd)
 	}
     
     }
+
+
+unsigned char basic_save_program (unsigned char * data, unsigned char slot)
+	{
+	unsigned long addr;
+	addr = slot;
+	addr = addr * 4096;
+	addr = addr + BASIC_BASEADDR;
+	fl_erase_4k(addr);
+	fl_write_4k(addr,data);	
+	return 1;
+	}
+
+unsigned char basic_load_program (unsigned char * data, unsigned char slot)
+	{
+	unsigned long addr;
+	addr = slot;
+	addr = addr * 4096;
+	addr = addr + BASIC_BASEADDR;
+	fl_read_4k(addr,data);
+	return 1;
+	}
 
 
 void __ISR(_TIMER_2_VECTOR, ipl6) Timer2Handler(void)

@@ -54,6 +54,9 @@
 #define		LED_G		LATFbits.LATF1
 #define		LED_B		LATDbits.LATD7
 
+#define		BASIC_SAVNUM	16
+#define		BASIC_BASEADDR	1024*1024*2
+
 #define	FLASH_BUFFERING
 
 void delay_us (unsigned long howmuch);

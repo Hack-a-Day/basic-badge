@@ -129,12 +129,14 @@ disk_temp_pointer = 0;
 unsigned char read_disk_byte (void)
 {
 unsigned char temp;
-unsigned long base;
+unsigned long base,ptr;
 base = (((unsigned long)(track))*16) + sector;
 if (drive==0)
 	{
 	base = base*128;
-	temp = ram_disk[base + disk_temp_pointer];
+	ptr = base + disk_temp_pointer;
+	if (ptr<RAMDISK_SIZE)
+		temp = ram_disk[ptr];
 	}
 if (drive==1)
 	{
@@ -175,11 +177,14 @@ void write_disk_byte (unsigned char dat)
 {
 unsigned char temp;
 unsigned int base;
+unsigned long ptr;
 base = (((unsigned int)(track))*16) + sector;
 if (drive==0)
 	{
 	base = base*128;
-	ram_disk[base + disk_temp_pointer] = dat;
+	ptr = base + disk_temp_pointer;
+	if (ptr<RAMDISK_SIZE)
+		ram_disk[ptr] = dat;
 	}
 if (drive==1)
 	{

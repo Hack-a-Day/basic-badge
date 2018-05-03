@@ -2,7 +2,7 @@
 #define	USE_ROMDISK
 //#define		REMOVE_MAINLOOP
 
-#define	RAMDISK_SIZE	51200
+#define	RAMDISK_SIZE	20480
 
 
 //#define	PB_CLK	80000					//xkHz

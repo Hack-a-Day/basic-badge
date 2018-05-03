@@ -61,4 +61,8 @@
 - more sensible error messages
 - LED word included
 
+0.25
+- added load x/save x function in basic
+- minor fixes
+
 
