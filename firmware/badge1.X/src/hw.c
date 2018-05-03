@@ -363,7 +363,8 @@ void hw_init (void)
 	wait_ms(80);					//wait a moment to avoid flicker
 	LCD_BKLT = 0;					//turn backlight on
 	fl_rst_pb();	
-	}
+
+  	}
 
 
 unsigned char keyb_tasks (void)

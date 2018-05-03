@@ -65,4 +65,7 @@
 - added load x/save x function in basic
 - minor fixes
 
+0.26
+- fixed more BASIC crashes
+
 

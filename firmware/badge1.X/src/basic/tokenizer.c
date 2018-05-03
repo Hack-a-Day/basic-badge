@@ -159,7 +159,8 @@ get_next_token(void)
     return TOKENIZER_STRING;
   } else {
     for(kt = keywords; kt->keyword != NULL; ++kt) {
-      if(strncmp(ptr, kt->keyword, strlen(kt->keyword)) == 0) {
+//      if(strncmp(ptr, kt->keyword, strlen(kt->keyword)) == 0) {
+	if(strncmp(ptr, kt->keyword, strlen(ptr)) == 0) {
 	nextptr = ptr + strlen(kt->keyword);
 	return kt->token;
       }

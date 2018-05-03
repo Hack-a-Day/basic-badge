@@ -19,30 +19,8 @@
 
 char bprog[4097] =
 "\
-10 print 123\n\
-20 print 234\n\
-21 let a=9\n\
-22 wait 100\n\
-23 led 0,1\n\
-24 wait 100\n\
-25 led 1,1\n\
-26 wait 100\n\
-27 led 2,1\n\
-28 wait 100\n\
-30 termt 0\n\
-31 clrscr\n\
-40 setxy a,a\n\
-50 print 4567\n\
-50 print 89\n\
-60 setxy 2,2\n\
-70 print 1234\n\
-71 led 0,0\n\
-72 led 1,0\n\
-73 led 2,0\n\
-74 wait 100\n\
-75 print 987\n\
-76 wait 1000\n\
-77 goto 75\n\
+20 gotoxy 10,14\n\
+30 print 123\n\
 ";
 
 /*
@@ -131,7 +109,7 @@ int main(void)
 		boot_animation();
 	if (flash_init==1)
 		init_first_x_sects(32);
-	stdio_write("\nBelegrade badge version 0.25\n");
+	stdio_write("\nBelegrade badge version 0.26\n");
 	stdio_write("Type your choice and hit ENTER\n");
 	stdio_write("1 - Hackaday BASIC\n");
 	stdio_write("2 - CP/M @ Z80\n");
