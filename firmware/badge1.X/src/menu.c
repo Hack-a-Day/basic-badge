@@ -21,12 +21,59 @@ void menu(void)
 			stdio_write(sstr);	
 			if (sstr[0]==NEWLINE)
 				{
-				menu_buff[menu_pointer] = 0;
-				if (strcmp(menu_buff,"1")==0) stdio_write("Y");
-				if (strcmp(menu_buff,"mike")==0) stdio_write("M");
+				//Erase where the funny messages are written
+				video_gotoxy(4,17);
+				for (i=4; i<39; i++) stdio_write(" ");
+				
+				menu_buff[menu_pointer] = 0;	//add zero terminator
+				//Check entry and react
+				if (strcmp(menu_buff,"1")==0)
+					{
+					video_clrscr();
+					init_basic();
+					while (1) loop_basic();
+					}
+				else if (strcmp(menu_buff,"2")==0)
+					{
+					video_clrscr();
+					init_z80_cpm();
+					while (1) loop_z80_cpm();
+					}			
+				else if (strcmp(menu_buff,"3")==0)
+					{
+					init_8080_basic();
+					while (1) loop_8080_basic();
+					}
+				else if (strcmp(menu_buff,"4")==0)
+					{
+					enable_display_scanning(0); //Shut off auto-scanning of character buffer
+					tetrapuzz();
+					}
+				else if (strcmp(menu_buff,"5")==0)
+					{
+					init_userprog();
+					while (1) loop_userprog();
+					}			
+				else if (strcmp(menu_buff,"mike")==0)
+					{
+					video_gotoxy(4,17);
+					stdio_write("Mike wrote this");
+					}
+				else
+					{
+					video_gotoxy(4,17);
+					stdio_write("Nice try, wise guy.");
+					}
+				
+				//Clear prompt area
+				video_gotoxy(4,13);
+				for (i=4; i<39; i++) stdio_write(" ");
+				video_gotoxy(4,13);
+				stdio_write("> ");
 				menu_pointer = 0;
 				menu_buff[menu_pointer] = 0;
 				}
+				
 			else
 				{
 				menu_buff[menu_pointer++] = sstr[0];
@@ -39,32 +86,7 @@ void menu(void)
 			/*
 				{
 				cmd_line_buff[cmd_line_pointer] = 0;
-				if (strcmp(cmd_line_buff,"1")==0)
-					{
-					init_basic();
-					while (1) loop_basic();
-					}
-				if (strcmp(cmd_line_buff,"2")==0)
-					{
-					init_z80_cpm();
-					while (1) loop_z80_cpm();
-					}			
-				if (strcmp(cmd_line_buff,"3")==0)
-					{
-					init_8080_basic();
-					while (1) loop_8080_basic();
-					}
-				if (strcmp(cmd_line_buff,"4")==0)
-					{
-					enable_display_scanning(0); //Shut off auto-scanning of character buffer
-					tetrapuzz();
-					}
-				if (strcmp(cmd_line_buff,"5")==0)
-					{
-					init_userprog();
-					while (1) loop_userprog();
-					}			
-				}
+
 			else
 				{
 				len = strlen(sstr);
