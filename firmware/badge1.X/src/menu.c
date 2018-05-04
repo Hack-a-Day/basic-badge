@@ -4,13 +4,7 @@
 
 void menu(void)
 	{
-	stdio_write("\nBelegrade badge version 0.27\n");
-	stdio_write("Type your choice and hit ENTER\n");
-	stdio_write("1 - Hackaday BASIC\n");
-	stdio_write("2 - CP/M @ Z80\n");
-	stdio_write("3 - Tiny Basic @ 8080\n");
-	stdio_write("4 - Play Badgetris!\n");
-	stdio_write("5 - User Program\n");
+	showmenu();
 	
 	char sstr[3];
 	unsigned char cmd_line_buff[30], cmd_line_pointer;
@@ -66,4 +60,15 @@ void menu(void)
 				}
 			}	
 		}
+	}
+
+void showmenu(void)
+	{
+	stdio_write("\nBelegrade badge version 0.27\n");
+	stdio_write("Type your choice and hit ENTER\n");
+	stdio_write("1 - Hackaday BASIC\n");
+	stdio_write("2 - CP/M @ Z80\n");
+	stdio_write("3 - Tiny Basic @ 8080\n");
+	stdio_write("4 - Play Badgetris!\n");
+	stdio_write("5 - User Program\n");
 	}
