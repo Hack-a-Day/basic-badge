@@ -155,6 +155,9 @@ void sound_play_notes (unsigned char note1, unsigned char note2, unsigned char n
 	sound_set_note(note2,1);
 	sound_set_note(note3,2);
 	wait_ms(wait);
+	sound_set_note(0,0);
+	sound_set_note(0,1);
+	sound_set_note(0,2);
 	IEC0bits.T5IE = 1;
 	}
 
