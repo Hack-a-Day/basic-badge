@@ -51,6 +51,7 @@
       <itemPath>src/splash.c</itemPath>
       <itemPath>src/tetrapuzz.c</itemPath>
       <itemPath>src/box_game.c</itemPath>
+      <itemPath>src/menu.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -71,8 +72,8 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PK4Tool</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion>1.44</languageToolchainVersion>
-        <platform>2</platform>
+        <languageToolchainVersion>2.05</languageToolchainVersion>
+        <platform>3</platform>
       </toolsSet>
       <compileType>
         <linkerTool>

@@ -111,7 +111,7 @@ unsigned char CHAR;
 #define	STDIO_TTY1	1
 
 void init_io(unsigned char mode);
-unsigned char stdio_write (unsigned char * data);
+unsigned char stdio_write (char * data);
 unsigned char stdio_c (unsigned char data);
 unsigned char stdio_in (unsigned char block);
 char stdio_get_state (void);

@@ -72,4 +72,8 @@
 - the crashes are now really fixed
 - setxy now works in VT100 mode too
 
+0.28
+- merged Mike's changes
+- stdio input mode (keyboard->system) changed from weird three byte long something to single characters
+
 
