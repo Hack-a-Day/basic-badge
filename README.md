@@ -5,7 +5,32 @@
 * Hardware Lead: Voja Antonic
 * Software Lead: Jaromir Sukuba
 
-Hardware details available on [the BASIC Badge project page](https://hackaday.io/project/80627-badge-for-hackaday-conference-2018-in-belgrade). 
+Hardware details available on [the BASIC Badge project page](https://hackaday.io/project/80627-badge-for-hackaday-conference-2018-in-belgrade).
+
+## BASIC Word List:
+
+### Standard Words:
+* `PRINT`
+* `IF`
+* `GOTO`
+* `GOSUB`
+* `RETURN`
+* `FOR`
+* `NEXT`
+* `END`
+* `LET`
+
+### Non-Standard Words
+
+* `CLR` - clears all code from the program buffer
+* `OUT X` - not completely implemented yet
+* `LED X,Y` - control LED, X[0..2] RGB, Y[0..1] on/off
+* `TUNE A,B,C,D` - plays tones A, B, C for duration D
+* `SETXY X,Y` - set cursor at X,Y
+* `TERMT X` - set terminal type X (turns on or off auto-refresh of character buffer)
+* `CLRSCR` - clear screen
+* `WAIT X` - wait for X ms
+* `COLOR X,Y` - X=Foreground, Y=Background using EGA 16-color palette
 
 ## Setting Up the Toolchain for BASIC Badge
 
