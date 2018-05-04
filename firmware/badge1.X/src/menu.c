@@ -7,8 +7,8 @@ void menu(void)
 	showmenu();
 	
 	char sstr[3];
-	unsigned char cmd_line_buff[30], cmd_line_pointer;
-	cmd_line_pointer=0;
+	unsigned char menu_buff[30], menu_pointer;
+	menu_pointer=0;
 	int len, i;
 	
 	while (1)
@@ -17,7 +17,24 @@ void menu(void)
 		if (get_stat!=0)
 			{
 			stdio_write(sstr);	
-			if (sstr[0]==NEWLINE) 
+			if (sstr[0]==NEWLINE)
+				{
+				menu_buff[menu_pointer] = 0;
+				if (strcmp(menu_buff,"1")==0) stdio_write("Y");
+				if (strcmp(menu_buff,"mike")==0) stdio_write("M");
+				menu_pointer = 0;
+				menu_buff[menu_pointer] = 0;
+				}
+			else
+				{
+				menu_buff[menu_pointer++] = sstr[0];
+				if (menu_pointer >= 29) 
+					{
+					menu_pointer = 0;
+					menu_buff[menu_pointer] = 0;
+					}
+				}
+			/*
 				{
 				cmd_line_buff[cmd_line_pointer] = 0;
 				if (strcmp(cmd_line_buff,"1")==0)
@@ -57,8 +74,8 @@ void menu(void)
 						if (cmd_line_pointer>0) cmd_line_buff[cmd_line_pointer--]=0;
 						}
 					}			
-				}
-			}	
+				}*/
+			}
 		}
 	}
 
