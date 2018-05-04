@@ -31,6 +31,8 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 * `CLRSCR` - clear screen
 * `WAIT X` - wait for X ms
 * `COLOR X,Y` - X=Foreground, Y=Background using EGA 16-color palette
+* `save X` - Save program buffer to flash. There are 16 slots: X[0..15]
+* `load X` - Load program into buffer from flash. There are 16 slots: X[0..15]
 
 ## Setting Up the Toolchain for BASIC Badge
 
