@@ -1,5 +1,7 @@
 #include "hw.h"
 #include "menu.h"
+#include <stdint.h>
+#include "vt100.h"
 #include <string.h>
 
 void menu(void)
@@ -81,11 +83,42 @@ void menu(void)
 
 void showmenu(void)
 	{
-	stdio_write("\nBelegrade badge version 0.27\n");
-	stdio_write("Type your choice and hit ENTER\n");
-	stdio_write("1 - Hackaday BASIC\n");
-	stdio_write("2 - CP/M @ Z80\n");
-	stdio_write("3 - Tiny Basic @ 8080\n");
-	stdio_write("4 - Play Badgetris!\n");
-	stdio_write("5 - User Program\n");
+	video_gotoxy(4,4);
+	stdio_write("Belegrade badge version 0.27");
+	video_gotoxy(4,5);
+	stdio_write("Type your choice and hit ENTER");
+	video_gotoxy(4,6);
+	stdio_write("1 - Hackaday BASIC");
+	video_gotoxy(4,7);
+	stdio_write("2 - CP/M @ Z80");
+	video_gotoxy(4,8);
+	stdio_write("3 - Tiny Basic @ 8080");
+	video_gotoxy(4,9);
+	stdio_write("4 - Play Badgetris!");
+	video_gotoxy(4,10);
+	stdio_write("5 - User Program");
+	video_gotoxy(4,11);
+	fancyframe();
+	video_gotoxy(4,13);
+	stdio_write("> ");
+	}
+
+void fancyframe(void)
+	{
+	unsigned int i;
+	video_gotoxy(0,0);
+	stdio_write("+");
+	for (i=0; i<38; i++) stdio_write("*");
+	stdio_write("+");
+	video_gotoxy(0,39);
+	stdio_write("+");
+	for (i=0; i<38; i++) stdio_write("*");
+	stdio_write("+");
+	for (i=1; i<19; i++)
+		{
+		video_gotoxy(0,i);
+		stdio_write("*");
+		video_gotoxy(39,i);
+		stdio_write("*");
+		}
 	}
