@@ -444,8 +444,8 @@ void BOX_update_score(void)
 	ten = (score%100)/10;
 	one = (score%100)%10;
 	if (hundred) mystring[i++] = hundred+'0';
-	if (ten) mystring[i++] = ten+'0';
-	if (one) mystring[i++] = one+'0';
+	if (hundred || ten) mystring[i++] = ten+'0';
+	if (hundred || ten || one) mystring[i++] = one+'0';
 	
 	BOX_print_string(mystring, BOX_SCOREBOX_X+76,BOX_SCOREBOX_Y+BOX_FRAME_THICKNESS+2,0xFFFFFF,DEFAULT_BG_COLOR);
 	}
