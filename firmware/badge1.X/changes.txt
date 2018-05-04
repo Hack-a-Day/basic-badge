@@ -79,4 +79,7 @@
 0.29
 - colors added
 
+0.30
+- color palette is now 16-color EGA
+
 

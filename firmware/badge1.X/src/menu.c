@@ -91,7 +91,7 @@ void showmenu(void)
 	{
 	video_set_color(15,0);
 	video_gotoxy(4,4);
-	stdio_write("Belegrade badge version 0.29");
+	stdio_write("Belegrade badge version 0.30");
 	video_gotoxy(4,5);
 	video_set_color(12,2);
 	stdio_write("Type your choice and hit ENTER");
@@ -111,7 +111,7 @@ void showmenu(void)
 	video_set_color(14,7);
 	stdio_write("5 - User Program");
 	video_gotoxy(4,11);
-	video_set_color(4,0);
+	video_set_color(11,0);
 	fancyframe();
 	video_set_color(15,0);
 	video_gotoxy(4,13);
