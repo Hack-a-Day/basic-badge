@@ -43,6 +43,8 @@ void tetrapuzz(void)
  
 void tetrapuzz_init(void)
 	{
+	start_after_wake = &BOX_pregame;	//Set function to run when waking from sleep]
+	
 	//Pull TMR1 value for a bit of not-really-but-kinda-random number
 	int timer1val = *(char*)0xBF800610;
 	BOX_seed_random((unsigned char) timer1val&0xF);

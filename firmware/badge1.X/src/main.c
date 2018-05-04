@@ -107,6 +107,7 @@ extern const unsigned char ram_init [30];
 int main(void)
 	{
     ticks = 0;
+	start_after_wake = &wake_return; //Function pointer for waking from sleep
 	hw_init();
 	stdio_src = STDIO_LOCAL;
 //	stdio_src = STDIO_TTY1;

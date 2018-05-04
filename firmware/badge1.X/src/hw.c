@@ -261,6 +261,15 @@ void hw_sleep (void)
 	PMD5 = 0;
 	PMD6 = 0;
 	hw_init();
+	start_after_wake();
+	}
+
+void wake_return(void)
+	{
+	//By default, this will be called after waking from sleep. It should do
+	//noting. This is a placeholder for user programs to set the function pointer.
+	set_led(0,1);
+	return;
 	}
 
 void hw_init (void)

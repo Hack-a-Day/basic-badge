@@ -68,6 +68,8 @@ void sound_set_note (unsigned char note, unsigned char generator);
 void sound_set_generator (unsigned int period, unsigned char generator);
 void sound_play_notes (unsigned char note1, unsigned char note2, unsigned char note3, unsigned int wait);
 void hw_sleep (void);
+void (*start_after_wake)(void);
+void wake_return(void);
 void set_led (unsigned char led_n, unsigned char led_v);
 
 
