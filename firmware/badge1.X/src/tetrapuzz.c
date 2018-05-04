@@ -50,7 +50,6 @@ void tetrapuzz_init(void)
 	BOX_seed_random((unsigned char) timer1val&0xF);
 
 	BOX_clearscreen();
-	BOX_pregame();
 	drop_timer_flag = 0;
 	wait_until = ticks;
 	BOX_start_game();

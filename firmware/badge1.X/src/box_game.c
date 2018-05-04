@@ -368,11 +368,6 @@ void BOX_erase(unsigned char X, unsigned char Y)
 
 void BOX_pregame(void)
 	{
-	//TODO: Clear screen and setup board
-	//printf(top butcol "EXIT" tabx4 taby4 whi "Click to play");
-	//printf(tabx4 taby5 "BadgeTris" butcol bot "<-      Rotate     ->");
-	unsigned int i;
- 
 	//Draw fancy background
 	tft_set_write_area(0,0,319,239);
 	TFT_24_7789_Write_Command(0x2C);
@@ -398,11 +393,8 @@ void BOX_pregame(void)
 	//Get score area ready
 	tft_fill_area(BOX_SCOREBOX_X, BOX_SCOREBOX_Y, BOX_SCOREBOX_WIDTH, BOX_SCOREBOX_HEIGHT, BOX_FRAMECOLOR);
 	tft_fill_area(BOX_SCOREBOX_X+BOX_FRAME_THICKNESS, BOX_SCOREBOX_Y+BOX_FRAME_THICKNESS, BOX_SCOREBOX_WIDTH-(2*BOX_FRAME_THICKNESS), BOX_SCOREBOX_HEIGHT-(2*BOX_FRAME_THICKNESS), DEFAULT_BG_COLOR);
-	
-	//Set up blank array
-	for (i=0; i<ARRAY_SIZE; i++) { BOX_location[i] = 0x00; }
 
-	//Show game area (should be blank)
+	//Show game area
 	BOX_rewrite_display(DEFAULT_FG_COLOR);
 	
 	BOX_update_score();
@@ -412,7 +404,11 @@ void BOX_start_game(void)
 	{
 	score = 0; //Reset score
 	game_over = 0;
-
+	
+	//Set up blank array
+	unsigned int i;
+	for (i=0; i<ARRAY_SIZE; i++) { BOX_location[i] = 0x00; }
+	BOX_pregame();
 	BOX_spawn();
 	}
 

@@ -268,7 +268,6 @@ void wake_return(void)
 	{
 	//By default, this will be called after waking from sleep. It should do
 	//noting. This is a placeholder for user programs to set the function pointer.
-	set_led(0,1);
 	return;
 	}
 
