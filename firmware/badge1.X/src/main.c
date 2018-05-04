@@ -20,14 +20,18 @@
 
 char bprog[4097] =
 "\
-10 clrscr\n\
-20 setxy 5,5\n\
-30 print 123\n\
-31 print 456\n\
-40 termt 0\n\
-50 setxy 5,7\n\
-60 print 345\n\
-70 print 678\n\
+5 a=0\n\
+6 b=0\n\
+10 print a\n\
+11 print b\n\
+12 a=a+1\n\
+13 if a>15 then gosub 100\n\
+14 color a,b\n\
+20 wait 500\n\
+30 goto 10\n\
+100 a=0\n\
+110 b=b+1\n\
+120 return\n\
 ";
 
 /*
@@ -71,15 +75,15 @@ char stdio_src;
 unsigned char key_buffer_ptr =0;
 
 char disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
+char color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 
 int i,j,len;
 unsigned char get_stat;
 volatile char brk_key;
-char sstr[3];
 unsigned char cmd_line_buff[30], cmd_line_pointer,cmd_line_key_stat_old,prompt;
 
 jmp_buf jbuf;
-
+char char_out;
 extern unsigned char flash_buff[4096];
 extern const unsigned char ram_image[65536];
 extern unsigned char ram_disk[RAMDISK_SIZE];
@@ -149,6 +153,7 @@ void enable_display_scanning(unsigned char onoff)
 
 void init_8080_basic (void)
 	{
+	video_set_color(15,0);
 	for (i=0;i<2048;i++) ram[i] = b2_rom[i];
 	for (i=0;i<30;i++) ram[i+0x1000] = ram_init[i];
 	wrk_ram	= PC = STACK = ram;
@@ -163,6 +168,7 @@ void loop_8080_basic (void)
 
 void init_z80_cpm (void)
 	{
+	video_set_color(15,0);
 #ifdef	USE_RAM_IMAGE	
 	for (i=0;i<65536;i++) ram[i] = ram_image[i];
 #endif	
@@ -184,6 +190,7 @@ void init_basic (void)
 	brk_key = 0;
 	cmd_line_pointer=0;
 	cmd_line_buff[0] = 0;
+	video_set_color(15,0);
 	}
 
 void loop_basic (void)
@@ -193,11 +200,11 @@ void loop_basic (void)
 	    stdio_write(">");	
 	    prompt = 0;
 	    }
-	get_stat = stdio_get(sstr);
+	get_stat = stdio_get(&char_out);
 	if (get_stat!=0)
 	    {
-	    stdio_write(sstr);	
-	    if (sstr[0]==NEWLINE) 
+	    stdio_c(char_out);	
+	    if (char_out==NEWLINE) 
 			{
 			cmd_line_buff[cmd_line_pointer] = 0;
 			cmd_exec (cmd_line_buff);
@@ -206,20 +213,16 @@ void loop_basic (void)
 			prompt = 1;			
 			}
 	    else
-		{
-		len = strlen(sstr);
-		for (i=0;i<len;i++)
-		    {
-		    if (sstr[i]>=' ') cmd_line_buff[cmd_line_pointer++] = sstr[i];
-		    else if (sstr[i]==BACKSPACE)
+			{
+			if (char_out>=' ') cmd_line_buff[cmd_line_pointer++] = char_out;
+			else if (char_out==BACKSPACE)
 				{
 				if (cmd_line_pointer>0) 
 					cmd_line_buff[cmd_line_pointer--]=0;
 				}
-		    }			
-		}
+
+			}
 	    }	
-	
 	}
 
 void init_userprog (void)
@@ -230,13 +233,13 @@ void init_userprog (void)
 
 void loop_userprog (void)
 {
-    get_stat = stdio_get(sstr);
+    get_stat = stdio_get(&char_out);
     if (get_stat!=0)
     {
 	handle_display = 0; //Shut off auto-scanning of character buffer
 	animate_splash();
 	//show_splash();
-	while(stdio_get(sstr) == 0) { ;; }  //wait for button press
+	while(stdio_get(&char_out) == 0) { ;; }  //wait for button press
 	handle_display = 1; //Go back to character display
     }
 
@@ -455,7 +458,7 @@ void __ISR(_TIMER_5_VECTOR, ipl3) Timer5Handler(void)
 	loop_badge();
     if (handle_display)
 		{
-		tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
+		tft_disp_buffer_refresh_part(disp_buffer,color_buffer);
 		//tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
 		}
     key_temp = keyb_tasks();
@@ -507,7 +510,7 @@ while (U3STAbits.UTXBF==1);
     
 }
 
-unsigned char stdio_write (unsigned char * data)
+unsigned char stdio_write (char * data)
 {
 if (stdio_src==STDIO_LOCAL)
 	{
@@ -562,8 +565,7 @@ else if (stdio_src==STDIO_TTY1)
 	{
 	if (rx_sta()!=0)
 		{
-		*dat++=rx_read();
-		*dat++=0;
+		*dat=rx_read();
 		return 1;
 		}
 	else

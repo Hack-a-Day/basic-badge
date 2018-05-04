@@ -76,4 +76,7 @@
 - merged Mike's changes
 - stdio input mode (keyboard->system) changed from weird three byte long something to single characters
 
+0.29
+- colors added
+
 

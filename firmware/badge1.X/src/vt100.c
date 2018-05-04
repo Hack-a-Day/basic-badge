@@ -8,7 +8,7 @@
 unsigned char msg1[50];
 
 
-
+unsigned char color_composite;
 unsigned int count;
 volatile uint16_t bufhead;
 volatile uint16_t buftail; 
@@ -39,7 +39,13 @@ static uint8_t revvideo;
 unsigned char cur_type,cur_blink;
 
 extern char disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
+extern char color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 volatile uint8_t buf[MAX_BUF];
+
+void video_set_color(unsigned char fg, unsigned char bg)
+	{
+	color_composite = (fg&0xF) | ((bg&0xF)<<4);
+	}
 
 
 void write_direct(unsigned int * x, unsigned int * y, unsigned char * str)
@@ -50,6 +56,7 @@ void write_direct(unsigned int * x, unsigned int * y, unsigned char * str)
 	while (*str>=' ')
 		{
 		disp_buffer[yt][xt] = *str++;
+		color_buffer[yt][xt] = color_composite;
 		xt++;
 		if (xt==DISP_BUFFER_WIDE)
 			{
@@ -437,11 +444,13 @@ for (j=1;j<(mbottom+1);j++)
 	for (i=0;i<DISP_BUFFER_WIDE;i++)
 		{
 		disp_buffer[j-1][i] = disp_buffer[j][i];
+		color_buffer[j-1][i] = color_buffer[j][i];
 		}
 	}	
 for (i=0;i<DISP_BUFFER_WIDE;i++)
 	{
 	disp_buffer[mbottom][i] = ' ';
+	color_buffer[mbottom][i] = 0;
 	}
 
 }
@@ -459,6 +468,7 @@ for (j=(lin+1);j<(mbottom+1);j++)
 	for (i=0;i<DISP_BUFFER_WIDE;i++)
 		{
 		disp_buffer[j-1][i] = disp_buffer[j][i];
+		color_buffer[j-1][i] = color_buffer[j][i];
 		}
 	}	
 /*
@@ -479,11 +489,13 @@ for (j=mbottom;j>0;j--)
 	for (i=0;i<DISP_BUFFER_WIDE;i++)
 		{
 		disp_buffer[j][i] = disp_buffer[j-1][i];
+		color_buffer[j][i] = color_buffer[j-1][i];
 		}
 	}	
 for (i=0;i<DISP_BUFFER_WIDE;i++)
 	{
 	disp_buffer[mtop][i] = ' ';
+	color_buffer[mtop][i] = 0;
 	}
 }
 
@@ -497,6 +509,7 @@ for (j=mbottom;j>(line);j--)
 	for (i=0;i<DISP_BUFFER_WIDE;i++)
 		{
 		disp_buffer[j][i] = disp_buffer[j-1][i];
+		color_buffer[j][i] = color_buffer[j-1][i];
 		}
 	}	
 /*
@@ -660,6 +673,7 @@ void video_clrscr()
   CURSOR_INVERT();
   video_reset_margins(); 
   memset(disp_buffer, revvideo, DISP_BUFFER_WIDE*DISP_BUFFER_HIGH);
+  memset(color_buffer, 0, DISP_BUFFER_WIDE*DISP_BUFFER_HIGH);
   cx = cy = 0;
   CURSOR_INVERT();
 }
@@ -668,6 +682,7 @@ void video_clrline()
 {
   CURSOR_INVERT();
   memset(&disp_buffer[cy], revvideo, DISP_BUFFER_WIDE);
+  memset(&color_buffer[cy], 0, DISP_BUFFER_WIDE);
   cx = 0;
   CURSOR_INVERT();
 }
@@ -675,6 +690,7 @@ void video_clrline()
 void video_clreol()
 {
   memset(&disp_buffer[cy][cx], revvideo, DISP_BUFFER_WIDE-cx);
+  memset(&color_buffer[cy][cx], 0, DISP_BUFFER_WIDE-cx);
 }
 
 void video_erase(uint8_t erasemode)
@@ -689,21 +705,30 @@ unsigned char x,y;
 //          (DISP_BUFFER_WIDE*DISP_BUFFER_HIGH)-(cy*DISP_BUFFER_WIDE+cx));
 	for (x=cx;x<DISP_BUFFER_WIDE;x++) 
 		for (y=cy;y<DISP_BUFFER_HIGH;y++) 
-		disp_buffer[y][x] = ' ';
+			{
+			disp_buffer[y][x] = ' ';
+			color_buffer[y][x] = 0;
+			}
       break;
     case 1: /* erase from beginning of screen to cursor */
 //jar
 //      memset(disp_buffer, revvideo, cy*DISP_BUFFER_WIDE+cx+1);
 	for (x=0;x<cx;x++) 
 		for (y=0;y<cy;y++) 
-		disp_buffer[y][x] = ' ';
+			{
+			disp_buffer[y][x] = ' ';
+			color_buffer[y][x] = 0;
+			}
       break;
     case 2: /* erase entire screen */
 //jar
 //      memset(disp_buffer, revvideo, DISP_BUFFER_WIDE*DISP_BUFFER_HIGH);
 	for (x=0;x<DISP_BUFFER_WIDE;x++) 
 		for (y=0;y<DISP_BUFFER_HIGH;y++) 
-		disp_buffer[y][x] = ' ';
+			{
+			disp_buffer[y][x] = ' ';
+			color_buffer[y][x] = ' ';
+			}
       break;
   }
   CURSOR_INVERT();
@@ -717,17 +742,31 @@ void video_eraseline(uint8_t erasemode)
   {
     case 0: /* erase from cursor to end of line */
 //jar
-	for (x=cx;x<DISP_BUFFER_WIDE;x++) disp_buffer[cy][x] = ' ';
+	for (x=cx;x<DISP_BUFFER_WIDE;x++) 
+		{
+		disp_buffer[cy][x] = ' ';
+		color_buffer[cy][x] = 0;
+		}
 //      memset(&disp_buffer[cy][cx], revvideo, DISP_BUFFER_WIDE-cx);
       break;
     case 1: /* erase from beginning of line to cursor */
 //jar
-	for (x=0;x<cx;x++) disp_buffer[cy][x] = ' ';
+	for (x=0;x<cx;x++)
+				{
+		disp_buffer[cy][x] = ' ';
+		color_buffer[cy][x] = 0;
+		}
+
 //      memset(&disp_buffer[cy], revvideo, cx+1);
       break;
     case 2: /* erase entire line */
 //jar
-	for (x=0;x<DISP_BUFFER_WIDE;x++) disp_buffer[cy][x] = ' ';
+	for (x=0;x<DISP_BUFFER_WIDE;x++)
+				{
+		disp_buffer[cy][x] = ' ';
+		color_buffer[cy][x] = 0;
+		}
+
 //      memset(&disp_buffer[cy], revvideo, DISP_BUFFER_WIDE);
       break;
   }
@@ -740,6 +779,7 @@ void video_putcxy(int8_t x, int8_t y, char c)
   if (x < 0 || x >= DISP_BUFFER_WIDE) return;
   if (y < 0 || y >= DISP_BUFFER_HIGH) return;
   disp_buffer[y][x] = c ^ revvideo;
+  color_buffer[y][x] = color_composite;
 }
 
 /* Does not respect top/bottom margins */
@@ -751,6 +791,7 @@ void video_putsxy(int8_t x, int8_t y, char *str)
   len = strlen(str);
   if (len > DISP_BUFFER_WIDE-x) len = DISP_BUFFER_WIDE-x;
   memcpy((char *)(&disp_buffer[y][x]), str, len);
+  memset((char *)(&color_buffer[y][x]), color_composite, len);
   if (revvideo) video_invert_range(x, y, len);
 }
 
@@ -761,6 +802,7 @@ void video_putline(int8_t y, char *str)
   if (y < 0 || y >= DISP_BUFFER_HIGH) return;
   /* strncpy fills unused bytes in the destination with nulls */
   strncpy((char *)(&disp_buffer[y]), str, DISP_BUFFER_WIDE);
+  memset((char *)(&color_buffer[y]), color_composite, strlen(str));
   if (revvideo) video_invert_range(0, y, DISP_BUFFER_WIDE);
 }
 
@@ -768,6 +810,7 @@ void video_setc(char c)
 {
   CURSOR_INVERT();
   disp_buffer[cy][cx] = c ^ revvideo;
+  color_buffer[cy][cx] = color_composite;
   CURSOR_INVERT();
 }
 
@@ -782,6 +825,7 @@ static void _video_putc(char c)
   else
   {
     disp_buffer[cy][cx] = c ^ revvideo;
+	color_buffer[cy][cx] = color_composite;
     _video_cfwd();
   }
 }
@@ -803,6 +847,7 @@ void video_putc_raw(char c)
 //jar
 //  disp_buffer[cy][cx] = c ^ revvideo;
   disp_buffer[cy][cx] = c;
+  color_buffer[cy][cx] = color_composite;
   _video_cfwd();
   CURSOR_INVERT();
 }

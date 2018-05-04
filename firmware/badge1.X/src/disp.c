@@ -103,22 +103,50 @@ const char font[96*12] =
 	};
 
 
+unsigned int color_table[16] = {
+	0x000000,	//0
+	0x00000F,	//1
+	0x0000FF,	//2
+	0x000FFF,	//3
+	0x00FFFF,	//4
+	0x0FFFFF,	//5
+	0xFFFFF0,	//6
+	0xFFFF00,	//7
+	0xFFF000,	//8
+	0xFF0000,	//9
+	0xF00000,	//10
+	0x0FFFF0,	//11
+	0x00FF00,	//12
+	0x000F00,	//13
+	0x00F000,	//14
+	0xFFFFFF,	//15	
+	
+	};
 
-void tft_disp_buffer_refresh(unsigned char * buff, unsigned int col, unsigned int back)
+
+void tft_disp_buffer_refresh(unsigned char * buff, unsigned char * color_buff)
 	{
-	unsigned int i,j,ad;
+	unsigned int i,j,ad,col,back;
 	for (i=0;i<20;i++)
 		for (j=0;j<40;j++)	
-			tft_print_char(buff[j+(i*40)],j*8,i*12,col,back);
+			{
+			col = color_buff[j+(i*40)]&0xF;
+			back = (color_buff[j+(i*40)]>>4)&0xF;
+			tft_print_char(buff[j+(i*40)],j*8,i*12,color_table[col],color_table[back]);
+			}
 	}
 
-void tft_disp_buffer_refresh_part(unsigned char * buff, unsigned int col, unsigned int back)
+void tft_disp_buffer_refresh_part(unsigned char * buff, unsigned char * color_buff)
 	{
-    static unsigned char dr_cnt=0;
+    static unsigned char dr_cnt=0,col,back;
 	unsigned int i,j,ad;
 	for (i=(dr_cnt);i<(dr_cnt+2);i++)
 		for (j=0;j<40;j++)	
-			tft_print_char(buff[j+(i*40)],j*8,i*12,col,back);
+			{
+			col = color_buff[j+(i*40)]&0xF;
+			back = (color_buff[j+(i*40)]>>4)&0xF;
+			tft_print_char(buff[j+(i*40)],j*8,i*12,color_table[col],color_table[back]);
+			}
     dr_cnt = dr_cnt + 2;
     if (dr_cnt == 20)
         dr_cnt = 0;

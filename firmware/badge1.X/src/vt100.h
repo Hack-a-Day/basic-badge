@@ -140,3 +140,5 @@ static void _video_scrolldown_lin(unsigned char line);
 
 void write_direct(unsigned int * x, unsigned int * y, unsigned char * str);
 void term_init (void);
+void video_set_color(unsigned char fg, unsigned char bg);
+

@@ -8,18 +8,18 @@ void menu(void)
 	{
 	showmenu();
 	
-	char sstr[3];
+	char char_out;
 	unsigned char menu_buff[30], menu_pointer;
 	menu_pointer=0;
 	int len, i;
 	
 	while (1)
 		{
-		unsigned char get_stat = stdio_get(sstr);
+		unsigned char get_stat = stdio_get(&char_out);
 		if (get_stat!=0)
 			{
-			stdio_write(sstr);	
-			if (sstr[0]==NEWLINE)
+			stdio_c(char_out);	
+			if (char_out==NEWLINE)
 				{
 				//Erase where the funny messages are written
 				video_gotoxy(4,17);
@@ -76,51 +76,44 @@ void menu(void)
 				
 			else
 				{
-				menu_buff[menu_pointer++] = sstr[0];
+				menu_buff[menu_pointer++] = char_out;
 				if (menu_pointer >= 29) 
 					{
 					menu_pointer = 0;
 					menu_buff[menu_pointer] = 0;
 					}
 				}
-			/*
-				{
-				cmd_line_buff[cmd_line_pointer] = 0;
-
-			else
-				{
-				len = strlen(sstr);
-				for (i=0;i<len;i++)
-					{
-					if (sstr[i]>=' ') cmd_line_buff[cmd_line_pointer++] = sstr[i];
-					else if (sstr[i]==BACKSPACE)
-						{
-						if (cmd_line_pointer>0) cmd_line_buff[cmd_line_pointer--]=0;
-						}
-					}			
-				}*/
 			}
 		}
 	}
 
 void showmenu(void)
 	{
+	video_set_color(15,0);
 	video_gotoxy(4,4);
-	stdio_write("Belegrade badge version 0.27");
+	stdio_write("Belegrade badge version 0.29");
 	video_gotoxy(4,5);
+	video_set_color(12,2);
 	stdio_write("Type your choice and hit ENTER");
 	video_gotoxy(4,6);
+	video_set_color(10,4);
 	stdio_write("1 - Hackaday BASIC");
 	video_gotoxy(4,7);
+	video_set_color(2,6);
 	stdio_write("2 - CP/M @ Z80");
 	video_gotoxy(4,8);
+	video_set_color(0,12);
 	stdio_write("3 - Tiny Basic @ 8080");
 	video_gotoxy(4,9);
+	video_set_color(9,0);
 	stdio_write("4 - Play Badgetris!");
 	video_gotoxy(4,10);
+	video_set_color(14,7);
 	stdio_write("5 - User Program");
 	video_gotoxy(4,11);
+	video_set_color(4,0);
 	fancyframe();
+	video_set_color(15,0);
 	video_gotoxy(4,13);
 	stdio_write("> ");
 	}
