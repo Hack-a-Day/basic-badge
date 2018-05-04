@@ -121,7 +121,8 @@ int main(void)
 	stdio_write("1 - Hackaday BASIC\n");
 	stdio_write("2 - CP/M @ Z80\n");
 	stdio_write("3 - Tiny Basic @ 8080\n");
-	stdio_write("4 - User Program\n");
+	stdio_write("4 - Play Badgetris!\n");
+	stdio_write("5 - User Program\n");
 	while (1)
 		{
 		get_stat = stdio_get(sstr);
@@ -147,6 +148,11 @@ int main(void)
 					while (1) loop_8080_basic();
 					}
 				if (strcmp(cmd_line_buff,"4")==0)
+					{
+					handle_display = 0; //Shut off auto-scanning of character buffer
+					tetrapuzz();
+					}
+				if (strcmp(cmd_line_buff,"5")==0)
 					{
 					init_userprog();
 					while (1) loop_userprog();
@@ -274,7 +280,6 @@ void loop_userprog (void)
     if (get_stat!=0)
     {
 	handle_display = 0; //Shut off auto-scanning of character buffer
-	tetrapuzz();
 	animate_splash();
 	//show_splash();
 	while(stdio_get(sstr) == 0) { ;; }  //wait for button press
