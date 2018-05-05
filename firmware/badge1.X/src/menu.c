@@ -89,30 +89,58 @@ void menu(void)
 
 void showmenu(void)
 	{
-	video_set_color(15,0);
-	video_gotoxy(4,4);
+	//Set some background boxes
+	
+	video_set_color(0,15);
+	video_gotoxy(1,1);
+	stdio_write("                                      ");
+	video_gotoxy(1,2);
+	stdio_write("                                      ");
+	video_gotoxy(1,3);
+	stdio_write("                                      ");
+	
+	video_set_color(15,8);
+	video_gotoxy(3,5);
+	stdio_write("                                  ");
+	video_set_color(15,9);
+	video_gotoxy(3,6);
+	stdio_write("                                  ");
+	video_gotoxy(3,7);
+	stdio_write("                                  ");
+	video_gotoxy(3,8);
+	stdio_write("                                  ");
+	video_gotoxy(3,9);
+	stdio_write("                                  ");
+	video_gotoxy(3,10);
+	stdio_write("                                  ");
+	
+	//Draw frame
+	video_set_color(12,0);
+	fancyframe();
+	
+	//Print menu text
+	video_set_color(0,15);
+	video_gotoxy(4,2);
 	stdio_write("Belegrade badge version 0.31");
 	video_gotoxy(4,5);
-	video_set_color(12,2);
+	video_set_color(15,8);
 	stdio_write("Type your choice and hit ENTER");
 	video_gotoxy(4,6);
-	video_set_color(10,4);
+	video_set_color(15,9);
 	stdio_write("1 - Hackaday BASIC");
 	video_gotoxy(4,7);
-	video_set_color(2,6);
+	video_set_color(15,9);
 	stdio_write("2 - CP/M @ Z80");
 	video_gotoxy(4,8);
-	video_set_color(0,12);
+	video_set_color(15,9);
 	stdio_write("3 - Tiny Basic @ 8080");
 	video_gotoxy(4,9);
-	video_set_color(9,0);
+	video_set_color(15,9);
 	stdio_write("4 - Play Badgetris!");
 	video_gotoxy(4,10);
-	video_set_color(14,7);
+	video_set_color(15,9);
 	stdio_write("5 - User Program");
-	video_gotoxy(4,11);
-	video_set_color(11,0);
-	fancyframe();
+	
 	video_set_color(15,0);
 	video_gotoxy(4,13);
 	stdio_write("> ");
