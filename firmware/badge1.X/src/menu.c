@@ -12,9 +12,23 @@ void menu(void)
 	unsigned char menu_buff[30], menu_pointer;
 	menu_pointer=0;
 	int len, i;
+	unsigned char clear_flag = 0;
+	unsigned long wait_to_clear = 0;
 	
 	while (1)
 		{
+		if (clear_flag)
+			{
+			if (millis() > wait_to_clear)
+				{
+				clear_flag = 0;
+				int cursorx = video_getx();
+				int cursory = video_gety();
+				video_gotoxy(1,17);
+				stdio_write("                                      ");
+				video_gotoxy(cursorx,cursory);
+				}
+			}
 		unsigned char get_stat = stdio_get(&char_out);
 		if (get_stat!=0)
 			{
@@ -58,11 +72,18 @@ void menu(void)
 					{
 					video_gotoxy(4,17);
 					stdio_write("Mike wrote this");
+					clear_flag = 1;
 					}
 				else
 					{
 					video_gotoxy(4,17);
 					stdio_write("Nice try, wise guy.");
+					clear_flag = 1;
+					}
+				
+				if (clear_flag)
+					{
+					wait_to_clear = millis() + 2000;
 					}
 				
 				//Clear prompt area
