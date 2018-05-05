@@ -1,8 +1,6 @@
 #include "splash.h"
 #include <stdint.h>
 
-extern volatile uint32_t ticks;
-
 struct Cipher_box
 {
     int16_t x;	    // Pixel location on screen (negative values for left overflow)
@@ -129,9 +127,9 @@ void animate_splash(void)
     tft_fill_area(0,0,320,240,CIPHER_BACKGROUND);    //Make display black
     
     while (1) {
-	if (ticks>=splash_waitfor)
+	if (millis()>=splash_waitfor)
 	{
-	    splash_waitfor = ticks+4;
+	    splash_waitfor = millis()+4;
 	    move_box_right(&box0);
 	    move_box_left(&box1);
 	    move_box_right(&box2);

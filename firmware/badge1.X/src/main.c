@@ -103,12 +103,13 @@ void loop_8080_basic (void);
 void clr_buffer(void);
 void loop_badge(void);
 void enable_display_scanning(unsigned char onoff);
+uint32_t millis(void);
 
 unsigned char flash_init = 0;
 unsigned char handle_display = 1;
 
 extern volatile uint16_t bufsize;
-extern volatile uint32_t ticks;	// millisecond timer incremented in ISR
+volatile uint32_t ticks;	// millisecond timer incremented in ISR
 
 extern const unsigned char b2_rom[2048];
 extern const unsigned char ram_init [30];
@@ -152,6 +153,11 @@ void enable_display_scanning(unsigned char onoff)
 	//Turns vt100 scanning on or off
 	if (onoff) handle_display = 1;
 	else handle_display = 0;
+	}
+
+uint32_t millis(void)
+	{
+	return ticks;
 	}
 
 void init_8080_basic (void)

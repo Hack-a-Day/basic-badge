@@ -37,7 +37,6 @@
 #pragma config CP = OFF                 // Code Protect (Protection Disabled)
 
 unsigned char key_state=0,key_last,key;
-volatile uint32_t ticks;	// millisecond timer incremented in ISR
 
 const char keys_normal[50] = 
 	{
@@ -434,8 +433,8 @@ void delay_us (unsigned long howmuch)
 void wait_ms (unsigned int count)
 {
 	unsigned int ticks_wait;
-	ticks_wait = ticks + count;
-	while (ticks<= ticks_wait);
+	ticks_wait = millis() + count;
+	while (millis()<= ticks_wait);
 }
 
 unsigned char	SPI_dat (unsigned char data)

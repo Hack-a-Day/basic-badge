@@ -2,8 +2,6 @@
 #include "tetrapuzz.h"
 #include "box_game.h"
 
-extern volatile unsigned long ticks;
-
 //FIXME: these should probably not be globals
 unsigned long wait_until;
 unsigned char drop_timer_flag = 0;
@@ -33,9 +31,9 @@ void tetrapuzz(void)
 			}
 
 		//Service the loop on a non-blocking delay here
-		if (ticks > wait_until)
+		if (millis() > wait_until)
 			{
-			wait_until = ticks+BOX_get_delay();
+			wait_until = millis()+BOX_get_delay();
 			tetrapuzz_loop();
 			}
 		}
@@ -51,7 +49,7 @@ void tetrapuzz_init(void)
 
 	BOX_clearscreen();
 	drop_timer_flag = 0;
-	wait_until = ticks;
+	wait_until = millis();
 	BOX_start_game();
 	}
 
