@@ -19,6 +19,24 @@ const unsigned long hashtable[HASH_TABLE_LENGTH] =
 	3174374908u,	//9
 	};
 
+//Prompt handling defines
+#define COMMAND_MAX 32
+#define TEXT_LEFT	4
+#define PROMPT_Y	13
+#define CRACK_Y		17
+
+//Menu color values
+#define MENU_FRAME_FG	12
+#define MENU_FRAME_BG	0
+#define MENU_BANNER_FG	0
+#define MENU_BANNER_BG	15
+#define MENU_HEADER_FG	15
+#define MENU_HEADER_BG	8
+#define MENU_ENTRY_FG	15
+#define MENU_ENTRY_BG	9
+#define MENU_DEFAULT_FG 15
+#define MENU_DEFAULT_BG 0
+
 const unsigned char wrencher[18][41] = {
 "    +mmy/                      /ymm+    ",
 "      sMMh                    hMMs      ",
@@ -44,12 +62,12 @@ void menu(void)
 	showmenu();
 	
 	char char_out;
-	unsigned char menu_buff[30], menu_pointer;
+	unsigned char menu_buff[COMMAND_MAX], menu_pointer;
 	menu_pointer=0;
 	int len, i;
 	unsigned char clear_flag = 0;
 	unsigned long wait_to_clear = 0;
-	
+	int cursorx, cursory;
 	while (1)
 		{
 		if (clear_flag)
@@ -57,9 +75,9 @@ void menu(void)
 			if (millis() > wait_to_clear)
 				{
 				clear_flag = 0;
-				int cursorx = video_getx();
-				int cursory = video_gety();
-				video_gotoxy(1,17);
+				cursorx = video_getx();
+				cursory = video_gety();
+				video_gotoxy(1,CRACK_Y);
 				stdio_write("                                      ");
 				video_gotoxy(cursorx,cursory);
 				}
@@ -67,12 +85,30 @@ void menu(void)
 		unsigned char get_stat = stdio_get(&char_out);
 		if (get_stat!=0)
 			{
-			stdio_c(char_out);	
-			if (char_out==NEWLINE)
+			stdio_c(char_out);
+			if (char_out==BACKSPACE)
+				{
+				if (menu_pointer)
+					{
+					//We only need to do this if we're not at position 0
+					--menu_pointer;
+					menu_buff[menu_pointer] = 0;
+					cursorx = video_getx();
+					cursory = video_gety();
+					stdio_write(" ");
+					video_gotoxy(cursorx, cursory);
+					}
+				else
+					{
+					//Don't let backspace key move left of input position
+					video_gotoxy(TEXT_LEFT+2,PROMPT_Y);
+					}
+				}
+			else if (char_out==NEWLINE)
 				{
 				//Erase where the funny messages are written
-				video_gotoxy(4,17);
-				for (i=4; i<39; i++) stdio_write(" ");
+				video_gotoxy(1,CRACK_Y);
+				stdio_write("                                      ");
 				
 				menu_buff[menu_pointer] = 0;	//add zero terminator
 				//Check entry and react
@@ -108,28 +144,20 @@ void menu(void)
 					switch (get_command_index(hash(menu_buff)))
 						{
 						//case 0: break;
-						case 2: clear_flag = wisecrack("Make your own sandwich",4,17); break;
-						case 3: clear_flag = wisecrack("Existence itself is not a hack", 4,17); break;
-						case 4: clear_flag = wisecrack("101010 *IS* the answer", 4,17); break;
-						case 5: clear_flag = wisecrack("Hackers don't need manuals", 4,17); break;
-						case 6: clear_flag = wisecrack("Han shot first", 4,17); break;
-						case 7: clear_flag = wisecrack("You're in a room filled with hackers", 4,17); break;
-						case 8: clear_flag = wisecrack("I am afraid I can't do that Dave", 4,17); break;
+						case 2: clear_flag = wisecrack("Make your own sandwich",TEXT_LEFT,CRACK_Y); break;
+						case 3: clear_flag = wisecrack("Existence itself is not a hack", TEXT_LEFT,CRACK_Y); break;
+						case 4: clear_flag = wisecrack("101010 *IS* the answer", TEXT_LEFT,CRACK_Y); break;
+						case 5: clear_flag = wisecrack("Hackers don't need manuals", TEXT_LEFT,CRACK_Y); break;
+						case 6: clear_flag = wisecrack("Han shot first", TEXT_LEFT,CRACK_Y); break;
+						case 7: clear_flag = wisecrack("You're in a room filled with hackers", TEXT_LEFT,CRACK_Y); break;
+						case 8: clear_flag = wisecrack("I am afraid I can't do that Dave", TEXT_LEFT,CRACK_Y); break;
 						case 9: show_wrencher(); break;
-						default: clear_flag = wisecrack("Nice try, wise guy",4,17); break;
+						default: clear_flag = wisecrack("Nice try, wise guy",TEXT_LEFT,CRACK_Y); break;
 						}
 					}
+
 				
-				if (clear_flag)
-					{
-					wait_to_clear = millis() + 2000;
-					}
-				
-				//Clear prompt area
-				video_gotoxy(4,13);
-				for (i=4; i<39; i++) stdio_write(" ");
-				video_gotoxy(4,13);
-				stdio_write("> ");
+				clear_prompt();
 				menu_pointer = 0;
 				menu_buff[menu_pointer] = 0;
 				}
@@ -137,11 +165,17 @@ void menu(void)
 			else
 				{
 				menu_buff[menu_pointer++] = char_out;
-				if (menu_pointer >= 29) 
+				if (menu_pointer >= COMMAND_MAX-1) 
 					{
 					menu_pointer = 0;
 					menu_buff[menu_pointer] = 0;
+					clear_flag = wisecrack("Boo, too big.",TEXT_LEFT,CRACK_Y);
+					clear_prompt();
 					}
+				}
+			if (clear_flag)
+				{
+				wait_to_clear = millis() + 2000;
 				}
 			}
 		}
@@ -182,7 +216,7 @@ void showmenu(void)
 	{
 	//Set some background boxes
 	video_clrscr();
-	video_set_color(0,15);
+	video_set_color(MENU_BANNER_FG,MENU_BANNER_BG);
 	video_gotoxy(1,1);
 	stdio_write("                                      ");
 	video_gotoxy(1,2);
@@ -190,10 +224,10 @@ void showmenu(void)
 	video_gotoxy(1,3);
 	stdio_write("                                      ");
 	
-	video_set_color(15,8);
+	video_set_color(MENU_HEADER_FG,MENU_HEADER_BG);
 	video_gotoxy(3,5);
 	stdio_write("                                  ");
-	video_set_color(15,9);
+	video_set_color(MENU_ENTRY_FG,MENU_ENTRY_BG);
 	video_gotoxy(3,6);
 	stdio_write("                                  ");
 	video_gotoxy(3,7);
@@ -206,34 +240,30 @@ void showmenu(void)
 	stdio_write("                                  ");
 	
 	//Draw frame
-	video_set_color(12,0);
+	video_set_color(MENU_FRAME_FG,MENU_FRAME_BG);
 	fancyframe();
 	
 	//Print menu text
-	video_set_color(0,15);
-	video_gotoxy(4,2);
+	video_set_color(MENU_BANNER_FG,MENU_BANNER_BG);
+	video_gotoxy(TEXT_LEFT,2);
 	stdio_write("Belegrade badge version 0.31");
-	video_gotoxy(4,5);
-	video_set_color(15,8);
+	video_gotoxy(TEXT_LEFT,5);
+	video_set_color(MENU_HEADER_FG,MENU_HEADER_BG);
 	stdio_write("Type your choice and hit ENTER");
-	video_gotoxy(4,6);
-	video_set_color(15,9);
+	video_gotoxy(TEXT_LEFT,6);
+	video_set_color(MENU_ENTRY_FG,MENU_ENTRY_BG);
 	stdio_write("1 - Hackaday BASIC");
-	video_gotoxy(4,7);
-	video_set_color(15,9);
+	video_gotoxy(TEXT_LEFT,7);
 	stdio_write("2 - CP/M @ Z80");
-	video_gotoxy(4,8);
-	video_set_color(15,9);
+	video_gotoxy(TEXT_LEFT,8);
 	stdio_write("3 - Tiny Basic @ 8080");
-	video_gotoxy(4,9);
-	video_set_color(15,9);
+	video_gotoxy(TEXT_LEFT,9);
 	stdio_write("4 - Play Badgetris!");
-	video_gotoxy(4,10);
-	video_set_color(15,9);
+	video_gotoxy(TEXT_LEFT,10);
 	stdio_write("5 - User Program");
 	
-	video_set_color(15,0);
-	video_gotoxy(4,13);
+	video_set_color(MENU_DEFAULT_FG,MENU_DEFAULT_BG);
+	video_gotoxy(TEXT_LEFT,PROMPT_Y);
 	stdio_write("> ");
 	}
 
@@ -255,6 +285,16 @@ void fancyframe(void)
 		video_gotoxy(39,i);
 		stdio_write("*");
 		}
+	}
+
+void clear_prompt(void)
+	{
+	//Clear prompt area
+	video_gotoxy(TEXT_LEFT,PROMPT_Y);
+	int i;
+	for (i=TEXT_LEFT; i<39; i++) stdio_write(" ");
+	video_gotoxy(TEXT_LEFT,PROMPT_Y);
+	stdio_write("> ");
 	}
 
 void show_wrencher(void)
