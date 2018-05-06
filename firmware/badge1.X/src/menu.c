@@ -4,19 +4,40 @@
 #include "vt100.h"
 #include <string.h>
 
-#define HASH_TABLE_LENGTH	9
+#define HASH_TABLE_LENGTH	10
 const unsigned long hashtable[HASH_TABLE_LENGTH] =
 	{
-	0,			//0
-	0,			//1
-	4080429,	//2
-	3914880981,	//3
-	1670,		//4
-	121730,		//5
-	4108351,	//6
-	138097304,	//7
-	110149,		//8
+	0,				//0
+	0,				//1
+	4080429,		//2
+	3914880981u,	//3
+	1670,			//4
+	121730,			//5
+	4108351,		//6
+	138097304,		//7
+	110149,			//8
+	3174374908u,	//9
 	};
+
+const unsigned char wrencher[18][41] = {
+"    +mmy/                      /ymm+    ",
+"      sMMh                    hMMs      ",
+"h/  .hMMMM.                  -MMMMh.  /h",
+"sMmyMMMMMMNo`              `oNMMMMMMymMs",
+" :hNMMMMMMMMMo`:shmNNmhs:`oMMMMMMMMMNh: ",
+"       :hMMN+sNMMMMMMMMMMNo+NMMh:       ",
+"         -s:mMMMMMMMMMMMMMMm:s.         ",
+"          `mMMMMMMMMMMMMMMMMm`          ",
+"          +MMh.  -mMMd-  .hMM/          ",
+"          oMM.  -+NMMN+-  .MMo          ",
+"          -MMd/NMMMmmMMMN/dMM-          ",
+"         -/sMMMMMMM::MMMMMMMs/-         ",
+"       /dMMsoMMMMMMNNMMMMMNosMMd/       ",
+" :hNMMMMMMMMd-hMMMMMMMMMMh-dMMMMMMMMNy: ",
+"sMmyMMMMMMm+` /mNsoNm+sNm/ `omMMMMMNymMo",
+"h:  .yMMMM.                  .MMMMy.  :h",
+"      sMMh                    hMMs      ",
+"   `ommh/                      /hmm+    "};
 
 void menu(void)
 	{
@@ -86,33 +107,18 @@ void menu(void)
 					{
 					switch (get_command_index(hash(menu_buff)))
 						{
-						case 1:
-							break;
-						case 2:
-							wisecrack("Make your own sandwich",4,17);
-							clear_flag = 1;
-							break;
-						case 3:
-							wisecrack("Existence itself is not a hack", 4,17);
-							clear_flag = 1;
-							break;
-						case 4:
-							wisecrack("101010 *IS* the answer", 4,17);
-							clear_flag = 1;
-							break;
-						default:
-							wisecrack("Nice try, wise guy",4,17);
-							clear_flag = 1;
-							break;
+						//case 0: break;
+						case 2: clear_flag = wisecrack("Make your own sandwich",4,17); break;
+						case 3: clear_flag = wisecrack("Existence itself is not a hack", 4,17); break;
+						case 4: clear_flag = wisecrack("101010 *IS* the answer", 4,17); break;
+						case 5: clear_flag = wisecrack("Hackers don't need manuals", 4,17); break;
+						case 6: clear_flag = wisecrack("Han shot first", 4,17); break;
+						case 7: clear_flag = wisecrack("You're in a room filled with hackers", 4,17); break;
+						case 8: clear_flag = wisecrack("I'm sorry, Dave. I'm afraid I can't do that", 2,17); break;
+						case 9: show_wrencher(); break;
+						default: clear_flag = wisecrack("Nice try, wise guy",4,17); break;
 						}
 					}
-				/*
-					if (get_command_index(hash(menu_buff))==3)
-					{
-					video_gotoxy(4,17);
-					stdio_write("Mike wrote this");
-					clear_flag = 1;
-					}*/
 				
 				if (clear_flag)
 					{
@@ -165,16 +171,17 @@ unsigned char get_command_index(unsigned long hash_value)
 	return 0;
 	}
 
-void wisecrack(char * quip, unsigned int x, unsigned char y)
+unsigned char wisecrack(char * quip, unsigned int x, unsigned char y)
 	{
 	video_gotoxy(x,y);
 	stdio_write(quip);
+	return 1;
 	}
 
 void showmenu(void)
 	{
 	//Set some background boxes
-	
+	video_clrscr();
 	video_set_color(0,15);
 	video_gotoxy(1,1);
 	stdio_write("                                      ");
@@ -249,3 +256,19 @@ void fancyframe(void)
 		stdio_write("*");
 		}
 	}
+
+void show_wrencher(void)
+	{
+	char i;
+	video_clrscr();
+	video_set_color(2,0);
+	video_gotoxy(0,1);
+	for (i=0; i<18; i++)
+		{
+		stdio_write((char *)wrencher[i]);
+		}
+	char char_out;
+	while (stdio_get(&char_out) == 0) {;;}
+	showmenu();
+	}
+
