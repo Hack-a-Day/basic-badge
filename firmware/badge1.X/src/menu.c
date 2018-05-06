@@ -267,8 +267,49 @@ void show_wrencher(void)
 		{
 		stdio_write((char *)wrencher[i]);
 		}
-	char char_out;
-	while (stdio_get(&char_out) == 0) {;;}
+	wait_ms(200);
+	i = 0;
+	unsigned char loopbreak = 0;
+	while(1)
+		{
+		loopbreak = playriff(i++);
+		if (loopbreak) break;
+		if (i > 3) i = 0;
+		}
 	showmenu();
+	}
+
+unsigned char playriff(unsigned char raisetop)
+	{
+	const unsigned int riffdelays[3] = {78,236,393};
+	const unsigned char riff[14][4] =
+		{
+			{0,62,69,0},
+			{0,0,0,0},
+			{0,62,69,0},
+			{0,0,0,0},
+			{0,62,69,1},
+			{0,0,0,2},
+			{0,62,69,0},
+			{0,0,0,0},
+			{0,62,69,0},
+			{0,0,0,0},
+			{0,62,69,1},
+			{0,0,0,0},
+			{50,0,0,1},
+			{0,0,0,0}
+		};
+	unsigned char i;
+	for (i=0; i<14; i++)
+		{
+		unsigned char top = 0;
+		if (riff[i][2] != 0)
+			{
+			top = riff[i][2] + raisetop;
+			}
+		sound_play_notes(riff[i][0],riff[i][1],top,riffdelays[riff[i][3]]);	
+		}
+		if (stdio_get(&i) != 0) { return 1; }
+	return 0;
 	}
 

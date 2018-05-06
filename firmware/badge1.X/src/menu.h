@@ -5,3 +5,4 @@ unsigned char wisecrack(char *, unsigned int, unsigned char);
 void showmenu(void);
 void fancyframe(void);
 void show_wrencher(void);
+unsigned char playriff(unsigned char);
