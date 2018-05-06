@@ -24,6 +24,8 @@ const unsigned long hashtable[HASH_TABLE_LENGTH] =
 #define TEXT_LEFT	4
 #define PROMPT_Y	13
 #define CRACK_Y		17
+#define VERSION_X	33
+#define VERSION_Y	18
 
 //Menu color values
 #define MENU_FRAME_FG	12
@@ -36,6 +38,7 @@ const unsigned long hashtable[HASH_TABLE_LENGTH] =
 #define MENU_ENTRY_BG	9
 #define MENU_DEFAULT_FG 15
 #define MENU_DEFAULT_BG 0
+#define MENU_VERSION_FG	8
 
 const unsigned char wrencher[18][41] = {
 "    +mmy/                      /ymm+    ",
@@ -246,10 +249,10 @@ void showmenu(void)
 	//Print menu text
 	video_set_color(MENU_BANNER_FG,MENU_BANNER_BG);
 	video_gotoxy(TEXT_LEFT,2);
-	stdio_write("Belegrade badge version 0.31");
+	stdio_write("Hackaday Belgrade Conference");
 	video_gotoxy(TEXT_LEFT,5);
 	video_set_color(MENU_HEADER_FG,MENU_HEADER_BG);
-	stdio_write("Type your choice and hit ENTER");
+	stdio_write("Type a command and hit ENTER");
 	video_gotoxy(TEXT_LEFT,6);
 	video_set_color(MENU_ENTRY_FG,MENU_ENTRY_BG);
 	stdio_write("1 - Hackaday BASIC");
@@ -261,6 +264,11 @@ void showmenu(void)
 	stdio_write("4 - Play Badgetris!");
 	video_gotoxy(TEXT_LEFT,10);
 	stdio_write("5 - User Program");
+	
+	video_set_color(MENU_VERSION_FG,MENU_DEFAULT_BG);
+	video_gotoxy(VERSION_X,VERSION_Y);
+	stdio_write("v");
+	stdio_write((char *)get_firmware_string());
 	
 	video_set_color(MENU_DEFAULT_FG,MENU_DEFAULT_BG);
 	video_gotoxy(TEXT_LEFT,PROMPT_Y);

@@ -15,6 +15,9 @@
 #include "splash.h"
 #include "tetrapuzz.h"
 
+//Badge firmware version should be defined as a string here:
+#define FIRMWARE_VERSION "0.31"
+
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
 
@@ -412,6 +415,10 @@ void clr_buffer (void)
 	}
     }
 }
+
+const char* get_firmware_string(void) {
+	return FIRMWARE_VERSION;
+	}
 
 unsigned char add_prog_line (char * line, char * prog, int linenum)
     {
