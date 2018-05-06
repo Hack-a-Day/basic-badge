@@ -114,7 +114,7 @@ void menu(void)
 						case 5: clear_flag = wisecrack("Hackers don't need manuals", 4,17); break;
 						case 6: clear_flag = wisecrack("Han shot first", 4,17); break;
 						case 7: clear_flag = wisecrack("You're in a room filled with hackers", 4,17); break;
-						case 8: clear_flag = wisecrack("I'm sorry, Dave. I'm afraid I can't do that", 2,17); break;
+						case 8: clear_flag = wisecrack("I am afraid I can't do that Dave", 4,17); break;
 						case 9: show_wrencher(); break;
 						default: clear_flag = wisecrack("Nice try, wise guy",4,17); break;
 						}
