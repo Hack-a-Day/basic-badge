@@ -4,6 +4,20 @@
 #include "vt100.h"
 #include <string.h>
 
+#define HASH_TABLE_LENGTH	9
+const unsigned long hashtable[HASH_TABLE_LENGTH] =
+	{
+	0,			//0
+	0,			//1
+	4080429,	//2
+	3914880981,	//3
+	1670,		//4
+	121730,		//5
+	4108351,	//6
+	138097304,	//7
+	110149,		//8
+	};
+
 void menu(void)
 	{
 	showmenu();
@@ -68,7 +82,7 @@ void menu(void)
 					init_userprog();
 					while (1) loop_userprog();
 					}			
-				else if (strcmp(menu_buff,"mike")==0)
+				else if (get_command_index(hash(menu_buff))==3)
 					{
 					video_gotoxy(4,17);
 					stdio_write("Mike wrote this");
@@ -106,6 +120,30 @@ void menu(void)
 				}
 			}
 		}
+	}
+
+unsigned long hash(char *command)
+	{
+	unsigned long hash = 0;
+	unsigned char infinite_loop_breaker = 0;
+	unsigned char c;
+	while (c = *command++)
+		{
+		hash = (hash*33)^c;
+		if (infinite_loop_breaker++ > 100) return 0;	//In case we get stuck
+		}
+	//sprintf(stdio_buff, "has %d\n", hash);
+	return hash;
+	}
+
+unsigned char get_command_index(unsigned long hash_value)
+	{
+	unsigned char i;
+	for (i=0; i<HASH_TABLE_LENGTH; i++)
+		{
+		if (hashtable[i] == hash_value) return i;
+		}
+	return 0;
 	}
 
 void showmenu(void)
