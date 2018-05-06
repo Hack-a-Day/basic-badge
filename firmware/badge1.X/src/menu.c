@@ -82,18 +82,37 @@ void menu(void)
 					init_userprog();
 					while (1) loop_userprog();
 					}			
-				else if (get_command_index(hash(menu_buff))==3)
+				else
+					{
+					switch (get_command_index(hash(menu_buff)))
+						{
+						case 1:
+							break;
+						case 2:
+							wisecrack("Make your own sandwich",4,17);
+							clear_flag = 1;
+							break;
+						case 3:
+							wisecrack("Existence itself is not a hack", 4,17);
+							clear_flag = 1;
+							break;
+						case 4:
+							wisecrack("101010 *IS* the answer", 4,17);
+							clear_flag = 1;
+							break;
+						default:
+							wisecrack("Nice try, wise guy",4,17);
+							clear_flag = 1;
+							break;
+						}
+					}
+				/*
+					if (get_command_index(hash(menu_buff))==3)
 					{
 					video_gotoxy(4,17);
 					stdio_write("Mike wrote this");
 					clear_flag = 1;
-					}
-				else
-					{
-					video_gotoxy(4,17);
-					stdio_write("Nice try, wise guy.");
-					clear_flag = 1;
-					}
+					}*/
 				
 				if (clear_flag)
 					{
@@ -144,6 +163,12 @@ unsigned char get_command_index(unsigned long hash_value)
 		if (hashtable[i] == hash_value) return i;
 		}
 	return 0;
+	}
+
+void wisecrack(char * quip, unsigned int x, unsigned char y)
+	{
+	video_gotoxy(x,y);
+	stdio_write(quip);
 	}
 
 void showmenu(void)
