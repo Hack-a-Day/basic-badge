@@ -435,11 +435,13 @@ void hw_init (void)
 	GEN_ENABLE = 1;
     INTEnableSystemMultiVectoredInt();
 
+	
     TFT_24_7789_Init();
 	tft_fill_area(0,0,320,240,0);	//fill with black color
 	wait_ms(80);					//wait a moment to avoid flicker
 	LCD_BKLT = 0;					//turn backlight on
-	fl_rst_pb();	
+	fl_rst_pb();
+ 	
 
   	}
 

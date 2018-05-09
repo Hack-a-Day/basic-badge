@@ -168,11 +168,15 @@ get_next_token(void)
     return TOKENIZER_STRING;
   } else {
     for(kt = keywords; kt->keyword != NULL; ++kt) {
-      if(strncmp(token_string, kt->keyword, strlen(token_string)) == 0) {
-	nextptr = ptr + strlen(kt->keyword);
-	return kt->token;
-      }
-    }
+      if(strncmp(token_string, kt->keyword, strlen(token_string)) == 0) 
+		  {
+		  if (strlen(token_string)==strlen(kt->keyword))
+			  {
+				nextptr = ptr + strlen(kt->keyword);
+				return kt->token;
+			  }
+			}
+		}
   }
 
   if(*ptr >= 'a' && *ptr <= 'z') {

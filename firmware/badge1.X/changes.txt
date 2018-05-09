@@ -98,4 +98,7 @@
 - sources should now use uint8_t type defs
 - bug fixes
 
+0.36
+- bug fix in BASIC tokenizer
+
 

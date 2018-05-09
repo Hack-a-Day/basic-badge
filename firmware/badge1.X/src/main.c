@@ -17,16 +17,16 @@
 #include "tetrapuzz.h"
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.35"
+#define FIRMWARE_VERSION "0.36"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
 
 int8_t bprog[4097] =
-"21 rnd a,100\n\
-30 print a\n\
-40 wait 100\n\
-50 goto 21\n\
+"10 let i=1\n\
+20 print i\n\
+30 if i=5 then print 543\n\
+40 if i=1 then print 123\n\
 ";
 
 int16_t prog_ptr;
