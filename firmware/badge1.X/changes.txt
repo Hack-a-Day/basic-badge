@@ -94,3 +94,8 @@
 0.34
 - started reorganizing sources
 
+0.35
+- sources should now use uint8_t type defs
+- bug fixes
+
+

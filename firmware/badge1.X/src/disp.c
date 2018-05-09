@@ -157,7 +157,7 @@ void tft_disp_buffer_refresh_part(uint8_t * buff, uint8_t * color_buff)
 
 
 
-inline void tft_print_char (uint8_t val, uint16_t x, uint16_t y, uint16_t col, uint16_t back)
+inline void tft_print_char (uint8_t val, uint16_t x, uint16_t y, uint32_t col, uint32_t back)
 	{
 	uint16_t fl,i,j;
 	uint16_t c1,c2,c3,b1,b2,b3;
@@ -226,9 +226,9 @@ inline void tft_print_char (uint8_t val, uint16_t x, uint16_t y, uint16_t col, u
 	}
 
 
-void tft_fill_area (uint16_t x, uint16_t y, uint16_t xlen, uint16_t ylen, uint16_t back)
+void tft_fill_area (uint16_t x, uint16_t y, uint16_t xlen, uint16_t ylen, uint32_t back)
 {
-    uint16_t i,j;
+    uint32_t i,j;
     tft_set_write_area(x,y,xlen,ylen);
     TFT_24_7789_Write_Command(0x2C);
     //FIXME: Why do I need these +1 adjustments. Off-by-one in tft_set_write_area?
