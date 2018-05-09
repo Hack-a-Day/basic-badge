@@ -534,6 +534,23 @@ int c1,c2;
 	//now set up led_p to value led_v
 	video_set_color(c1,c2);
 	tokenizer_next();
+}
+/*---------------------------------------------------------------------------*/
+static void
+rnd_statement(void)
+{
+int var,c1;
+long temp;
+	accept(TOKENIZER_RND);
+	var = tokenizer_variable_num();
+	accept(TOKENIZER_VARIABLE);
+	accept(TOKENIZER_COMMA);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	temp = get_rnd();
+	temp = temp * c1;
+	temp = temp / 65535;
+	ubasic_set_variable(var,temp);
+	tokenizer_next();
 }/*---------------------------------------------------------------------------*/
 static void
 statement(void)
@@ -596,6 +613,9 @@ statement(void)
     break;	  
   case TOKENIZER_COLOR:
     color_statement();
+    break;
+  case TOKENIZER_RND:
+    rnd_statement();
     break;
   default:
     sprintf(err_msg,"Bad token %d at line %d\n", token,last_linenum);

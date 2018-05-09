@@ -85,4 +85,7 @@
 0.31
 - sound generator is now silenced after tone command ends
 
+0.32
+- rnd word added
+
 

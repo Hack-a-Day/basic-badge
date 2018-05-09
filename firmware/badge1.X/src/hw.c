@@ -38,6 +38,8 @@
 
 unsigned char key_state=0,key_last,key;
 
+unsigned int rnd_var1,rnd_var2,rnd_var3;
+
 const char keys_normal[50] = 
 	{
 	'3','4','2','5','1','9','6','7','0','8',
@@ -432,7 +434,7 @@ void hw_init (void)
 	sound_set_generator(0,2);
 	GEN_ENABLE = 1;
     INTEnableSystemMultiVectoredInt();
-	
+
     TFT_24_7789_Init();
 	tft_fill_area(0,0,320,240,0);	//fill with black color
 	wait_ms(80);					//wait a moment to avoid flicker
@@ -446,6 +448,8 @@ unsigned char keyb_tasks (void)
 	{
 	static char shift=0;
 	unsigned char retval = 0;
+	rnd_var3 = rnd_var3 + 12345;
+	rnd_var2 = rnd_var2 + millis();
 	K_R1 = 1;
 	K_R2 = 1;
 	K_R3 = 1;
@@ -483,6 +487,7 @@ unsigned char keyb_tasks (void)
 		if (K_C8==0)	key = 7 + (key_state*10);
 		if (K_C9==0)	key = 8 + (key_state*10);
 		if (K_C10==0)	key = 9 + (key_state*10);
+		rnd_var1 = rnd_var1  + key;
 		key_state++;
 		}
 	return retval;
@@ -499,6 +504,7 @@ void wait_ms (unsigned int count)
 {
 	unsigned int ticks_wait;
 	ticks_wait = millis() + count;
+	rnd_var2 = rnd_var2  + ticks_wait;
 	while (millis()<= ticks_wait);
 }
 
@@ -508,3 +514,34 @@ SPI1BUF = data;
 while (SPI1STATbits.SPIRBF==0);
 return (SPI1BUF);
 }
+
+
+unsigned int get_rnd (void)
+	{
+	unsigned long var;
+	static unsigned long var_prev;
+	var = rnd_var1 + rnd_var2 + rnd_var3 + (var_prev*1103515245) + 12345;
+	var = var & 0xFFFF;
+	var_prev = var;
+	return var;
+	}
+
+
+void __ISR(_TIMER_2_VECTOR, ipl6) Timer2Handler(void)
+	{
+    IFS0bits.T2IF = 0;
+	GEN_0_PIN = ~ GEN_0_PIN;
+	rnd_var3++;
+	}
+void __ISR(_TIMER_3_VECTOR, ipl6) Timer3Handler(void)
+	{
+    IFS0bits.T3IF = 0;
+	GEN_1_PIN = ~ GEN_1_PIN;
+	rnd_var3++;
+	}
+void __ISR(_TIMER_4_VECTOR, ipl6) Timer4Handler(void)
+	{
+    IFS0bits.T4IF = 0;
+	GEN_2_PIN = ~ GEN_2_PIN;
+	rnd_var3++;
+	}

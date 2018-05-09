@@ -1,5 +1,3 @@
-- basic load/save to FLASH
-- power on/off via button
 - switching of consoles - tty versus local
 - api for user code
 - remove dependancy from PLIB

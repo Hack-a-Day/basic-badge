@@ -74,6 +74,7 @@ static const struct keyword_token keywords[] = {
   {"wait", TOKENIZER_WAIT},
   {"led", TOKENIZER_LED},
   {"color", TOKENIZER_COLOR},
+  {"rnd", TOKENIZER_RND},
   {NULL, TOKENIZER_ERROR}
 };
 

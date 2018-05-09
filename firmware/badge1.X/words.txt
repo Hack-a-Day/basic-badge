@@ -15,4 +15,5 @@ CLRSCR - clear screen
 WAIT X - wait for X ms
 LED X,Y - set LED X to state Y
 COLOR X,Y - set foreground to X and background to Y
+RND V,X - assign random number 0..X to variable V
 
