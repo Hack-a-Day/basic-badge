@@ -104,4 +104,7 @@
 0.37
 - extended ASCII characters are now available from C code
 
+0.38
+- added BASIC word CHR that prints one character with given ASCII value, useful for handling extended ASCII characters
+
 

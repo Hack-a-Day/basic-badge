@@ -79,6 +79,7 @@ enum {
   TOKENIZER_LED,
   TOKENIZER_COLOR,
   TOKENIZER_RND,
+  TOKENIZER_CHR,
 };
 
 void tokenizer_init(const char *program);

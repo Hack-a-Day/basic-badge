@@ -553,6 +553,16 @@ long temp;
 	tokenizer_next();
 }/*---------------------------------------------------------------------------*/
 static void
+chr_statement(void)
+{
+int var,c1;
+long temp;
+	accept(TOKENIZER_CHR);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	stdio_c(c1);
+	tokenizer_next();
+}/*---------------------------------------------------------------------------*/
+static void
 statement(void)
 {
   int token;
@@ -616,6 +626,9 @@ statement(void)
     break;
   case TOKENIZER_RND:
     rnd_statement();
+    break;
+  case TOKENIZER_CHR:
+    chr_statement();
     break;
   default:
     sprintf(err_msg,"Bad token %d at line %d\n", token,last_linenum);
