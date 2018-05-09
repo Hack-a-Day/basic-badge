@@ -273,25 +273,26 @@ void showmenu(void)
 	video_set_color(MENU_DEFAULT_FG,MENU_DEFAULT_BG);
 	video_gotoxy(TEXT_LEFT,PROMPT_Y);
 	stdio_write("> ");
+	
 	}
 
 void fancyframe(void)
 	{
 	uint16_t i;
 	video_gotoxy(0,0);
-	stdio_write("+");
-	for (i=0; i<38; i++) stdio_write("*");
-	stdio_write("+");
+	stdio_c(201);
+	for (i=0; i<38; i++) stdio_c(205);
+	stdio_c(187);
 	video_gotoxy(0,39);
-	stdio_write("+");
-	for (i=0; i<38; i++) stdio_write("*");
-	stdio_write("+");
+	stdio_c(200);
+	for (i=0; i<38; i++) stdio_c(205);
+	stdio_c(188);
 	for (i=1; i<19; i++)
 		{
 		video_gotoxy(0,i);
-		stdio_write("*");
+		stdio_c(186);
 		video_gotoxy(39,i);
-		stdio_write("*");
+		stdio_c(186);
 		}
 	}
 

@@ -101,4 +101,7 @@
 0.36
 - bug fix in BASIC tokenizer
 
+0.37
+- extended ASCII characters are now available from C code
+
 
