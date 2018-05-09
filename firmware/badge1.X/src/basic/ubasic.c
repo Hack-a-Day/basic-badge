@@ -71,7 +71,7 @@ static int variables[MAX_VARNUM];
 
 static int ended;
 
-unsigned char term_vt100=1;
+uint8_t term_vt100=1;
 unsigned int term_x=0,term_y=0;
 
 static int expr(void);

@@ -36,11 +36,11 @@
 #pragma config BWP = OFF                // Boot Flash Write Protect bit (Protection Disabled)
 #pragma config CP = OFF                 // Code Protect (Protection Disabled)
 
-unsigned char key_state=0,key_last,key;
+uint8_t key_state=0,key_last,key;
 
-unsigned int rnd_var1,rnd_var2,rnd_var3;
+uint16_t rnd_var1,rnd_var2,rnd_var3;
 
-const char keys_normal[50] = 
+const int8_t keys_normal[50] = 
 	{
 	'3','4','2','5','1','9','6','7','0','8',
 	'e','r','w','t','q','o','y','u','p','i',
@@ -49,7 +49,7 @@ const char keys_normal[50] =
 	K_DN,K_RT,K_LT,';',K_UP,K_DEL,'=',K_ENT,BACKSPACE,'_',
 	};
 
-const char keys_shift_l[50] = 
+const int8_t keys_shift_l[50] = 
 	{
 	'#','$','@','%','!','(',' ','&',')','*',
 	'E','R','W','T','Q','O','Y','U','P','I',
@@ -57,7 +57,7 @@ const char keys_shift_l[50] =
 	'X','C','Z','V',' ','<','B','N','>','M',
 	K_DN,K_RT,K_LT,':',K_UP,K_DEL,'+',K_ECR,BACKSPACE,'"',
 	};
-const char keys_shift_r[50] = 
+const int8_t keys_shift_r[50] = 
 	{
 	'#','$','@','%','!','(',' ','&',')','*',
 	'E','R','W','T','Q','O','Y','U','P','I',
@@ -66,14 +66,14 @@ const char keys_shift_r[50] =
 	K_DN,K_RT,K_LT,':',K_UP,K_DEL,'+',K_ECR,BACKSPACE,'"',
 	};
 
-char key_char;
+int8_t key_char;
 
 
-const unsigned int tone_pr_table[128] = 
+const uint16_t tone_pr_table[128] = 
 	{
 	0, //No Note
 	/* Sacrifice this for 0 to be 'no note' 366927, // 0 | C-1 | 8.176Hz */
-	/* Lowest notes have timer values too big for unsigned int so setting to 0 as workaround*/
+	/* Lowest notes have timer values too big for uint16_t so setting to 0 as workaround*/
 	0, //346340, // 1 | C?/D?-1 | 8.662Hz
 	0, //326904, // 2 | D-1 | 9.177Hz
 	0, //308546, // 3 | E?/D?-1 | 9.723Hz
@@ -203,7 +203,7 @@ const unsigned int tone_pr_table[128] =
 	239, // 127 | G9 | 12543.9Hz
 	};
 
-void set_led (unsigned char led_n, unsigned char led_v)
+void set_led (uint8_t led_n, uint8_t led_v)
 	{
 	if (led_n==0)
 		LED_R = led_v;
@@ -213,7 +213,7 @@ void set_led (unsigned char led_n, unsigned char led_v)
 		LED_B = led_v;	
 	}
 
-void sound_play_notes (unsigned char note1, unsigned char note2, unsigned char note3, unsigned int wait)
+void sound_play_notes (uint8_t note1, uint8_t note2, uint8_t note3, uint16_t wait)
 	{
 	IEC0bits.T5IE = 0;		//sound is a bit shaky without this
 							//quick hack, needs more debugging
@@ -227,12 +227,12 @@ void sound_play_notes (unsigned char note1, unsigned char note2, unsigned char n
 	IEC0bits.T5IE = 1;
 	}
 
-void sound_set_note (unsigned char note, unsigned char generator)
+void sound_set_note (uint8_t note, uint8_t generator)
 	{
 	sound_set_generator(tone_pr_table[note],generator);
 	}
 
-void sound_set_generator (unsigned int period, unsigned char generator)
+void sound_set_generator (uint16_t period, uint8_t generator)
 	{
 	if (generator==0)
 		{
@@ -444,10 +444,10 @@ void hw_init (void)
   	}
 
 
-unsigned char keyb_tasks (void)
+uint8_t keyb_tasks (void)
 	{
-	static char shift=0;
-	unsigned char retval = 0;
+	static int8_t shift=0;
+	uint8_t retval = 0;
 	rnd_var3 = rnd_var3 + 12345;
 	rnd_var2 = rnd_var2 + millis();
 	K_R1 = 1;
@@ -494,21 +494,21 @@ unsigned char keyb_tasks (void)
 	}
 
 
-void delay_us (unsigned long howmuch)
+void delay_us (uint32_t  howmuch)
 	{
 //nope, need to rework
 	}
 
 
-void wait_ms (unsigned int count)
+void wait_ms (uint16_t count)
 {
-	unsigned int ticks_wait;
+	uint16_t ticks_wait;
 	ticks_wait = millis() + count;
 	rnd_var2 = rnd_var2  + ticks_wait;
 	while (millis()<= ticks_wait);
 }
 
-unsigned char	SPI_dat (unsigned char data)
+unsigned char	SPI_dat (uint8_t data)
 {
 SPI1BUF = data;
 while (SPI1STATbits.SPIRBF==0);
@@ -516,10 +516,10 @@ return (SPI1BUF);
 }
 
 
-unsigned int get_rnd (void)
+uint16_t get_rnd (void)
 	{
-	unsigned long var;
-	static unsigned long var_prev;
+	uint32_t  var;
+	static uint32_t  var_prev;
 	var = rnd_var1 + rnd_var2 + rnd_var3 + (var_prev*1103515245) + 12345;
 	var = var & 0xFFFF;
 	var_prev = var;

@@ -20,11 +20,11 @@
 #define CIPHER_CURSOR       0xFFFFFF
 
 void show_splash(void);
-void draw_vert_line(unsigned int x, unsigned char y, unsigned char height, unsigned int color);
+void draw_vert_line(uint16_t x, uint8_t y, uint8_t height, uint32_t color);
 void animate_splash(void);
 uint8_t overlaps_logo(int16_t x, uint8_t row);
 
-const unsigned int b_cipher[12] = {
+const uint16_t b_cipher[12] = {
     0b0000101010111101,
     0b0000010111100110,
     0b0000101101111101,

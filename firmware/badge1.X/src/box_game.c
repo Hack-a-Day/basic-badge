@@ -1,5 +1,6 @@
 #include "box_game.h"
 #include "hw.h"
+#include <stdint.h>
 
 /*
 Program flow:
@@ -62,13 +63,13 @@ Program flow:
 
 #define DEFAULT_DROP_DELAY	1000
 
-static unsigned char cursor_x, cursor_y;
+static uint8_t cursor_x, cursor_y;
 
-volatile unsigned char random_piece = 0;	//Used to select a piece "randomly" (but not really)
+volatile uint8_t random_piece = 0;	//Used to select a piece "randomly" (but not really)
 
-unsigned char BOX_piece[4];
+uint8_t BOX_piece[4];
 
-const unsigned char BOX_reference[7][4][4] = {
+const uint8_t BOX_reference[7][4][4] = {
 		//T
 		{
 				{
@@ -288,18 +289,18 @@ const unsigned char BOX_reference[7][4][4] = {
 };
 
 //Variables
-unsigned char BOX_location[ARRAY_SIZE];
-unsigned char x_loc, y_loc;     //Bottom left index of each piece
-unsigned char cur_piece = 0;	//Index for BOX_reference
-unsigned char rotate = 0;		//Index for piece rotation
-static unsigned char score = 0;		//Track the number of rows completed
-static unsigned char game_over = 0;
+uint8_t BOX_location[ARRAY_SIZE];
+uint8_t x_loc, y_loc;     //Bottom left index of each piece
+uint8_t cur_piece = 0;	//Index for BOX_reference
+uint8_t rotate = 0;		//Index for piece rotation
+static uint8_t score = 0;		//Track the number of rows completed
+static uint8_t game_over = 0;
 
 //Messages
-const unsigned char message1[] = { "Badgetris!" };
-const unsigned char message2[] = { "click to start" };
-const unsigned char message3[] = { "Game Over" };
-const unsigned char message4[] = { "Lines:" };
+const uint8_t message1[] = { "Badgetris!" };
+const uint8_t message2[] = { "click to start" };
+const uint8_t message3[] = { "Game Over" };
+const uint8_t message4[] = { "Lines:" };
 
 //Functions
 
@@ -310,7 +311,7 @@ const unsigned char message4[] = { "Lines:" };
  *   be used.                  *
  *******************************/
 
-void BOX_seed_random(unsigned char seed)
+void BOX_seed_random(uint8_t seed)
 	{
 	if (seed > 6) random_piece = 0;
 	else random_piece = seed;
@@ -320,17 +321,17 @@ void BOX_inc_random(void)
 	if (++random_piece > 6) random_piece = 0;
 	}
 
-unsigned char BOX_get_score(void)
+uint8_t BOX_get_score(void)
 	{
 	return score;
 	}
 
-unsigned int BOX_get_delay(void)
+uint16_t BOX_get_delay(void)
 	{
 	if (BOX_get_score)
 		{
-		unsigned char level = BOX_get_score()/4;
-		unsigned int dropdelay = DEFAULT_DROP_DELAY;
+		uint8_t level = BOX_get_score()/4;
+		uint16_t dropdelay = DEFAULT_DROP_DELAY;
 		while(level)
 			{
 			dropdelay -= (dropdelay/5);
@@ -348,20 +349,20 @@ void BOX_clearscreen(void)
 	tft_fill_area(0, 0, 319, 239, 0x000000);
 	}
 
-void BOX_draw(unsigned char X, unsigned char Y, unsigned int color)
+void BOX_draw(uint8_t X, uint8_t Y, uint32_t color)
 	{
 	//Draw box
-	unsigned char row = Y*BOX_MULTIPLIER;
-	unsigned int col = X*BOX_MULTIPLIER;
+	uint8_t row = Y*BOX_MULTIPLIER;
+	uint16_t col = X*BOX_MULTIPLIER;
 	
 	tft_fill_area(col+BOX_XOFFSET, row+BOX_YOFFSET, BOX_MULTIPLIER-1, BOX_MULTIPLIER-1, color);
 	}
 
-void BOX_erase(unsigned char X, unsigned char Y)
+void BOX_erase(uint8_t X, uint8_t Y)
 	{
 	//Erase box
-	unsigned char row = Y*BOX_MULTIPLIER;
-	unsigned int col = X*BOX_MULTIPLIER;
+	uint8_t row = Y*BOX_MULTIPLIER;
+	uint16_t col = X*BOX_MULTIPLIER;
 	
 	tft_fill_area(col+BOX_XOFFSET, row+BOX_YOFFSET, BOX_MULTIPLIER-1, BOX_MULTIPLIER-1, DEFAULT_BG_COLOR);
 	}
@@ -371,7 +372,7 @@ void BOX_pregame(void)
 	//Draw fancy background
 	tft_set_write_area(0,0,319,239);
 	TFT_24_7789_Write_Command(0x2C);
-	unsigned int patternx, patterny, hue;
+	uint16_t patternx, patterny, hue;
 	for (patterny = 0; patterny<240; patterny++)
 		{
 		for (patternx = 0; patternx<320; patternx++)
@@ -406,7 +407,7 @@ void BOX_start_game(void)
 	game_over = 0;
 	
 	//Set up blank array
-	unsigned int i;
+	uint16_t i;
 	for (i=0; i<ARRAY_SIZE; i++) { BOX_location[i] = 0x00; }
 	BOX_pregame();
 	BOX_spawn();
@@ -420,7 +421,7 @@ void BOX_show_gameover(void)
 	BOX_print_string(message3,BOX_SCOREBOX_X+12,BOX_GAMEOVER_Y+BOX_FRAME_THICKNESS+2,0xFFFF00,0xFF0000);
 	}
 
-unsigned char BOX_end_game(void)
+uint8_t BOX_end_game(void)
 	{
 	//FIXME: What happens when game ends?
 	return game_over;
@@ -433,9 +434,9 @@ void BOX_update_score(void)
 	BOX_print_string(message4,BOX_SCOREBOX_X+12,BOX_SCOREBOX_Y+BOX_FRAME_THICKNESS+2,0xFFFFFF,DEFAULT_BG_COLOR);
 
 	//This hack turns score numbers into a string
-	char mystring[4] = {'0',0,0,0};
-	unsigned char i = 0;
-	unsigned char hundred, ten, one;
+	int8_t mystring[4] = {'0',0,0,0};
+	uint8_t i = 0;
+	uint8_t hundred, ten, one;
 	hundred = score/100;
 	ten = (score%100)/10;
 	one = (score%100)%10;
@@ -446,9 +447,9 @@ void BOX_update_score(void)
 	BOX_print_string(mystring, BOX_SCOREBOX_X+76,BOX_SCOREBOX_Y+BOX_FRAME_THICKNESS+2,0xFFFFFF,DEFAULT_BG_COLOR);
 	}
 
-void BOX_print_string(const char * buf, unsigned int x_pixel, unsigned char y_pixel, unsigned int fgcolor, unsigned int bgcolor)
+void BOX_print_string(const int8_t * buf, uint16_t x_pixel, uint8_t y_pixel, uint32_t fgcolor, uint32_t bgcolor)
 	{
-	unsigned char i=0;
+	uint8_t i=0;
 	while (buf[i] != 0)
 		{
 		tft_print_char(buf[i],x_pixel+(i*8),y_pixel,fgcolor,bgcolor);
@@ -467,30 +468,30 @@ void BOX_print_string(const char * buf, unsigned int x_pixel, unsigned char y_pi
  * BOX_loc_clear_bit
  ************************************************/
 
-unsigned char BOX_loc_return_bit(unsigned char X, unsigned char Y)
+uint8_t BOX_loc_return_bit(uint8_t X, uint8_t Y)
 	{
 	//Calculate array index and shift amount
-	unsigned char array_index_offset = ((Y)/8)*(BOX_BOARD_RIGHT+1);
-	unsigned char shift_index = (Y)%8;		//How much to shift for our bit mask
+	uint8_t array_index_offset = ((Y)/8)*(BOX_BOARD_RIGHT+1);
+	uint8_t shift_index = (Y)%8;		//How much to shift for our bit mask
 
 	if (BOX_location[X+array_index_offset] & 1<<shift_index) return 1;
 	else return 0;
 	}
 
-void BOX_loc_set_bit(unsigned char X, unsigned char Y)
+void BOX_loc_set_bit(uint8_t X, uint8_t Y)
 	{
 	//Calculate array index and shift amount
-	unsigned char array_index_offset = ((Y)/8)*(BOX_BOARD_RIGHT+1);
-	unsigned char shift_index = (Y)%8;		//How much to shift for our bit mask
+	uint8_t array_index_offset = ((Y)/8)*(BOX_BOARD_RIGHT+1);
+	uint8_t shift_index = (Y)%8;		//How much to shift for our bit mask
 
 	BOX_location[X+array_index_offset] |= 1<<shift_index;
 	}
 
-void BOX_loc_clear_bit(unsigned char X, unsigned char Y)
+void BOX_loc_clear_bit(uint8_t X, uint8_t Y)
 	{
 	//Calculate array index and shift amount
-	unsigned char array_index_offset = ((Y)/8)*(BOX_BOARD_RIGHT+1);
-	unsigned char shift_index = (Y)%8;		//How much to shift for our bit mask
+	uint8_t array_index_offset = ((Y)/8)*(BOX_BOARD_RIGHT+1);
+	uint8_t shift_index = (Y)%8;		//How much to shift for our bit mask
 
 	BOX_location[X+array_index_offset] &= ~(1<<shift_index);
 	}
@@ -505,7 +506,7 @@ void BOX_loc_clear_bit(unsigned char X, unsigned char Y)
 void BOX_store_loc(void)
 	{
 	//Step through 4 columns
-	unsigned char temp_col, temp_row;
+	uint8_t temp_col, temp_row;
 	for (temp_col=0; temp_col<4; temp_col++)
 		{
 		//Only if x_loc is not out of bounds
@@ -530,7 +531,7 @@ void BOX_store_loc(void)
 void BOX_clear_loc(void)
 	{
 	//Step through 4 columns
-	unsigned char temp_col, temp_row;
+	uint8_t temp_col, temp_row;
 	for (temp_col=0; temp_col<4; temp_col++)
 		{
 		//Only if x_loc is not out of bounds
@@ -552,7 +553,7 @@ void BOX_clear_loc(void)
 		}
 	}
 
-void BOX_load_reference(unsigned char piece, unsigned char rotation)
+void BOX_load_reference(uint8_t piece, uint8_t rotation)
 	{
 	BOX_piece[0] = BOX_reference[piece][rotation][0];
 	BOX_piece[1] = BOX_reference[piece][rotation][1];
@@ -560,14 +561,14 @@ void BOX_load_reference(unsigned char piece, unsigned char rotation)
 	BOX_piece[3] = BOX_reference[piece][rotation][3];
 	}
 
-void BOX_rotate(unsigned char direction)
+void BOX_rotate(uint8_t direction)
 	{
 	//TODO: Allow for adjustments if rotation is prevented due to proximity
 
 	BOX_clear_loc(); //Clear current location so we don't have false compares
 
 	//Load in the candidate rotation
-	unsigned char new_rotate = rotate;
+	uint8_t new_rotate = rotate;
 	if (++new_rotate > 3) new_rotate = 0;
 	BOX_load_reference(cur_piece,new_rotate);
 
@@ -600,7 +601,7 @@ void BOX_rotate(unsigned char direction)
 
 void BOX_write_piece(void)  //Writes piece to display
 	{
-	unsigned char i, j;
+	uint8_t i, j;
 	for (i=0; i<4; i++)  //Step through each of 4 columns
 		{
 		for (j=0; j<4; j++) //Step through each of 4 rows
@@ -620,7 +621,7 @@ void BOX_write_piece(void)  //Writes piece to display
 
 void BOX_clear_piece(void)  //Clears piece from display
 	{
-	unsigned char i, j;
+	uint8_t i, j;
 	for (i=0; i<4; i++)  //Step through each of 4 columns
 		{
 		for (j=0; j<4; j++) //Step through each of 4 rows
@@ -638,11 +639,11 @@ void BOX_clear_piece(void)  //Clears piece from display
 		}
 	}
 
-void BOX_rewrite_display(unsigned int fgcolor)	//Rewrites entire playing area
+void BOX_rewrite_display(uint32_t fgcolor)	//Rewrites entire playing area
 	{
 	//printf(cls);
 	
-	unsigned char cols, rows;
+	uint8_t cols, rows;
 	for (cols=0; cols<=BOX_BOARD_RIGHT; cols++)
 		{
 		for (rows=0; rows<=BOX_BOARD_BOTTOM; rows++)
@@ -682,10 +683,10 @@ void BOX_spawn(void)
 	BOX_update_screen();
 	}
 
-unsigned char BOX_check(signed char X_offset, signed char Y_offset)
+uint8_t BOX_check(int8_t X_offset, int8_t Y_offset)
 	{
-	unsigned char temp_area[4] = { 0x00, 0x00, 0x00, 0x00 };
-	unsigned char i;
+	uint8_t temp_area[4] = { 0x00, 0x00, 0x00, 0x00 };
+	uint8_t i;
 	//Build compare mask in temp_area[]
 
 	//Clear the current piece from BOX_location[] so we don't have a false overlap
@@ -698,7 +699,7 @@ unsigned char BOX_check(signed char X_offset, signed char Y_offset)
 		if ((unsigned char)(x_loc+X_offset+i) > BOX_BOARD_RIGHT) temp_area[i] = 0x0F;
 		else
 			{
-			unsigned char j;
+			uint8_t j;
 			for (j=0; j<4; j++)
 				{
 				//if we're out of bounds on the y axis
@@ -725,13 +726,13 @@ void BOX_line_check(void)
 	//TODO: Tweak this to enable scoring
 
 	//Check every line on the playing area for complete rows and record them in an array
-	unsigned char complete_lines[4];	//There will never be more than 4 complete rows
-	unsigned char temp_index = 0;		//Index for complete_lines[]
+	uint8_t complete_lines[4];	//There will never be more than 4 complete rows
+	uint8_t temp_index = 0;		//Index for complete_lines[]
   
-	unsigned char board_rows;
+	uint8_t board_rows;
 	for (board_rows=0; board_rows<=BOX_BOARD_BOTTOM; board_rows++)
 		{
-		unsigned char board_cols=0;
+		uint8_t board_cols=0;
 		while ((board_cols<=BOX_BOARD_RIGHT) && (BOX_loc_return_bit(board_cols,board_rows)))
 			{
 			//Complete row found, record in complete_lines[]
@@ -751,15 +752,15 @@ void BOX_line_check(void)
 	--temp_index;	//This was incremented one too many times earlier, get it back to the proper index.
 
 	//Rewrite BOX_location[] data without completed lines
-	unsigned char read_from_row = BOX_BOARD_BOTTOM;
-	unsigned char write_to_row = BOX_BOARD_BOTTOM;
+	uint8_t read_from_row = BOX_BOARD_BOTTOM;
+	uint8_t write_to_row = BOX_BOARD_BOTTOM;
 
 	//When we have read from all rows, this will be set to 0 and
 	//remaining bits cleared from BOX_location[]
-	unsigned char rows_left_to_read = 1;
+	uint8_t rows_left_to_read = 1;
 
 	//Use variable i to iterate through every row of the board
-	unsigned char i=0;
+	uint8_t i=0;
 	while (i <= BOX_BOARD_BOTTOM)
 		{
 		//If the current row is a complete line
@@ -783,7 +784,7 @@ void BOX_line_check(void)
 		else
 			{
 			//Write data to all columns of current row
-			unsigned char col;
+			uint8_t col;
 			for (col=0; col<=BOX_BOARD_RIGHT; col++)
 				{
 				//If there are rows left to read from, do so.

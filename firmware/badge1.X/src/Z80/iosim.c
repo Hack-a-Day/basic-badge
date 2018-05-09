@@ -35,7 +35,7 @@
 #include "hwz.h"
 #include "../hw.h"
 
-unsigned char iosim_mode;
+uint8_t iosim_mode;
 
 /*
  *	This function is to initiate the I/O devices.
@@ -46,7 +46,7 @@ unsigned char iosim_mode;
  *	unused port with an error trap handler, so that
  *	simulation stops at I/O on the unused ports.
  */
-void init_io(unsigned char mode)
+void init_io(uint8_t mode)
 {
 iosim_mode = mode;
 }
@@ -69,7 +69,7 @@ BYTE io_in(adr)
 BYTE adr;
 {
 char sstr[3];
-unsigned char test,test2;
+uint8_t test,test2;
 if (iosim_mode==IO_CPM_MODE)
 	{	
 	if (adr==0x01)	
@@ -134,7 +134,7 @@ if (iosim_mode==IO_BASIC_MODE)
 BYTE io_out(adr, data)
 BYTE adr, data;
 {
-unsigned char test;
+uint8_t test;
 if (iosim_mode==IO_CPM_MODE)
 	{		
 	if (adr==0x03)						//concout device

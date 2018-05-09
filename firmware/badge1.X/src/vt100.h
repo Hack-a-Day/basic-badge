@@ -16,9 +16,9 @@ typedef struct
   uint8_t revvideo;
 } termstate_t; 
 
-void escseq_process(char c);
-void escseq_process_noncsi(char c);
-void escseq_process_csi(char c);
+void escseq_process(int8_t c);
+void escseq_process_noncsi(int8_t c);
+void escseq_process_csi(int8_t c);
 void escseq_csi_start(void);
 uint8_t escseq_get_param(uint8_t defaultval);
 void receive_char(uint8_t c);
@@ -60,26 +60,26 @@ void video_erase(uint8_t erasemode);
  * This call corresponds to the ANSI "Erase in Line" escape sequence. */
 void video_eraseline(uint8_t erasemode);
 /* Overwrites the character at the cursor position without moving it. */
-void video_setc(char c);
+void video_setc(int8_t c);
 /* Prints a character at the cursor position and advances the cursor.
  * Carriage returns and newlines are interpreted. */
-void video_putc(char c);
+void video_putc(int8_t c);
 /* Prints a character at the cursor position and advances the cursor.
  * Carriage returns and newlines are not interpreted. */
-void video_putc_raw(char c);
+void video_putc_raw(int8_t c);
 /* Prints a string at the cursor position and advances the cursor.
  * The screen will be scrolled if necessary. */
-void video_puts(char *str);
+void video_puts(int8_t *str);
 /* Prints a string from program memory at the cursor position and advances
  * the cursor. The screen will be scrolled if necessary. */
-void video_putcxy(int8_t x, int8_t y, char c);
+void video_putcxy(int8_t x, int8_t y, int8_t c);
 /* Prints a string at the specified position. Escape characters are not
  * interpreted. The cursor is not advanced and the screen is not scrolled. */
-void video_putsxy(int8_t x, int8_t y, char *str);
+void video_putsxy(int8_t x, int8_t y, int8_t *str);
 /* Prints a string from program memory at the specified position.
  * Escape characters are not interpreted. The cursor is not advanced and the
  * screen is not scrolled. */
-void video_putline(int8_t y, char *str);
+void video_putline(int8_t y, int8_t *str);
 /* Prints a string from program memory on the specified line.
  * The previous contents of the line are erased. Escape characters are not
  * interpreted. The cursor is not advanced and the screen is not scrolled. */
@@ -119,7 +119,7 @@ int8_t video_getx(void);
 /* Returns the y coordinate of the cursor. */
 int8_t video_gety(void);
 /* Returns the character at the specified position. */
-char video_charat(int8_t x, int8_t y);
+int8_t video_charat(int8_t x, int8_t y);
 /* Shows the cursor. Off by default. */
 void video_show_cursor(void);
 /* Hides the cursor. */
@@ -134,11 +134,11 @@ static void _video_scrolldown(void);
 static void _video_lfwd(void);
 static void _video_cfwd(void);
 static void _video_lback(void);
-static void _video_scrollup_lin(unsigned char lin);
-static void _video_scrolldown_lin(unsigned char line);
+static void _video_scrollup_lin(uint8_t lin);
+static void _video_scrolldown_lin(uint8_t line);
 
 
-void write_direct(unsigned int * x, unsigned int * y, unsigned char * str);
+void write_direct(uint16_t * x, uint16_t * y, uint8_t * str);
 void term_init (void);
-void video_set_color(unsigned char fg, unsigned char bg);
+void video_set_color(uint8_t fg, uint8_t bg);
 

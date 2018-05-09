@@ -1,13 +1,14 @@
 #include "hw.h"
 #include "tetrapuzz.h"
 #include "box_game.h"
+#include <stdint.h>
 
 //FIXME: these should probably not be globals
-unsigned long wait_until;
-unsigned char drop_timer_flag = 0;
-unsigned int state;
+uint32_t  wait_until;
+uint8_t drop_timer_flag = 0;
+uint16_t state;
 
-char sstr[3];
+int8_t sstr[3];
 
 void tetrapuzz(void)
 	{
@@ -21,7 +22,7 @@ void tetrapuzz(void)
 		BOX_inc_random();
 		
 		//Service button inputs as necessary
-		unsigned char get_stat = stdio_get(sstr);
+		uint8_t get_stat = stdio_get(sstr);
 		if (get_stat!=0)
 			{
 			if (sstr[0]==K_UP) {	BOX_rotate(1);	}
@@ -44,7 +45,7 @@ void tetrapuzz_init(void)
 	start_after_wake = &BOX_pregame;	//Set function to run when waking from sleep]
 	
 	//Pull TMR1 value for a bit of not-really-but-kinda-random number
-	int timer1val = *(char*)0xBF800610;
+	int16_t timer1val = *(char*)0xBF800610;
 	BOX_seed_random((unsigned char) timer1val&0xF);
 
 	BOX_clearscreen();

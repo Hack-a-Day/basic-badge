@@ -5,11 +5,11 @@
 
 #define MAX_BUF 50
 
-unsigned char msg1[50];
+uint8_t msg1[50];
 
 
-unsigned char color_composite;
-unsigned int count;
+uint8_t color_composite;
+uint16_t count;
 volatile uint16_t bufhead;
 volatile uint16_t buftail; 
 volatile uint16_t bufsize;
@@ -22,8 +22,8 @@ static uint8_t process_escseqs;
 static uint8_t local_echo;
 /* escape sequence processing */
 static uint8_t in_esc;
-static char paramstr[MAX_ESC_LEN+1];
-static char *paramptr;
+static int8_t paramstr[MAX_ESC_LEN+1];
+static int8_t *paramptr;
 static uint8_t paramch;
 /* current attributes */
 static uint8_t graphicchars;  /* set to 1 with an SI and set to 0 with an SO */
@@ -36,21 +36,21 @@ static int8_t mbottom;
 /* reverse video */
 static uint8_t revvideo;
 
-unsigned char cur_type,cur_blink;
+uint8_t cur_type,cur_blink;
 
-extern char disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
-extern char color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
+extern int8_t disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
+extern int8_t color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 volatile uint8_t buf[MAX_BUF];
 
-void video_set_color(unsigned char fg, unsigned char bg)
+void video_set_color(uint8_t fg, uint8_t bg)
 	{
 	color_composite = (fg&0xF) | ((bg&0xF)<<4);
 	}
 
 
-void write_direct(unsigned int * x, unsigned int * y, unsigned char * str)
+void write_direct(uint16_t * x, uint16_t * y, uint8_t * str)
 	{
-	unsigned int xt,yt;
+	uint16_t xt,yt;
 	xt = *x;
 	yt = *y;
 	while (*str>=' ')
@@ -176,7 +176,7 @@ void receive_char(uint8_t c)
 }
 
 
-void escseq_process(char c)
+void escseq_process(int8_t c)
 {
   /* CAN and SUB interrupt escape sequences */
   if (c == 0x18 || c == 0x1A)
@@ -202,7 +202,7 @@ void escseq_process(char c)
 }
 
 /* Process sequences that begin with ESC */
-void escseq_process_noncsi(char c)
+void escseq_process_noncsi(int8_t c)
 {
   switch (c)
   {
@@ -248,7 +248,7 @@ void escseq_process_noncsi(char c)
 }
 
 /* Process sequences that begin with ESC [ */
-void escseq_process_csi(char c)
+void escseq_process_csi(int8_t c)
 {
   if ((c >= '0' && c <= '9') || c == ';' || c == '?') /* digit or separator */
   {
@@ -346,8 +346,8 @@ void escseq_csi_start()
 uint8_t escseq_get_param(uint8_t defaultval)
 {
 uint8_t val;
- char *startptr;
-char *endptr;
+ int8_t *startptr;
+int8_t *endptr;
 
   if (!paramptr)
     return defaultval;
@@ -433,7 +433,7 @@ void video_set_reverse(uint8_t val)
 
 static void _video_scrollup()
 {
-unsigned char i,j;
+uint8_t i,j;
 //jar
 /*
   memmove(&disp_buffer[mtop], &disp_buffer[mtop+1], (mbottom-mtop)*DISP_BUFFER_WIDE);
@@ -455,9 +455,9 @@ for (i=0;i<DISP_BUFFER_WIDE;i++)
 
 }
 
-static void _video_scrollup_lin(unsigned char lin)
+static void _video_scrollup_lin(uint8_t lin)
 {
-unsigned char i,j;
+uint8_t i,j;
 //jar
 /*
   memmove(&disp_buffer[mtop], &disp_buffer[mtop+1], (mbottom-mtop)*DISP_BUFFER_WIDE);
@@ -481,7 +481,7 @@ for (i=0;i<DISP_BUFFER_WIDE;i++)
 
 static void _video_scrolldown()
 {
-unsigned char i,j;
+uint8_t i,j;
 //  memmove(&disp_buffer[mtop+1], &disp_buffer[mtop], (mbottom-mtop)*DISP_BUFFER_WIDE);
 //  memset(&disp_buffer[mtop], revvideo, DISP_BUFFER_WIDE);
 for (j=mbottom;j>0;j--)
@@ -499,9 +499,9 @@ for (i=0;i<DISP_BUFFER_WIDE;i++)
 	}
 }
 
-static void _video_scrolldown_lin(unsigned char line)
+static void _video_scrolldown_lin(uint8_t line)
 {
-unsigned char i,j;
+uint8_t i,j;
 //  memmove(&disp_buffer[mtop+1], &disp_buffer[mtop], (mbottom-mtop)*DISP_BUFFER_WIDE);
 //  memset(&disp_buffer[mtop], revvideo, DISP_BUFFER_WIDE);
 for (j=mbottom;j>(line);j--)
@@ -663,7 +663,7 @@ int8_t video_gety(void)
   return cy;
 }
 
-char video_charat(int8_t x, int8_t y)
+int8_t video_charat(int8_t x, int8_t y)
 {
   return disp_buffer[cy][cx];
 }
@@ -695,7 +695,7 @@ void video_clreol()
 
 void video_erase(uint8_t erasemode)
 {
-unsigned char x,y;
+uint8_t x,y;
   CURSOR_INVERT();
   switch(erasemode)
   {
@@ -736,7 +736,7 @@ unsigned char x,y;
 
 void video_eraseline(uint8_t erasemode)
 {
- unsigned char y,x;
+ uint8_t y,x;
   CURSOR_INVERT();
   switch(erasemode)
   {
@@ -774,7 +774,7 @@ void video_eraseline(uint8_t erasemode)
 }
 
 /* Does not respect top/bottom margins */
-void video_putcxy(int8_t x, int8_t y, char c)
+void video_putcxy(int8_t x, int8_t y, int8_t c)
 {
   if (x < 0 || x >= DISP_BUFFER_WIDE) return;
   if (y < 0 || y >= DISP_BUFFER_HIGH) return;
@@ -783,30 +783,30 @@ void video_putcxy(int8_t x, int8_t y, char c)
 }
 
 /* Does not respect top/bottom margins */
-void video_putsxy(int8_t x, int8_t y, char *str)
+void video_putsxy(int8_t x, int8_t y, int8_t *str)
 {
-	int len;
+	int16_t len;
   if (x < 0 || x >= DISP_BUFFER_WIDE) return;
   if (y < 0 || y >= DISP_BUFFER_HIGH) return;
   len = strlen(str);
   if (len > DISP_BUFFER_WIDE-x) len = DISP_BUFFER_WIDE-x;
-  memcpy((char *)(&disp_buffer[y][x]), str, len);
-  memset((char *)(&color_buffer[y][x]), color_composite, len);
+  memcpy((int8_t *)(&disp_buffer[y][x]), str, len);
+  memset((int8_t *)(&color_buffer[y][x]), color_composite, len);
   if (revvideo) video_invert_range(x, y, len);
 }
 
 
 /* Does not respect top/bottom margins */
-void video_putline(int8_t y, char *str)
+void video_putline(int8_t y, int8_t *str)
 {
   if (y < 0 || y >= DISP_BUFFER_HIGH) return;
   /* strncpy fills unused bytes in the destination with nulls */
-  strncpy((char *)(&disp_buffer[y]), str, DISP_BUFFER_WIDE);
-  memset((char *)(&color_buffer[y]), color_composite, strlen(str));
+  strncpy((int8_t *)(&disp_buffer[y]), str, DISP_BUFFER_WIDE);
+  memset((int8_t *)(&color_buffer[y]), color_composite, strlen(str));
   if (revvideo) video_invert_range(0, y, DISP_BUFFER_WIDE);
 }
 
-void video_setc(char c)
+void video_setc(int8_t c)
 {
   CURSOR_INVERT();
   disp_buffer[cy][cx] = c ^ revvideo;
@@ -814,7 +814,7 @@ void video_setc(char c)
   CURSOR_INVERT();
 }
 
-static void _video_putc(char c)
+static void _video_putc(int8_t c)
 {
   /* If the last character printed exceeded the right boundary,
    * we have to go to a new line. */
@@ -830,14 +830,14 @@ static void _video_putc(char c)
   }
 }
 
-void video_putc(char c)
+void video_putc(int8_t c)
 {
   CURSOR_INVERT();
   _video_putc(c);
   CURSOR_INVERT();
 }
 
-void video_putc_raw(char c)
+void video_putc_raw(int8_t c)
 {
   CURSOR_INVERT();
   
@@ -852,10 +852,10 @@ void video_putc_raw(char c)
   CURSOR_INVERT();
 }
 
-void video_puts(char *str)
+void video_puts(int8_t *str)
 {
   /* Characters are interpreted and printed one at a time. */
-  char c;
+  int8_t c;
   CURSOR_INVERT();
   while ((c = *str++))
     _video_putc(c);
@@ -887,7 +887,7 @@ uint8_t video_cursor_visible()
 
 void video_invert_range(int8_t x, int8_t y, uint8_t rangelen)
 {
-  char *start = &disp_buffer[y][x];
+  int8_t *start = &disp_buffer[y][x];
   uint8_t i;
   for (i = 0; i < rangelen; i++)
   {

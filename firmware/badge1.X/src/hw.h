@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 #define		LCD_PORT	LATE
 #define		LCD_WR		LATDbits.LATD4
 #define		LCD_RES		LATGbits.LATG7
@@ -59,18 +61,18 @@
 
 #define	FLASH_BUFFERING
 
-void delay_us (unsigned long howmuch);
+void delay_us (uint32_t  howmuch);
 void wait_1ms (void);
-void wait_ms (unsigned int count);
-unsigned char keyb_tasks (void);
+void wait_ms (uint16_t count);
+uint8_t keyb_tasks (void);
 void hw_init (void);
-void sound_set_note (unsigned char note, unsigned char generator);
-void sound_set_generator (unsigned int period, unsigned char generator);
-void sound_play_notes (unsigned char note1, unsigned char note2, unsigned char note3, unsigned int wait);
+void sound_set_note (uint8_t note, uint8_t generator);
+void sound_set_generator (uint16_t period, uint8_t generator);
+void sound_play_notes (uint8_t note1, uint8_t note2, uint8_t note3, uint16_t wait);
 void hw_sleep (void);
 void (*start_after_wake)(void);
 void wake_return(void);
-void set_led (unsigned char led_n, unsigned char led_v);
+void set_led (uint8_t led_n, uint8_t led_v);
 
 
 typedef union
@@ -86,7 +88,7 @@ struct
     unsigned brk:1;
     unsigned del:1;
  };
-unsigned char CHAR;
+uint8_t CHAR;
 }kspec_var; 
 
 #define	NEWLINE	0x0A
@@ -110,12 +112,12 @@ unsigned char CHAR;
 #define	STDIO_LOCAL	0
 #define	STDIO_TTY1	1
 
-void init_io(unsigned char mode);
-unsigned char stdio_write (char * data);
-unsigned char stdio_c (unsigned char data);
-unsigned char stdio_in (unsigned char block);
-char stdio_get_state (void);
-char stdio_get (char * dat);
+void init_io(uint8_t mode);
+uint8_t stdio_write (int8_t * data);
+uint8_t stdio_c (uint8_t data);
+uint8_t stdio_in (uint8_t block);
+int8_t stdio_get_state (void);
+int8_t stdio_get (int8_t * dat);
 
 #define	FCY		48000000UL
 #define	FPB		FCY/1

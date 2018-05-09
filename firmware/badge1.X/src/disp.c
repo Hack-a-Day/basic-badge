@@ -1,8 +1,10 @@
 #include <xc.h>
 #include "hw.h"
 #include "disp.h"
+#include <stdint.h>
 
-const char font[96*12] = 
+
+const int8_t font[96*12] = 
 {
 0b0000000, 0b0000000, 0b0000000, 0b0000000, 0b0000000, 0b0000000, 0b0000000, 0b0000000, 0b0000000, 0b0000000, 0b0000000, 0b0000000,   
 0b0001000, 0b0001000, 0b0001000, 0b0001000, 0b0001000, 0b0001000, 0b0001000, 0b0001000, 0b0000000, 0b0001000, 0b0000000, 0b0000000,   
@@ -103,7 +105,7 @@ const char font[96*12] =
 	};
 
 
-unsigned int color_table[16] = {
+uint32_t color_table[16] = {
 	0x000000,	//0
 	0x0000AA,	//1
 	0x00AA00,	//2
@@ -124,9 +126,9 @@ unsigned int color_table[16] = {
 	};
 
 
-void tft_disp_buffer_refresh(unsigned char * buff, unsigned char * color_buff)
+void tft_disp_buffer_refresh(uint8_t * buff, uint8_t * color_buff)
 	{
-	unsigned int i,j,ad,col,back;
+	uint16_t i,j,ad,col,back;
 	for (i=0;i<20;i++)
 		for (j=0;j<40;j++)	
 			{
@@ -136,10 +138,10 @@ void tft_disp_buffer_refresh(unsigned char * buff, unsigned char * color_buff)
 			}
 	}
 
-void tft_disp_buffer_refresh_part(unsigned char * buff, unsigned char * color_buff)
+void tft_disp_buffer_refresh_part(uint8_t * buff, uint8_t * color_buff)
 	{
-    static unsigned char dr_cnt=0,col,back;
-	unsigned int i,j,ad;
+    static uint8_t dr_cnt=0,col,back;
+	uint16_t i,j,ad;
 	for (i=(dr_cnt);i<(dr_cnt+2);i++)
 		for (j=0;j<40;j++)	
 			{
@@ -155,10 +157,10 @@ void tft_disp_buffer_refresh_part(unsigned char * buff, unsigned char * color_bu
 
 
 
-inline void tft_print_char (unsigned char val, unsigned int x, unsigned int y, unsigned int col, unsigned int back)
+inline void tft_print_char (uint8_t val, uint16_t x, uint16_t y, uint16_t col, uint16_t back)
 	{
-	unsigned int fl,i,j;
-	unsigned int c1,c2,c3,b1,b2,b3;
+	uint16_t fl,i,j;
+	uint16_t c1,c2,c3,b1,b2,b3;
 	c1 = (col>>16)&0xFF;
 	c2 = (col>>8)&0xFF;
 	c3 = (col>>0)&0xFF;
@@ -224,9 +226,9 @@ inline void tft_print_char (unsigned char val, unsigned int x, unsigned int y, u
 	}
 
 
-void tft_fill_area (unsigned int x, unsigned int y, unsigned int xlen, unsigned int ylen, unsigned int back)
+void tft_fill_area (uint16_t x, uint16_t y, uint16_t xlen, uint16_t ylen, uint16_t back)
 {
-    unsigned int i,j;
+    uint16_t i,j;
     tft_set_write_area(x,y,xlen,ylen);
     TFT_24_7789_Write_Command(0x2C);
     //FIXME: Why do I need these +1 adjustments. Off-by-one in tft_set_write_area?
@@ -236,7 +238,7 @@ void tft_fill_area (unsigned int x, unsigned int y, unsigned int xlen, unsigned 
     }
 }
 
-inline void tft_set_write_area (unsigned int x, unsigned int y, unsigned int xlen, unsigned int ylen)
+inline void tft_set_write_area (uint16_t x, uint16_t y, uint16_t xlen, uint16_t ylen)
 	{
 	TFT_24_7789_Write_Command(0x002A);
 	TFT_24_7789_Write_Data((x>>8)&0xFF);
@@ -253,7 +255,7 @@ inline void tft_set_write_area (unsigned int x, unsigned int y, unsigned int xle
 
 
 /*******************************************************************************/
-void TFT_24_7789_Write_Command(unsigned int command)
+void TFT_24_7789_Write_Command(uint16_t command)
 {
 LCD_RD = 1;
 LCD_DC = 0;
@@ -263,14 +265,14 @@ LCD_WR_SET;
 LCD_DC = 1;
 }
 /*******************************************************************************/
-inline void TFT_24_7789_Write_Data(unsigned int data1)
+inline void TFT_24_7789_Write_Data(uint16_t data1)
 {
 LCD_WR_CLR;
 LCD_PORT = data1;
 LCD_WR_SET;
 }
 
-inline void TFT_24_7789_Write_Data3(unsigned int data1,unsigned int data2, unsigned int data3)
+inline void TFT_24_7789_Write_Data3(uint16_t data1,uint16_t data2, uint16_t data3)
 {
 LCD_WR_CLR;
 LCD_PORT = data1;

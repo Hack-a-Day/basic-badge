@@ -9,15 +9,15 @@ struct Cipher_box
 
 void show_splash(void)
 {
-    unsigned int i,j;
+    uint16_t i,j;
     tft_fill_area(0,0,320,240,CIPHER_BACKGROUND);    //Make display black
     for (i=0; i<12; i++)
     {
 	for (j=0; j<12; j++)
 	{
 	    if (b_cipher[i] & 1<<j) {
-		unsigned int curX = CIPHER_X0+((12-j)*CIPHER_CHAR_WIDTH)-((j/3)*CIPHER_SPACE);
-		unsigned char curY = CIPHER_Y0+(i*CIPHER_CHAR_WIDTH)+((i/3)*CIPHER_SPACE);
+		uint16_t curX = CIPHER_X0+((12-j)*CIPHER_CHAR_WIDTH)-((j/3)*CIPHER_SPACE);
+		uint8_t curY = CIPHER_Y0+(i*CIPHER_CHAR_WIDTH)+((i/3)*CIPHER_SPACE);
 		//FIXME: Why do I need these -1 adjustments?
 		tft_fill_area(curX,curY,CIPHER_CHAR_WIDTH-1,CIPHER_CHAR_WIDTH-1,CIPHER_COLOR);
 	    }
@@ -25,7 +25,7 @@ void show_splash(void)
     }
 }
 
-void draw_vert_line(unsigned int x, unsigned char y, unsigned char height, unsigned int color)
+void draw_vert_line(uint16_t x, uint8_t y, uint8_t height, uint32_t color)
 {
     tft_fill_area(x,y,0,height-1,color);
 }
@@ -108,8 +108,8 @@ uint8_t overlaps_logo(int16_t x, uint8_t row) {
 
 void animate_splash(void)
 {
-    unsigned int x = 0;
-    unsigned int splash_waitfor = 0;
+    uint16_t x = 0;
+    uint16_t splash_waitfor = 0;
     
     struct Cipher_box box0 = { 0, 0 };
     struct Cipher_box box1 = { 319+(10*CIPHER_CHAR_WIDTH), 1 };

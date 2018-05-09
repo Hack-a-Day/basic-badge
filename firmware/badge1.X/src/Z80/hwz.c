@@ -11,32 +11,32 @@
 
 #define	FLASH_BUFFERING	
 
-extern const unsigned char rom_image[65536];
-extern const unsigned char rd_image[131072];
-unsigned char drive, sector, track,disk_temp_pointer;
-unsigned char disk_temp[128];
+extern const uint8_t rom_image[65536];
+extern const uint8_t rd_image[131072];
+uint8_t drive, sector, track,disk_temp_pointer;
+uint8_t disk_temp[128];
 
-unsigned char flash_buff[4096];
+uint8_t flash_buff[4096];
 
-unsigned char conin_buffer[30];
-unsigned char conin_buffer_pointer;
+uint8_t conin_buffer[30];
+uint8_t conin_buffer_pointer;
 
-unsigned int last_addr;
-unsigned char unwritten;
+uint16_t last_addr;
+uint8_t unwritten;
 
-unsigned char fl_rdsr(void);
-unsigned char fl_rdid(void);
+uint8_t fl_rdsr(void);
+uint8_t fl_rdid(void);
 
 #ifdef	USE_RAM_IMAGE
-extern const unsigned char ram_image[65536];
+extern const uint8_t ram_image[65536];
 #endif
 
-unsigned char ram_disk[RAMDISK_SIZE];
+uint8_t ram_disk[RAMDISK_SIZE];
 
 
 void reload_cpm_warm (void)
 {
-unsigned int i;
+uint16_t i;
 #ifdef	USE_RAM_IMAGE	
 	for (i=0xD400;i<(0xD400+0x1EFF);i++) ram[i] = ram_image[i];
 #endif
@@ -45,7 +45,7 @@ unsigned int i;
 
 void init_diskb(void)
 {
-unsigned int i;
+uint16_t i;
 for (i=0;i<256;i++)
 	{
 	ee_wren();
@@ -87,20 +87,20 @@ AD1PCFG=0xFFFFFFFF;
 
 
 //-------------------device at 0x68-----------------
-unsigned char rxm_sta (void)
+uint8_t rxm_sta (void)
 {
 /*
 if (U3BSTAbits.URXDA==1) return 0xFF;
 	else return 0x00;
  */
 }
-unsigned char rxm_read (void)
+uint8_t rxm_read (void)
 {
 /*
 return U3BRXREG;
  */
 }
-void txm_write (unsigned char data)
+void txm_write (uint8_t data)
 {
 /*
 U3BTXREG = data;
@@ -110,27 +110,27 @@ while (U3BSTAbits.UTXBF==1);
 
 
 
-void set_drive (unsigned char dat)
+void set_drive (uint8_t dat)
 {
 drive = dat;
 disk_temp_pointer = 0;
 }
-void set_sector (unsigned char dat)
+void set_sector (uint8_t dat)
 {
 sector = dat;
 disk_temp_pointer = 0;
 }
-void set_track (unsigned char dat)
+void set_track (uint8_t dat)
 {
 track = dat;
 disk_temp_pointer = 0;
 }
 
-unsigned char read_disk_byte (void)
+uint8_t read_disk_byte (void)
 {
-unsigned char temp;
-unsigned long base,ptr;
-base = (((unsigned long)(track))*16) + sector;
+uint8_t temp;
+uint32_t  base,ptr;
+base = (((uint32_t )(track))*16) + sector;
 if (drive==0)
 	{
 	base = base*128;
@@ -173,11 +173,11 @@ disk_temp_pointer++;
 return temp;
 }
 
-void write_disk_byte (unsigned char dat)
+void write_disk_byte (uint8_t dat)
 {
-unsigned char temp;
-unsigned int base;
-unsigned long ptr;
+uint8_t temp;
+uint16_t base;
+uint32_t  ptr;
 base = (((unsigned int)(track))*16) + sector;
 if (drive==0)
 	{
@@ -232,7 +232,7 @@ disk_temp_pointer++;
 }
 
 /*
-unsigned char	SPI_dat (unsigned char data)
+unsigned char	SPI_dat (uint8_t data)
 {
 
 SPI2ABUF = data;
@@ -242,9 +242,9 @@ return (SPI2ABUF);
 
  */
 
-void write_sector (unsigned char *data, unsigned int addr)
+void write_sector (uint8_t *data, uint16_t addr)
 {
-unsigned char i,temp;
+uint8_t i,temp;
 CS_MEM = 0;
 SPI_dat(0x02);
 temp = (addr>>9);
@@ -267,9 +267,9 @@ while (temp>0)
 	}
 }
 
-void read_sector (unsigned char *data, unsigned int addr)
+void read_sector (uint8_t *data, uint16_t addr)
 {
-unsigned char i,temp;
+uint8_t i,temp;
 CS_MEM = 0;
 SPI_dat(0x03);
 temp = (addr>>9);
@@ -288,9 +288,9 @@ for (i=0;i<128;i++)
 
 CS_MEM = 1;
 }
-unsigned char ee_rs (void)
+uint8_t ee_rs (void)
 {
-unsigned char temp;
+uint8_t temp;
 CS_MEM = 0;
 SPI_dat(0x05);
 temp = SPI_dat(0xFF);
@@ -315,9 +315,9 @@ CS_MEM = 1;
 
 
 
-unsigned char fl_rdsr(void)
+uint8_t fl_rdsr(void)
 {
-volatile unsigned char temp;
+volatile uint8_t temp;
 CS_FLASH = 0;
 SPI_dat(0x05);
 temp = SPI_dat(0xFF);
@@ -326,9 +326,9 @@ return temp;
 }
 
 
-unsigned char fl_rdid(void)
+uint8_t fl_rdid(void)
 {
-volatile unsigned char temp;
+volatile uint8_t temp;
 CS_FLASH = 0;
 SPI_dat(0x9F);
 temp = SPI_dat(0xFF);
@@ -337,9 +337,9 @@ temp = SPI_dat(0xAA);
 CS_FLASH = 1;
 }
 
-void fl_read_4k(unsigned long addr, unsigned char * data)
+void fl_read_4k(uint32_t  addr, uint8_t * data)
 {
-unsigned int i;
+uint16_t i;
 CS_FLASH = 0;
 SPI_dat(0x03);
 SPI_dat((addr>>16)&0xFF);
@@ -349,9 +349,9 @@ for (i=0;i<4096;i++) *data++ = SPI_dat(0xFF);
 CS_FLASH = 1;
 }
 
-void fl_read_nk(unsigned long addr, unsigned char * data, unsigned int n)
+void fl_read_nk(uint32_t  addr, uint8_t * data, uint16_t n)
 {
-unsigned int i;
+uint16_t i;
 CS_FLASH = 0;
 SPI_dat(0x03);
 SPI_dat((addr>>16)&0xFF);
@@ -362,9 +362,9 @@ CS_FLASH = 1;
 }
 
 
-void fl_erase_4k(unsigned long addr)
+void fl_erase_4k(uint32_t  addr)
 {
-unsigned int i;
+uint16_t i;
 fl_wren();
 CS_FLASH = 0;
 SPI_dat(0x20);
@@ -376,9 +376,9 @@ while ((fl_rdsr())&0x01);
 }
 
 
-void fl_write(unsigned long addr,unsigned char data)
+void fl_write(uint32_t  addr,uint8_t data)
 {
-unsigned int i;
+uint16_t i;
 fl_wren();
 CS_FLASH = 0;
 SPI_dat(0x02);
@@ -408,9 +408,9 @@ CS_FLASH = 1;
 }
 
 
-void fl_write_4k(unsigned long addr, unsigned char * data)
+void fl_write_4k(uint32_t  addr, uint8_t * data)
 {
-unsigned int i;
+uint16_t i;
 for (i=0;i<4096;i++) 
 	{
 	fl_write(addr+i,*data++);
@@ -418,11 +418,11 @@ for (i=0;i<4096;i++)
 	}
 }
 
-void fl_write_128(unsigned int sector,unsigned char * data)
+void fl_write_128(uint16_t sector,uint8_t * data)
 {
-unsigned long addr;
-unsigned char i;
-addr = ((unsigned long)(sector))*128UL;
+uint32_t  addr;
+uint8_t i;
+addr = ((uint32_t )(sector))*128UL;
 addr = addr&0xFFFFF000;
 #ifdef	FLASH_BUFFERING	
 if (last_addr!=addr)
@@ -440,10 +440,10 @@ unwritten = 1;
 #ifndef	FLASH_BUFFERING	
 fl_read_4k(addr,flash_buff);
 #endif
-addr = ((unsigned long)(sector))*128UL;
+addr = ((uint32_t )(sector))*128UL;
 addr = addr&0x00000FFF;
 for (i=0;i<128;i++) flash_buff[addr+i] = data[i];
-addr = ((unsigned long)(sector))*128UL;
+addr = ((uint32_t )(sector))*128UL;
 addr = addr&0xFFFFF000;
 #ifndef	FLASH_BUFFERING	
 fl_erase_4k(addr);
@@ -451,9 +451,9 @@ fl_write_4k(addr,flash_buff);
 #endif
 }
 
-void fl_read_128(unsigned int sector,unsigned char * data)
+void fl_read_128(uint16_t sector,uint8_t * data)
 {
-unsigned long addr;
+uint32_t  addr;
 #ifdef	FLASH_BUFFERING	
 if (unwritten == 1)
 	{
@@ -463,13 +463,13 @@ if (unwritten == 1)
 	last_addr = 0xFFFF;
 	}
 #endif
-addr = ((unsigned long)(sector))*128UL;
+addr = ((uint32_t )(sector))*128UL;
 fl_read_nk(addr,data,128);
 }
 
-void init_first_x_sects (unsigned char i)			//format directory area
+void init_first_x_sects (uint8_t i)			//format directory area
 {
-unsigned int j;
+uint16_t j;
 for (j=0;j<128;j++) disk_temp[j]=0xE5;
 for (j=0;j<32;j++) 
 	{

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <stdint.h>
 #include "hw.h"
 #include <setjmp.h>
 #include "Z80/sim.h"
@@ -16,58 +17,58 @@
 #include "tetrapuzz.h"
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.33"
+#define FIRMWARE_VERSION "0.34"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
 
-char bprog[4097] =
+int8_t bprog[4097] =
 "21 rnd a,100\n\
 30 print a\n\
 40 wait 100\n\
 50 goto 21\n\
 ";
 
-int prog_ptr;
-char tprog[100];
+int16_t prog_ptr;
+int8_t tprog[100];
 
-void delay_us (unsigned long howmuch);
-unsigned char add_prog_line (char * line, char * prog, int linenum);
+void delay_us (uint32_t  howmuch);
+uint8_t add_prog_line (int8_t * line, int8_t * prog, int16_t linenum);
 
 void terminal_init(void);
-unsigned char terminal_tasks (char * input, UINT16 * shift);
-char term_k_stat (void);
-char term_k_char (char * out);
-unsigned char rx_sta (void);
-unsigned char rx_read (void);
-void tx_write (unsigned char data);
-unsigned char cmd_exec (char * cmd);
-unsigned char basic_save_program (unsigned char * data, unsigned char slot);
-unsigned char basic_load_program (unsigned char * data, unsigned char slot);
+uint8_t terminal_tasks (int8_t * input, uint16_t * shift);
+int8_t term_k_stat (void);
+int8_t term_k_char (int8_t * out);
+uint8_t rx_sta (void);
+uint8_t rx_read (void);
+void tx_write (uint8_t data);
+uint8_t cmd_exec (int8_t * cmd);
+uint8_t basic_save_program (uint8_t * data, uint8_t slot);
+uint8_t basic_load_program (uint8_t * data, uint8_t slot);
 
-char term_buffer[TBUF_LEN];
-char term_screen_buffer[TERM_WIDTH*TERM_LINES];
+int8_t term_buffer[TBUF_LEN];
+int8_t term_screen_buffer[TERM_WIDTH*TERM_LINES];
 //a lot of magic numbers here, should be done properly
-char stdio_buff[25];
-char term_input[50],term_input_p,term_key_stat_old;
-UINT16 term_pointer,vertical_shift;
-char key_buffer[10];
-char stdio_src;
-unsigned char key_buffer_ptr =0;
+int8_t stdio_buff[25];
+int8_t term_input[50],term_input_p,term_key_stat_old;
+uint16_t term_pointer,vertical_shift;
+int8_t key_buffer[10];
+int8_t stdio_src;
+uint8_t key_buffer_ptr =0;
 
-char disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
-char color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
+int8_t disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
+int8_t color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 
-int i,j,len;
-unsigned char get_stat;
-volatile char brk_key;
-unsigned char cmd_line_buff[30], cmd_line_pointer,cmd_line_key_stat_old,prompt;
+int16_t i,j,len;
+uint8_t get_stat;
+volatile int8_t brk_key;
+uint8_t cmd_line_buff[30], cmd_line_pointer,cmd_line_key_stat_old,prompt;
 
 jmp_buf jbuf;
-char char_out;
-extern unsigned char flash_buff[4096];
-extern const unsigned char ram_image[65536];
-extern unsigned char ram_disk[RAMDISK_SIZE];
+int8_t char_out;
+extern uint8_t flash_buff[4096];
+extern const uint8_t ram_image[65536];
+extern uint8_t ram_disk[RAMDISK_SIZE];
 
 void init_z80_cpm (void);
 void init_basic (void);
@@ -80,19 +81,19 @@ void init_8080_basic (void);
 void loop_8080_basic (void);
 void clr_buffer(void);
 void loop_badge(void);
-void enable_display_scanning(unsigned char onoff);
+void enable_display_scanning(uint8_t onoff);
 uint32_t millis(void);
 
-unsigned char flash_init = 0;
-unsigned char handle_display = 1;
+uint8_t flash_init = 0;
+uint8_t handle_display = 1;
 
 extern volatile uint16_t bufsize;
 volatile uint32_t ticks;	// millisecond timer incremented in ISR
 
-extern const unsigned char b2_rom[2048];
-extern const unsigned char ram_init [30];
+extern const uint8_t b2_rom[2048];
+extern const uint8_t ram_init [30];
 
-int main(void)
+int16_t main(void)
 	{
     ticks = 0;
 	start_after_wake = &wake_return; //Function pointer for waking from sleep
@@ -127,7 +128,7 @@ void loop_badge(void)
 		}
 	}
 
-void enable_display_scanning(unsigned char onoff)
+void enable_display_scanning(uint8_t onoff)
 	{
 	//Turns vt100 scanning on or off
 	if (onoff) handle_display = 1;
@@ -231,8 +232,8 @@ void loop_userprog (void)
 	handle_display = 1; //Go back to character display
     }
 
-    static unsigned int delay_until = 0;
-    static unsigned char count = '0';
+    static uint16_t delay_until = 0;
+    static uint8_t count = '0';
 
     if (ticks>=delay_until)
     {
@@ -260,11 +261,11 @@ const char* get_firmware_string(void) {
 	return FIRMWARE_VERSION;
 	}
 
-unsigned char add_prog_line (char * line, char * prog, int linenum)
+uint8_t add_prog_line (int8_t * line, int8_t * prog, int16_t linenum)
     {
-    unsigned char * prog_ptr=prog, * prog_ptr_prev, * prog_ptr_dest;
-    int linenum_now,linenum_prev=0,line_exp_len,cnt;
-    char line_rest[50],line_exp[50],ret;
+    uint8_t * prog_ptr=prog, * prog_ptr_prev, * prog_ptr_dest;
+    int16_t linenum_now,linenum_prev=0,line_exp_len,cnt;
+    int8_t line_rest[50],line_exp[50],ret;
     sprintf(line_exp,"%d %s\n",linenum,line);
     line_exp_len = strlen(line_exp);
     while (1)
@@ -309,10 +310,10 @@ unsigned char add_prog_line (char * line, char * prog, int linenum)
     }
 
 
-unsigned char cmd_exec (char * cmd)
+uint8_t cmd_exec (int8_t * cmd)
     {
-    char cmd_clean[25];
-    int linenum,prognum;
+    int8_t cmd_clean[25];
+    int16_t linenum,prognum;
     if (isdigit(cmd[0]))
 		{
 		sscanf(cmd,"%d %[^\n]s",&linenum,cmd_clean);
@@ -405,9 +406,9 @@ unsigned char cmd_exec (char * cmd)
     }
 
 
-unsigned char basic_save_program (unsigned char * data, unsigned char slot)
+uint8_t basic_save_program (uint8_t * data, uint8_t slot)
 	{
-	unsigned long addr;
+	uint32_t  addr;
 	addr = slot;
 	addr = addr * 4096;
 	addr = addr + BASIC_BASEADDR;
@@ -416,9 +417,9 @@ unsigned char basic_save_program (unsigned char * data, unsigned char slot)
 	return 1;
 	}
 
-unsigned char basic_load_program (unsigned char * data, unsigned char slot)
+uint8_t basic_load_program (uint8_t * data, uint8_t slot)
 	{
-	unsigned long addr;
+	uint32_t  addr;
 	addr = slot;
 	addr = addr * 4096;
 	addr = addr + BASIC_BASEADDR;
@@ -431,7 +432,7 @@ unsigned char basic_load_program (unsigned char * data, unsigned char slot)
 
 void __ISR(_TIMER_5_VECTOR, ipl3) Timer5Handler(void)
 {
-    unsigned char key_temp;
+    uint8_t key_temp;
     IFS0bits.T5IF = 0;
 	loop_badge();
     if (handle_display)
@@ -461,9 +462,9 @@ void __ISR(_EXTERNAL_2_VECTOR, ipl4) Int2Handler(void)
 //*****************************************************************************/
 
 
-unsigned char rx_sta (void)
+uint8_t rx_sta (void)
 {
-volatile int u_sta;
+volatile int16_t u_sta;
 if (U3STAbits.URXDA==1) 
 	{
 		u_sta++;
@@ -472,15 +473,15 @@ if (U3STAbits.URXDA==1)
 	else 
 		return 0x00;
 }
-unsigned char rx_read (void)
+uint8_t rx_read (void)
 {
-	unsigned char data;
+	uint8_t data;
 //	if (uart_buffer_ptr<500)
 //		uart_buffer[uart_buffer_ptr++] = data;
 	data = U3RXREG;
 	return data;
 }
-void tx_write (unsigned char data)
+void tx_write (uint8_t data)
 {
     
 U3TXREG = data;
@@ -488,12 +489,10 @@ while (U3STAbits.UTXBF==1);
     
 }
 
-unsigned char stdio_write (char * data)
+uint8_t stdio_write (int8_t * data)
 {
 if (stdio_src==STDIO_LOCAL)
 	{
-//jar
-//	terminal_tasks(data,&vertical_shift);
 	while (*data!=0x00)
 		{
 		buf_enqueue (*data++);
@@ -508,15 +507,13 @@ else if (stdio_src==STDIO_TTY1)
 	}
 }
 
-unsigned char stdio_c (unsigned char data)
+uint8_t stdio_c (uint8_t data)
 {
-char tmp[3];
+int8_t tmp[3];
 if (stdio_src==STDIO_LOCAL)
 	{
 	tmp[0] = data;
 	tmp[1] = 0;
-//jar
-//	terminal_tasks(tmp,&vertical_shift);
 	buf_enqueue (data);
 	while (bufsize)
 		receive_char(buf_dequeue());
@@ -525,7 +522,7 @@ else if (stdio_src==STDIO_TTY1)
 	tx_write(data);
 }
 
-char stdio_get_state (void)
+int8_t stdio_get_state (void)
 	{
 	if (stdio_src==STDIO_LOCAL)
 		return term_k_stat();
@@ -533,7 +530,7 @@ char stdio_get_state (void)
 		return rx_sta();
 	}
 
-char stdio_get (char * dat)
+int8_t stdio_get (int8_t * dat)
 {
 if (stdio_src==STDIO_LOCAL)
 	{
@@ -552,9 +549,9 @@ else if (stdio_src==STDIO_TTY1)
 return 0;
 }
 
-char term_k_stat (void)
+int8_t term_k_stat (void)
 {
-    unsigned char key_len;
+    uint8_t key_len;
 IEC0bits.T2IE = 0;
 key_len = key_buffer_ptr;
 IEC0bits.T2IE = 1;
@@ -564,9 +561,9 @@ else
 	return 1;
 }
 
-char term_k_char (char * out)
+int8_t term_k_char (int8_t * out)
 {
-unsigned char retval;
+uint8_t retval;
 IEC0bits.T2IE = 0;
 retval = key_buffer_ptr;
 if (key_buffer_ptr>0)

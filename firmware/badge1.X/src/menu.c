@@ -5,7 +5,7 @@
 #include <string.h>
 
 #define HASH_TABLE_LENGTH	10
-const unsigned long hashtable[HASH_TABLE_LENGTH] =
+const uint32_t  hashtable[HASH_TABLE_LENGTH] =
 	{
 	0,				//0
 	0,				//1
@@ -40,7 +40,7 @@ const unsigned long hashtable[HASH_TABLE_LENGTH] =
 #define MENU_DEFAULT_BG 0
 #define MENU_VERSION_FG	8
 
-const unsigned char wrencher[18][41] = {
+const uint8_t wrencher[18][41] = {
 "    +mmy/                      /ymm+    ",
 "      sMMh                    hMMs      ",
 "h/  .hMMMM.                  -MMMMh.  /h",
@@ -64,13 +64,13 @@ void menu(void)
 	{
 	showmenu();
 	
-	char char_out;
-	unsigned char menu_buff[COMMAND_MAX], menu_pointer;
+	int8_t char_out;
+	uint8_t menu_buff[COMMAND_MAX], menu_pointer;
 	menu_pointer=0;
-	int len, i;
-	unsigned char clear_flag = 0;
-	unsigned long wait_to_clear = 0;
-	int cursorx, cursory;
+	int16_t len, i;
+	uint8_t clear_flag = 0;
+	uint32_t  wait_to_clear = 0;
+	int16_t cursorx, cursory;
 	while (1)
 		{
 		if (clear_flag)
@@ -85,7 +85,7 @@ void menu(void)
 				video_gotoxy(cursorx,cursory);
 				}
 			}
-		unsigned char get_stat = stdio_get(&char_out);
+		uint8_t get_stat = stdio_get(&char_out);
 		if (get_stat!=0)
 			{
 			stdio_c(char_out);
@@ -184,11 +184,11 @@ void menu(void)
 		}
 	}
 
-unsigned long hash(char *command)
+uint32_t  hash(int8_t *command)
 	{
-	unsigned long hash = 0;
-	unsigned char infinite_loop_breaker = 0;
-	unsigned char c;
+	uint32_t  hash = 0;
+	uint8_t infinite_loop_breaker = 0;
+	uint8_t c;
 	while (c = *command++)
 		{
 		hash = (hash*33)^c;
@@ -198,9 +198,9 @@ unsigned long hash(char *command)
 	return hash;
 	}
 
-unsigned char get_command_index(unsigned long hash_value)
+uint8_t get_command_index(uint32_t  hash_value)
 	{
-	unsigned char i;
+	uint8_t i;
 	for (i=0; i<HASH_TABLE_LENGTH; i++)
 		{
 		if (hashtable[i] == hash_value) return i;
@@ -208,7 +208,7 @@ unsigned char get_command_index(unsigned long hash_value)
 	return 0;
 	}
 
-unsigned char wisecrack(char * quip, unsigned int x, unsigned char y)
+uint8_t wisecrack(int8_t * quip, uint16_t x, uint8_t y)
 	{
 	video_gotoxy(x,y);
 	stdio_write(quip);
@@ -268,7 +268,7 @@ void showmenu(void)
 	video_set_color(MENU_VERSION_FG,MENU_DEFAULT_BG);
 	video_gotoxy(VERSION_X,VERSION_Y);
 	stdio_write("v");
-	stdio_write((char *)get_firmware_string());
+	stdio_write((int8_t *)get_firmware_string());
 	
 	video_set_color(MENU_DEFAULT_FG,MENU_DEFAULT_BG);
 	video_gotoxy(TEXT_LEFT,PROMPT_Y);
@@ -277,7 +277,7 @@ void showmenu(void)
 
 void fancyframe(void)
 	{
-	unsigned int i;
+	uint16_t i;
 	video_gotoxy(0,0);
 	stdio_write("+");
 	for (i=0; i<38; i++) stdio_write("*");
@@ -299,7 +299,7 @@ void clear_prompt(void)
 	{
 	//Clear prompt area
 	video_gotoxy(TEXT_LEFT,PROMPT_Y);
-	int i;
+	int16_t i;
 	for (i=TEXT_LEFT; i<39; i++) stdio_write(" ");
 	video_gotoxy(TEXT_LEFT,PROMPT_Y);
 	stdio_write("> ");
@@ -307,17 +307,17 @@ void clear_prompt(void)
 
 void show_wrencher(void)
 	{
-	char i;
+	int8_t i;
 	video_clrscr();
 	video_set_color(2,0);
 	video_gotoxy(0,1);
 	for (i=0; i<18; i++)
 		{
-		stdio_write((char *)wrencher[i]);
+		stdio_write((int8_t *)wrencher[i]);
 		}
 	wait_ms(200);
 	i = 0;
-	unsigned char loopbreak = 0;
+	uint8_t loopbreak = 0;
 	while(1)
 		{
 		loopbreak = playriff(i++);
@@ -327,10 +327,10 @@ void show_wrencher(void)
 	showmenu();
 	}
 
-unsigned char playriff(unsigned char raisetop)
+uint8_t playriff(uint8_t raisetop)
 	{
-	const unsigned int riffdelays[3] = {78,236,393};
-	const unsigned char riff[14][4] =
+	const uint16_t riffdelays[3] = {78,236,393};
+	const uint8_t riff[14][4] =
 		{
 			{0,62,69,0},
 			{0,0,0,0},
@@ -347,10 +347,10 @@ unsigned char playriff(unsigned char raisetop)
 			{50,0,0,1},
 			{0,0,0,0}
 		};
-	unsigned char i;
+	uint8_t i;
 	for (i=0; i<14; i++)
 		{
-		unsigned char top = 0;
+		uint8_t top = 0;
 		if (riff[i][2] != 0)
 			{
 			top = riff[i][2] + raisetop;
