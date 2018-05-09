@@ -547,7 +547,7 @@ long temp;
 	accept(TOKENIZER_COMMA);
 	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
 	temp = get_rnd();
-	temp = temp * c1;
+	temp = temp * (c1+1);
 	temp = temp / 65535;
 	ubasic_set_variable(var,temp);
 	tokenizer_next();

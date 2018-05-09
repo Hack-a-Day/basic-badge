@@ -88,4 +88,7 @@
 0.32
 - rnd word added
 
+0.33
+- minor rnd bug fixed
+
 
