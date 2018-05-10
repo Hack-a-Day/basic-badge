@@ -17,7 +17,7 @@
 #include "tetrapuzz.h"
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.38"
+#define FIRMWARE_VERSION "0.39"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
@@ -107,6 +107,8 @@ int16_t main(void)
 	stdio_src = STDIO_LOCAL;
 //	stdio_src = STDIO_TTY1;
 	term_init();
+	if (flash_init==1)
+		init_first_x_sects(32);	
 	if (SHOW_SPLASH)
 		boot_animation();
 	if (flash_init==1)

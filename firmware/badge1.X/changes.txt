@@ -107,4 +107,8 @@
 0.38
 - added BASIC word CHR that prints one character with given ASCII value, useful for handling extended ASCII characters
 
+0.39
+- fixed some Z80 emulation bugs
+- adjusted and recompiled Z80 BIOS to fit smaller ramdisk and second ROM disk (currently empty)
+
 

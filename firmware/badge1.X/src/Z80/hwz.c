@@ -21,7 +21,7 @@ uint8_t flash_buff[4096];
 uint8_t conin_buffer[30];
 uint8_t conin_buffer_pointer;
 
-uint16_t last_addr;
+uint32_t last_addr;
 uint8_t unwritten;
 
 uint8_t fl_rdsr(void);
@@ -41,27 +41,6 @@ uint16_t i;
 	for (i=0xD400;i<(0xD400+0x1EFF);i++) ram[i] = ram_image[i];
 #endif
 }
-
-
-void init_diskb(void)
-{
-uint16_t i;
-for (i=0;i<256;i++)
-	{
-	ee_wren();
-	write_sector(ram_disk+ (i*128),i);
-	read_sector(disk_temp,i);
-	read_sector(ram_disk+ (i*128),i);
-	}
-for (i=0;i<256;i++)
-	{
-	read_sector(disk_temp,i);
-	read_sector(ram_disk+ (i*128),i);
-	}
-
-
-}
-
 
 
 void init_usart (void)
@@ -147,7 +126,9 @@ if (drive==1)
 	}
 if (drive==2)
 	{
+	base = base*128;
 	}
+
 if (drive==3)
 	{
 	if (disk_temp_pointer==0) fl_read_128(base,disk_temp);
@@ -194,7 +175,6 @@ if (drive==2)
 	{
 	//rom disk, no writes allowed
 	}
-
 if (drive==3)
 	{
 	disk_temp[disk_temp_pointer] = dat;
@@ -231,86 +211,7 @@ if (drive==6)
 disk_temp_pointer++;
 }
 
-/*
-unsigned char	SPI_dat (uint8_t data)
-{
 
-SPI2ABUF = data;
-while (SPI2ASTATbits.SPIRBF==0);
-return (SPI2ABUF);
-}
-
- */
-
-void write_sector (uint8_t *data, uint16_t addr)
-{
-uint8_t i,temp;
-CS_MEM = 0;
-SPI_dat(0x02);
-temp = (addr>>9);
-SPI_dat(temp);
-temp = (addr>>1);
-SPI_dat(temp);
-temp = (addr<<7);
-SPI_dat(temp);
-
-for (i=0;i<128;i++) SPI_dat(*data++);
-
-CS_MEM = 1;
-temp = ee_rs();
-temp = temp&0x01;
-
-while (temp>0)
-	{
-	temp = ee_rs();
-	temp = temp&0x01;
-	}
-}
-
-void read_sector (uint8_t *data, uint16_t addr)
-{
-uint8_t i,temp;
-CS_MEM = 0;
-SPI_dat(0x03);
-temp = (addr>>9);
-SPI_dat(temp);
-temp = (addr>>1);
-SPI_dat(temp);
-temp = (addr<<7);
-SPI_dat(temp);
-
-
-for (i=0;i<128;i++) 
-	{
-	*data = SPI_dat(0xFF);
-	*data++;
-	}
-
-CS_MEM = 1;
-}
-uint8_t ee_rs (void)
-{
-uint8_t temp;
-CS_MEM = 0;
-SPI_dat(0x05);
-temp = SPI_dat(0xFF);
-CS_MEM = 1;
-return temp;
-}
-
-void ee_wren (void)
-{
-CS_MEM = 0;
-SPI_dat(0x06);
-CS_MEM = 1;
-}
-
-void ee_wrdi (void)
-{
-CS_MEM = 0;
-SPI_dat(0x04);
-CS_MEM = 1;
-}
 
 
 
@@ -418,7 +319,7 @@ for (i=0;i<4096;i++)
 	}
 }
 
-void fl_write_128(uint16_t sector,uint8_t * data)
+void fl_write_128(uint32_t sector,uint8_t * data)
 {
 uint32_t  addr;
 uint8_t i;
@@ -451,7 +352,7 @@ fl_write_4k(addr,flash_buff);
 #endif
 }
 
-void fl_read_128(uint16_t sector,uint8_t * data)
+void fl_read_128(uint32_t sector,uint8_t * data)
 {
 uint32_t  addr;
 #ifdef	FLASH_BUFFERING	
@@ -469,7 +370,7 @@ fl_read_nk(addr,data,128);
 
 void init_first_x_sects (uint8_t i)			//format directory area
 {
-uint16_t j;
+uint32_t j;
 for (j=0;j<128;j++) disk_temp[j]=0xE5;
 for (j=0;j<32;j++) 
 	{

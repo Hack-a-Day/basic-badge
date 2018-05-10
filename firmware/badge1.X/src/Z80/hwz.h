@@ -4,21 +4,7 @@
 #define	USE_ROMDISK
 //#define		REMOVE_MAINLOOP
 
-#define	RAMDISK_SIZE	20480
-
-
-//#define	PB_CLK	80000					//xkHz
-#define	BAUD_U3A	38400
-#define	BAUD_U3B	38400
-#define	BAUD_U2A	38400
-#define	CS_MEM		LATBbits.LATB4
-#define	CS_MEM_T	TRISBbits.TRISB4
-
-//#define	CS_FLASH	LATBbits.LATB5
-//#define	CS_FLASH_T	TRISBbits.TRISB5
-
-#define	CONIO_SWITCH	LATBbits.LATB15
-#define	CONIO_SWITCH_T	TRISBbits.TRISB15
+#define	RAMDISK_SIZE	(1024*22)
 
 uint8_t rx_sta (void);
 uint8_t rx_read (void);
@@ -58,8 +44,8 @@ void fl_rst_pb(void);
 void fl_wren(void);
 void fl_write_4k(uint32_t  addr, uint8_t * data);
 void fl_read_nk(uint32_t  addr, uint8_t * data, uint16_t n);
-void fl_read_128(uint16_t sector,uint8_t * data);
-void fl_write_128(uint16_t sector,uint8_t * data);
+void fl_read_128(uint32_t sector,uint8_t * data);
+void fl_write_128(uint32_t sector,uint8_t * data);
 void init_first_x_sects (uint8_t i);
 
 
