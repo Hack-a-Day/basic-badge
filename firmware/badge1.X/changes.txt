@@ -123,4 +123,7 @@
 0.43
 - temprarily added CP/M disk formatter
 
+0.44
+- slower LCD initialization
+
 

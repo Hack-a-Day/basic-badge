@@ -2,7 +2,6 @@
 
 #define	USE_RAM_IMAGE	
 #define	USE_ROMDISK
-//#define		REMOVE_MAINLOOP
 
 #define	RAMDISK_SIZE	(1024*22)
 

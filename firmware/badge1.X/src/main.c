@@ -18,15 +18,13 @@
 #include "tetrapuzz.h"
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.43"
+#define FIRMWARE_VERSION "0.44"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
 
 int8_t bprog[4097] =
-"1 poinless long program\n\
-2 to sport MORE function\n\
-3 chr 205\n\
+"3 chr 205\n\
 4 chr 205\n\
 5 setxy 2,2\n\
 6 chr 206\n\
@@ -34,42 +32,6 @@ int8_t bprog[4097] =
 8 chr 215\n\
 9 wait 1000\n\
 10 clrscr \n\
-11 chr 205\n\
-12 chr 205\n\
-13 chr 205\n\
-14 setxy 2,2\n\
-15 chr 206\n\
-16 setxy 4,4\n\
-17 chr 215\n\
-18 wait 1000\n\
-19 clrscr \n\
-20 chr 205\n\
-21 chr 205\n\
-22 chr 205\n\
-23 setxy 2,2\n\
-24 chr 206\n\
-25 setxy 4,4\n\
-26 chr 215\n\
-27 wait 1000\n\
-28 clrscr \n\
-29 chr 205\n\
-30 chr 205\n\
-31 chr 205\n\
-32 setxy 2,2\n\
-33 chr 206\n\
-34 setxy 4,4\n\
-35 chr 215\n\
-36 wait 1000\n\
-37 clrscr \n\
-38 chr 205\n\
-39 chr 205\n\
-40 chr 205\n\
-41 setxy 2,2\n\
-42 chr 206\n\
-43 setxy 4,4\n\
-44 chr 215\n\
-45 wait 1000\n\
-46 clrscr \n\
 ";
 
 int16_t prog_ptr;
@@ -138,8 +100,68 @@ volatile uint32_t ticks;	// millisecond timer incremented in ISR
 extern const uint8_t b2_rom[2048];
 extern const uint8_t ram_init [30];
 
+const int8_t post_char_table[4*11] = "1234567890=qwertyuiop;/asdfghjkl\n\0zxcvbnm,.\0";
 
+void post (void)
+	{
+	uint8_t retval,index,line,position;
+	video_clrscr();
+	
+	while (1)
+		{
+		wait_ms(200);
+		video_set_color(11,1);
+		video_gotoxy(1,1);
+		stdio_write("u ");
+		video_gotoxy(24,1);
+		stdio_write("p ");
+		video_gotoxy(0,2);
+		stdio_write("l r");
+		video_gotoxy(22,2);
+		stdio_write("b b ");
+		video_gotoxy(1,3);
+		stdio_write("d ");
+		video_gotoxy(22,3);
+		stdio_write("_ d ");
+		video_gotoxy(1,4);
+		stdio_write("1 2 3 4 5 6 7 9 8 0 = ");
+		video_gotoxy(1,5);
+		stdio_write("Q W E R T Y U I O P ; ");
+		video_gotoxy(1,6);
+		stdio_write("? A S D F G H J K L e ");
+		video_gotoxy(1,7);
+		stdio_write("s Z X C V B N M < > s ");
 
+		if (stdio_get(&retval)!=0)
+			{
+			if ((retval>=' ')&(retval<=0x7F))
+				{
+				index = 255;
+				for (i=0;i<44;i++)
+					{
+					if (post_char_table[i]==retval)
+						index = i;
+					}
+				if (index<255)
+					{
+					line = index / 11;
+					position = index % 11;
+					video_gotoxy (1+(2*position),4+line);
+					video_set_color(11,4);
+					stdio_write("  ");
+					}
+				else
+					{
+					
+					}
+				}
+			
+			}
+		
+		}
+	
+	while(1);
+	}
 
 
 
@@ -154,6 +176,9 @@ int16_t main(void)
 	stdio_src = STDIO_LOCAL;
 //	stdio_src = STDIO_TTY1;
 	term_init();
+	
+//	post();
+	
 	
 	if (flash_init==1)
 		init_first_x_sects(32);	
