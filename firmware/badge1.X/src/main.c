@@ -18,7 +18,7 @@
 #include "tetrapuzz.h"
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.44"
+#define FIRMWARE_VERSION "0.45"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
@@ -116,7 +116,7 @@ void post (void)
 		video_gotoxy(24,1);
 		stdio_write("p ");
 		video_gotoxy(0,2);
-		stdio_write("l r");
+		stdio_write("l r ");
 		video_gotoxy(22,2);
 		stdio_write("b b ");
 		video_gotoxy(1,3);
@@ -131,7 +131,25 @@ void post (void)
 		stdio_write("? A S D F G H J K L e ");
 		video_gotoxy(1,7);
 		stdio_write("s Z X C V B N M < > s ");
-
+		if (KEY_BRK==0)
+			{
+			video_gotoxy(22,2);
+			video_set_color(11,4);
+			stdio_write("  ");						
+			}					
+		if (K_SHIFTR==0)
+			{
+			video_gotoxy(1,7);
+			video_set_color(11,4);
+			stdio_write("  ");						
+			}					
+		if (K_SHIFTL==0)
+			{
+			video_gotoxy(21,7);
+			video_set_color(11,4);
+			stdio_write("  ");						
+			}	
+		
 		if (stdio_get(&retval)!=0)
 			{
 			if ((retval>=' ')&(retval<=0x7F))
@@ -152,10 +170,25 @@ void post (void)
 					}
 				else
 					{
-					
+					if (retval=='_')
+						{
+						video_gotoxy(22,3);
+						video_set_color(11,4);
+						stdio_write("  ");						
+						}
 					}
 				}
-			
+			else
+				{
+				if (retval==K_UP) video_gotoxy(1,1);
+				if (retval==K_DN) video_gotoxy(1,3);
+				if (retval==K_LT) video_gotoxy(0,2);
+				if (retval==K_RT) video_gotoxy(2,2);
+				if (retval==NEWLINE) video_gotoxy(21,6);
+				if (retval==K_DEL) video_gotoxy(24,3);
+				video_set_color(11,4);
+				stdio_write("  ");						
+				}
 			}
 		
 		}
@@ -177,7 +210,8 @@ int16_t main(void)
 //	stdio_src = STDIO_TTY1;
 	term_init();
 	
-//	post();
+	if (KEY_BRK==0)
+		post();
 	
 	
 	if (flash_init==1)

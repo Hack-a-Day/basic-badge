@@ -2,16 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/menu.c</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/vt100.c</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/hw.c</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/basic/ubasic.c</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/main.c</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/basic/tokenizer.h</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/vt100.h</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/basic/tokenizer.c</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/disp.c</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

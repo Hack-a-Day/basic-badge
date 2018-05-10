@@ -27,7 +27,7 @@ uint8_t rxk_read (void);
 
 
 void wait_1ms (void);
-void wait_ms (uint16_t count);
+void wait_ms (uint32_t count);
 void wait_cyc (uint16_t cyc);
 void init_termint (void);
 

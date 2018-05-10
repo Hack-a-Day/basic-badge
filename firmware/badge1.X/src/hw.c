@@ -502,9 +502,9 @@ void delay_us (uint32_t  howmuch)
 	}
 
 
-void wait_ms (uint16_t count)
+void wait_ms (uint32_t count)
 {
-	uint16_t ticks_wait;
+	uint32_t ticks_wait;
 	ticks_wait = millis() + count;
 	rnd_var2 = rnd_var2  + ticks_wait;
 	while (millis()<= ticks_wait);

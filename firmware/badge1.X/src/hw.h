@@ -63,7 +63,7 @@
 
 void delay_us (uint32_t  howmuch);
 void wait_1ms (void);
-void wait_ms (uint16_t count);
+void wait_ms (uint32_t count);
 uint8_t keyb_tasks (void);
 void hw_init (void);
 void sound_set_note (uint8_t note, uint8_t generator);
