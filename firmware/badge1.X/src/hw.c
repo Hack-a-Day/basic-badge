@@ -407,8 +407,6 @@ void hw_init (void)
     LCD_BKLT = 1;
     LCD_PWR = 0;
 	TRISCbits.TRISC15 = 0;
-
-  
 	
     PR5 = 12 *(FPB / 64 / 1000);
     T5CONbits.TCKPS = 0b110;
