@@ -114,4 +114,7 @@
 0.40
 - added function MORE to list basic programs in more sensible way
 
+0.41
+- fixed bug in MORE function
+
 

@@ -18,15 +18,13 @@
 #include "tetrapuzz.h"
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.40"
+#define FIRMWARE_VERSION "0.41"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
 
 int8_t bprog[4097] =
-"1 poinless long program\n\
-2 to sport MORE function\n\
-3 chr 205\n\
+"3 chr 205\n\
 4 chr 205\n\
 5 setxy 2,2\n\
 6 chr 206\n\
@@ -126,6 +124,8 @@ void clr_buffer(void);
 void loop_badge(void);
 void enable_display_scanning(uint8_t onoff);
 uint32_t millis(void);
+void list_more (void);
+
 
 uint8_t flash_init = 0;
 uint8_t handle_display = 1;
@@ -139,29 +139,7 @@ extern const uint8_t ram_init [30];
 
 
 
-void list_more (void)
-	{
-	uint8_t retval;
-	uint16_t list_cnt=0,list_nl_cnt=0;
-	while (bprog[list_cnt]!=0)
-		{
-		if (bprog[list_cnt]==NEWLINE)
-			list_nl_cnt++;
-		if (list_nl_cnt==(DISP_BUFFER_HIGH-1))
-			{
-			stdio_c(NEWLINE);
-			stdio_write("---hit any key for more, q to quit---");
-			while (stdio_get(&retval)==0)
-				{
-				if (retval == 'q')
-					return;				
-				}
-			list_nl_cnt = 0;
-			video_clrscr();
-			}
-		stdio_c(bprog[list_cnt++]);
-		}	
-	}
+
 
 
 int16_t main(void)
@@ -506,7 +484,27 @@ uint8_t basic_load_program (uint8_t * data, uint8_t slot)
 	return 1;
 	}
 
-
+void list_more (void)
+	{
+	uint8_t retval;
+	uint16_t list_cnt=0,list_nl_cnt=0;
+	while (bprog[list_cnt]!=0)
+		{
+		if (bprog[list_cnt]==NEWLINE)
+			list_nl_cnt++;
+		if (list_nl_cnt==(DISP_BUFFER_HIGH-1))
+			{
+			stdio_c(NEWLINE);
+			stdio_write("---hit any key for more, q to quit---");
+			while (stdio_get(&retval)==0);
+			stdio_c(NEWLINE);
+			if (retval == 'q') return;
+			list_nl_cnt = 0;
+			video_clrscr();
+			}
+		stdio_c(bprog[list_cnt++]);
+		}	
+	}
 
 
 void __ISR(_TIMER_5_VECTOR, ipl3) Timer5Handler(void)
