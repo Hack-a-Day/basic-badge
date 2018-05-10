@@ -61,6 +61,19 @@ The BASIC badge is based around a PIC32MX370F512H. Software is compiled using MP
     * A PIC programmer like the PICKIT3 is required to program your badge
     * On the PIC programmer, pins 1-5 correspond to RES, V+, GND, B0, and B1 on the badge
 
+## Using XMODEM
+
+# Badge side
+
+* Launch "CP/M @ Z80" on the badge
+* b:
+* xmdm r e:ZORK1.DAT
+
+# Linux XMODEM info
+
+* sudo apt-get install lrzsz
+* sudo chmod 777 /dev/ttyUSB0
+* sx -X ZORK1.DAT > /dev/ttyUSB0 < /dev/ttyUSB0
 
 ## Proposed Functionality
 
