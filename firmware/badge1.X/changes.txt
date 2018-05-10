@@ -111,4 +111,7 @@
 - fixed some Z80 emulation bugs
 - adjusted and recompiled Z80 BIOS to fit smaller ramdisk and second ROM disk (currently empty)
 
+0.40
+- added function MORE to list basic programs in more sensible way
+
 

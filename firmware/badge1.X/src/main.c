@@ -1,5 +1,6 @@
 #include <xc.h>
 #include "basic/ubasic.h"
+#include "basic/tokenizer.h"
 #include <plib.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,21 +18,58 @@
 #include "tetrapuzz.h"
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.39"
+#define FIRMWARE_VERSION "0.40"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
 
 int8_t bprog[4097] =
-"9 clrscr \n\
-10 chr 205\n\
+"1 poinless long program\n\
+2 to sport MORE function\n\
+3 chr 205\n\
+4 chr 205\n\
+5 setxy 2,2\n\
+6 chr 206\n\
+7 setxy 4,4\n\
+8 chr 215\n\
+9 wait 1000\n\
+10 clrscr \n\
 11 chr 205\n\
 12 chr 205\n\
-20 setxy 2,2\n\
-30 chr 206\n\
-40 setxy 4,4\n\
-50 chr 215\n\
-60 wait 1000\n\
+13 chr 205\n\
+14 setxy 2,2\n\
+15 chr 206\n\
+16 setxy 4,4\n\
+17 chr 215\n\
+18 wait 1000\n\
+19 clrscr \n\
+20 chr 205\n\
+21 chr 205\n\
+22 chr 205\n\
+23 setxy 2,2\n\
+24 chr 206\n\
+25 setxy 4,4\n\
+26 chr 215\n\
+27 wait 1000\n\
+28 clrscr \n\
+29 chr 205\n\
+30 chr 205\n\
+31 chr 205\n\
+32 setxy 2,2\n\
+33 chr 206\n\
+34 setxy 4,4\n\
+35 chr 215\n\
+36 wait 1000\n\
+37 clrscr \n\
+38 chr 205\n\
+39 chr 205\n\
+40 chr 205\n\
+41 setxy 2,2\n\
+42 chr 206\n\
+43 setxy 4,4\n\
+44 chr 215\n\
+45 wait 1000\n\
+46 clrscr \n\
 ";
 
 int16_t prog_ptr;
@@ -98,15 +136,45 @@ volatile uint32_t ticks;	// millisecond timer incremented in ISR
 extern const uint8_t b2_rom[2048];
 extern const uint8_t ram_init [30];
 
+
+
+
+void list_more (void)
+	{
+	uint8_t retval;
+	uint16_t list_cnt=0,list_nl_cnt=0;
+	while (bprog[list_cnt]!=0)
+		{
+		if (bprog[list_cnt]==NEWLINE)
+			list_nl_cnt++;
+		if (list_nl_cnt==(DISP_BUFFER_HIGH-1))
+			{
+			stdio_c(NEWLINE);
+			stdio_write("---hit any key for more, q to quit---");
+			while (stdio_get(&retval)==0)
+				{
+				if (retval == 'q')
+					return;				
+				}
+			list_nl_cnt = 0;
+			video_clrscr();
+			}
+		stdio_c(bprog[list_cnt++]);
+		}	
+	}
+
+
 int16_t main(void)
 	{
+
     ticks = 0;
 	start_after_wake = &wake_return; //Function pointer for waking from sleep
 	hw_init();
-
+					
 	stdio_src = STDIO_LOCAL;
 //	stdio_src = STDIO_TTY1;
 	term_init();
+	
 	if (flash_init==1)
 		init_first_x_sects(32);	
 	if (SHOW_SPLASH)
@@ -344,6 +412,10 @@ uint8_t cmd_exec (int8_t * cmd)
 	else if (strcmp("clr",cmd)==0)
 	    {
 	    bprog[0]=0;
+	    }
+	else if (strcmp("more",cmd)==0)
+	    {
+	    list_more();
 	    }
 	else if (strncmp("load",cmd,4)==0)
 	    {

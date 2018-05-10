@@ -78,6 +78,7 @@ void term_init (void)
 	bufsize = 0;
 	cur_blink = 1;
 	cur_type = 2;	
+	video_set_color(15,0);
 	}
 
 void buf_enqueue(uint8_t c)
