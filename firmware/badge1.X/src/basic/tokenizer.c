@@ -184,7 +184,7 @@ get_next_token(void)
     nextptr = ptr + 1;
     return TOKENIZER_VARIABLE;
   }
-
+  nextptr = ptr + 1;
   
   return TOKENIZER_ERROR;
 }

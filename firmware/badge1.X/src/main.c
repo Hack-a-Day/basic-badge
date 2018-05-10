@@ -18,13 +18,15 @@
 #include "tetrapuzz.h"
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.41"
+#define FIRMWARE_VERSION "0.42"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
 
 int8_t bprog[4097] =
-"3 chr 205\n\
+"1 poinless long program\n\
+2 to sport MORE function\n\
+3 chr 205\n\
 4 chr 205\n\
 5 setxy 2,2\n\
 6 chr 206\n\
@@ -345,7 +347,7 @@ uint8_t add_prog_line (int8_t * line, int8_t * prog, int16_t linenum)
 				prog_ptr = prog_ptr_prev;
 				cnt = strlen(prog_ptr);
 				prog_ptr_dest = prog_ptr + line_exp_len;
-				memmove(prog_ptr_dest,prog_ptr,cnt);
+				memmove(prog_ptr_dest,prog_ptr,cnt+1);
 				memcpy(prog_ptr,line_exp,line_exp_len);		
 				}
 			return 0;
@@ -366,7 +368,7 @@ uint8_t add_prog_line (int8_t * line, int8_t * prog, int16_t linenum)
 uint8_t cmd_exec (int8_t * cmd)
     {
     int8_t cmd_clean[25];
-    int16_t linenum,prognum;
+    int32_t linenum,prognum;
     if (isdigit(cmd[0]))
 		{
 		sscanf(cmd,"%d %[^\n]s",&linenum,cmd_clean);

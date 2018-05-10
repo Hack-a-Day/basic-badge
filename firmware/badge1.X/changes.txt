@@ -117,4 +117,7 @@
 0.41
 - fixed bug in MORE function
 
+0.42
+- fixed bug in interpreter and line inserting algorithm
+
 
