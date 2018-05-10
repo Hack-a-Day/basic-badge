@@ -10,29 +10,37 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 ## BASIC Word List:
 
 ### Standard Words:
-* `PRINT`
-* `IF`
-* `GOTO`
-* `GOSUB`
-* `RETURN`
-* `FOR`
-* `NEXT`
-* `END`
-* `LET`
+* `print`
+* `if`
+* `goto`
+* `gosub`
+* `return`
+* `for`
+* `next`
+* `end`
+* `let`
 
-### Non-Standard Words
+### Badge Custom Words
 
-* `CLR` - clears all code from the program buffer
-* `OUT X` - not completely implemented yet
-* `LED X,Y` - control LED, X[0..2] RGB, Y[0..1] on/off
-* `TUNE A,B,C,D` - plays tones A, B, C for duration D
-* `SETXY X,Y` - set cursor at X,Y
-* `TERMT X` - set terminal type X (turns on or off auto-refresh of character buffer)
-* `CLRSCR` - clear screen
-* `WAIT X` - wait for X ms
-* `COLOR X,Y` - X=Foreground, Y=Background using EGA 16-color palette
+* `out X` - not completely implemented yet
+* `led X,Y` - control LED, X[0..2] RGB, Y[0..1] on/off
+* `tune A,B,C,D` - plays tones A, B, C for duration D
+* `clrscr` - clear screen
+* `setxy X,Y` - set cursor at X,Y
+* `wait X` - wait for X ms
+* `color X,Y` - X=Foreground, Y=Background using EGA 16-color palette
+* `rnd V,X` - assigns random number 0..X to variable V
+* `chr X` - prints character with ASCII representation X
+* `termt X` - sets VT100 terminal on or off (1-on, 0-off)
+
+### BASIC CLI commands
+
+* `run` - runs program
 * `save X` - Save program buffer to flash. There are 16 slots: X[0..15]
 * `load X` - Load program into buffer from flash. There are 16 slots: X[0..15]
+* `list` - list whole program
+* `more` - list program by pages
+* `clr` - clears all code from the program buffer
 
 ## Setting Up the Toolchain for BASIC Badge
 
