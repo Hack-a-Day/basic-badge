@@ -120,4 +120,7 @@
 0.42
 - fixed bug in interpreter and line inserting algorithm
 
+0.43
+- temprarily added CP/M disk formatter
+
 

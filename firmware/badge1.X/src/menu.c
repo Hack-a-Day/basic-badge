@@ -142,6 +142,14 @@ void menu(void)
 					init_userprog();
 					while (1) loop_userprog();
 					}			
+				else if (strcmp(menu_buff,"6")==0)
+					{
+					video_clrscr();
+					stdio_write("...formatting FLASH...");
+					init_first_x_sects(32);
+					stdio_write("...done. Reset badge now.");
+					while (1);
+					}			
 				else
 					{
 					switch (get_command_index(hash(menu_buff)))
@@ -264,6 +272,8 @@ void showmenu(void)
 	stdio_write("4 - Play Badgetris!");
 	video_gotoxy(TEXT_LEFT,10);
 	stdio_write("5 - User Program");
+	video_gotoxy(TEXT_LEFT,11);
+	stdio_write("6 - !!!CP/M disk formatter!!!");
 	
 	video_set_color(MENU_VERSION_FG,MENU_DEFAULT_BG);
 	video_gotoxy(VERSION_X,VERSION_Y);
