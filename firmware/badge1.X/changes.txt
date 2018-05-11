@@ -134,3 +134,9 @@
 - FLASH handling in Z80 CP/M is now more robust
 - BRK key bug fixed
 
+0.47
+- fixed line insertion algorithm
+- new disk C in CP/M, containing zork and sargon
+
+
+

@@ -11,6 +11,7 @@
 
 extern const uint8_t rom_image[65536];
 extern const uint8_t rd_image[131072];
+extern const uint8_t rd_image2[ROMDISK2_SIZE];
 uint8_t drive, sector, track,disk_temp_pointer;
 uint8_t disk_temp[128];
 
@@ -124,7 +125,14 @@ if (drive==1)
 	}
 if (drive==2)
 	{
+#ifdef USE_EEPROM
+	if (disk_temp_pointer==0) read_sector(disk_temp,base);
+	temp = disk_temp[disk_temp_pointer];
+#endif
 	base = base*128;
+#ifdef	USE_ROMDISK2
+	temp = rd_image2[base + disk_temp_pointer];
+#endif
 	}
 
 if (drive==3)
@@ -171,7 +179,14 @@ if (drive==1)
 	}
 if (drive==2)
 	{
-	//rom disk, no writes allowed
+#ifdef USE_EEPROM
+	disk_temp[disk_temp_pointer] = dat;
+	if (disk_temp_pointer==127) 
+		{
+		ee_wren();
+		write_sector(disk_temp,base);
+		}
+#endif
 	}
 if (drive==3)
 	{
@@ -370,6 +385,13 @@ void init_first_x_sects (uint8_t i)			//format directory area
 {
 uint32_t j;
 for (j=0;j<128;j++) disk_temp[j]=0xE5;
+#ifdef USE_EEPROM
+for (j=0;j<i;j++) 
+	{
+	ee_wren();
+	write_sector(disk_temp,j);
+	}
+#endif
 for (j=0;j<i;j++) 
 	{
 	fl_write_128(j,disk_temp);
@@ -389,3 +411,76 @@ for (j=0;j<i;j++)
 	}
 
 }
+
+#ifdef USE_EEPROM
+void write_sector (unsigned char *data, unsigned int addr)
+{
+unsigned char i,temp;
+CS_MEM = 0;
+SPI_dat(0x02);
+temp = (addr>>9);
+SPI_dat(temp);
+temp = (addr>>1);
+SPI_dat(temp);
+temp = (addr<<7);
+SPI_dat(temp);
+
+for (i=0;i<128;i++) 
+	SPI_dat(data[i]);
+
+CS_MEM = 1;
+temp = ee_rs();
+temp = temp&0x01;
+
+while (temp>0)
+	{
+	temp = ee_rs();
+	temp = temp&0x01;
+	}
+}
+
+void read_sector (unsigned char *data, unsigned int addr)
+{
+unsigned char i,temp;
+CS_MEM = 0;
+SPI_dat(0x03);
+temp = (addr>>9);
+SPI_dat(temp);
+temp = (addr>>1);
+SPI_dat(temp);
+temp = (addr<<7);
+SPI_dat(temp);
+
+
+for (i=0;i<128;i++) 
+	{
+	*data = SPI_dat(0xFF);
+	*data++;
+	}
+
+CS_MEM = 1;
+}
+unsigned char ee_rs (void)
+{
+unsigned char temp;
+CS_MEM = 0;
+SPI_dat(0x05);
+temp = SPI_dat(0xFF);
+CS_MEM = 1;
+return temp;
+}
+
+void ee_wren (void)
+{
+CS_MEM = 0;
+SPI_dat(0x06);
+CS_MEM = 1;
+}
+
+void ee_wrdi (void)
+{
+CS_MEM = 0;
+SPI_dat(0x04);
+CS_MEM = 1;
+}
+#endif

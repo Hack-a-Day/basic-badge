@@ -20,6 +20,7 @@
       <itemPath>src/splash.h</itemPath>
       <itemPath>src/menu.h</itemPath>
       <itemPath>src/tune_player.h</itemPath>
+      <itemPath>src/post.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -55,6 +56,7 @@
       <itemPath>src/box_game.c</itemPath>
       <itemPath>src/menu.c</itemPath>
       <itemPath>src/tune_player.c</itemPath>
+      <itemPath>src/post.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

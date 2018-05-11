@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=src/basic/tokenizer.c src/basic/ubasic.c src/Z80/hwz.c src/Z80/iosim.c src/Z80/sim1.c src/Z80/sim2.c src/Z80/sim3.c src/Z80/sim4.c src/Z80/sim5.c src/Z80/sim6.c src/Z80/sim7.c src/Z80/simfun.c src/Z80/simglb.c src/disp.c src/hw.c src/images.c src/vt100.c src/main.c src/splash.c src/tetrapuzz.c src/box_game.c src/menu.c src/tune_player.c
+SOURCEFILES_QUOTED_IF_SPACED=src/basic/tokenizer.c src/basic/ubasic.c src/Z80/hwz.c src/Z80/iosim.c src/Z80/sim1.c src/Z80/sim2.c src/Z80/sim3.c src/Z80/sim4.c src/Z80/sim5.c src/Z80/sim6.c src/Z80/sim7.c src/Z80/simfun.c src/Z80/simglb.c src/disp.c src/hw.c src/images.c src/vt100.c src/main.c src/splash.c src/tetrapuzz.c src/box_game.c src/menu.c src/tune_player.c src/post.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/src/basic/tokenizer.o ${OBJECTDIR}/src/basic/ubasic.o ${OBJECTDIR}/src/Z80/hwz.o ${OBJECTDIR}/src/Z80/iosim.o ${OBJECTDIR}/src/Z80/sim1.o ${OBJECTDIR}/src/Z80/sim2.o ${OBJECTDIR}/src/Z80/sim3.o ${OBJECTDIR}/src/Z80/sim4.o ${OBJECTDIR}/src/Z80/sim5.o ${OBJECTDIR}/src/Z80/sim6.o ${OBJECTDIR}/src/Z80/sim7.o ${OBJECTDIR}/src/Z80/simfun.o ${OBJECTDIR}/src/Z80/simglb.o ${OBJECTDIR}/src/disp.o ${OBJECTDIR}/src/hw.o ${OBJECTDIR}/src/images.o ${OBJECTDIR}/src/vt100.o ${OBJECTDIR}/src/main.o ${OBJECTDIR}/src/splash.o ${OBJECTDIR}/src/tetrapuzz.o ${OBJECTDIR}/src/box_game.o ${OBJECTDIR}/src/menu.o ${OBJECTDIR}/src/tune_player.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/src/basic/tokenizer.o.d ${OBJECTDIR}/src/basic/ubasic.o.d ${OBJECTDIR}/src/Z80/hwz.o.d ${OBJECTDIR}/src/Z80/iosim.o.d ${OBJECTDIR}/src/Z80/sim1.o.d ${OBJECTDIR}/src/Z80/sim2.o.d ${OBJECTDIR}/src/Z80/sim3.o.d ${OBJECTDIR}/src/Z80/sim4.o.d ${OBJECTDIR}/src/Z80/sim5.o.d ${OBJECTDIR}/src/Z80/sim6.o.d ${OBJECTDIR}/src/Z80/sim7.o.d ${OBJECTDIR}/src/Z80/simfun.o.d ${OBJECTDIR}/src/Z80/simglb.o.d ${OBJECTDIR}/src/disp.o.d ${OBJECTDIR}/src/hw.o.d ${OBJECTDIR}/src/images.o.d ${OBJECTDIR}/src/vt100.o.d ${OBJECTDIR}/src/main.o.d ${OBJECTDIR}/src/splash.o.d ${OBJECTDIR}/src/tetrapuzz.o.d ${OBJECTDIR}/src/box_game.o.d ${OBJECTDIR}/src/menu.o.d ${OBJECTDIR}/src/tune_player.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/src/basic/tokenizer.o ${OBJECTDIR}/src/basic/ubasic.o ${OBJECTDIR}/src/Z80/hwz.o ${OBJECTDIR}/src/Z80/iosim.o ${OBJECTDIR}/src/Z80/sim1.o ${OBJECTDIR}/src/Z80/sim2.o ${OBJECTDIR}/src/Z80/sim3.o ${OBJECTDIR}/src/Z80/sim4.o ${OBJECTDIR}/src/Z80/sim5.o ${OBJECTDIR}/src/Z80/sim6.o ${OBJECTDIR}/src/Z80/sim7.o ${OBJECTDIR}/src/Z80/simfun.o ${OBJECTDIR}/src/Z80/simglb.o ${OBJECTDIR}/src/disp.o ${OBJECTDIR}/src/hw.o ${OBJECTDIR}/src/images.o ${OBJECTDIR}/src/vt100.o ${OBJECTDIR}/src/main.o ${OBJECTDIR}/src/splash.o ${OBJECTDIR}/src/tetrapuzz.o ${OBJECTDIR}/src/box_game.o ${OBJECTDIR}/src/menu.o ${OBJECTDIR}/src/tune_player.o ${OBJECTDIR}/src/post.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/src/basic/tokenizer.o.d ${OBJECTDIR}/src/basic/ubasic.o.d ${OBJECTDIR}/src/Z80/hwz.o.d ${OBJECTDIR}/src/Z80/iosim.o.d ${OBJECTDIR}/src/Z80/sim1.o.d ${OBJECTDIR}/src/Z80/sim2.o.d ${OBJECTDIR}/src/Z80/sim3.o.d ${OBJECTDIR}/src/Z80/sim4.o.d ${OBJECTDIR}/src/Z80/sim5.o.d ${OBJECTDIR}/src/Z80/sim6.o.d ${OBJECTDIR}/src/Z80/sim7.o.d ${OBJECTDIR}/src/Z80/simfun.o.d ${OBJECTDIR}/src/Z80/simglb.o.d ${OBJECTDIR}/src/disp.o.d ${OBJECTDIR}/src/hw.o.d ${OBJECTDIR}/src/images.o.d ${OBJECTDIR}/src/vt100.o.d ${OBJECTDIR}/src/main.o.d ${OBJECTDIR}/src/splash.o.d ${OBJECTDIR}/src/tetrapuzz.o.d ${OBJECTDIR}/src/box_game.o.d ${OBJECTDIR}/src/menu.o.d ${OBJECTDIR}/src/tune_player.o.d ${OBJECTDIR}/src/post.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/src/basic/tokenizer.o ${OBJECTDIR}/src/basic/ubasic.o ${OBJECTDIR}/src/Z80/hwz.o ${OBJECTDIR}/src/Z80/iosim.o ${OBJECTDIR}/src/Z80/sim1.o ${OBJECTDIR}/src/Z80/sim2.o ${OBJECTDIR}/src/Z80/sim3.o ${OBJECTDIR}/src/Z80/sim4.o ${OBJECTDIR}/src/Z80/sim5.o ${OBJECTDIR}/src/Z80/sim6.o ${OBJECTDIR}/src/Z80/sim7.o ${OBJECTDIR}/src/Z80/simfun.o ${OBJECTDIR}/src/Z80/simglb.o ${OBJECTDIR}/src/disp.o ${OBJECTDIR}/src/hw.o ${OBJECTDIR}/src/images.o ${OBJECTDIR}/src/vt100.o ${OBJECTDIR}/src/main.o ${OBJECTDIR}/src/splash.o ${OBJECTDIR}/src/tetrapuzz.o ${OBJECTDIR}/src/box_game.o ${OBJECTDIR}/src/menu.o ${OBJECTDIR}/src/tune_player.o
+OBJECTFILES=${OBJECTDIR}/src/basic/tokenizer.o ${OBJECTDIR}/src/basic/ubasic.o ${OBJECTDIR}/src/Z80/hwz.o ${OBJECTDIR}/src/Z80/iosim.o ${OBJECTDIR}/src/Z80/sim1.o ${OBJECTDIR}/src/Z80/sim2.o ${OBJECTDIR}/src/Z80/sim3.o ${OBJECTDIR}/src/Z80/sim4.o ${OBJECTDIR}/src/Z80/sim5.o ${OBJECTDIR}/src/Z80/sim6.o ${OBJECTDIR}/src/Z80/sim7.o ${OBJECTDIR}/src/Z80/simfun.o ${OBJECTDIR}/src/Z80/simglb.o ${OBJECTDIR}/src/disp.o ${OBJECTDIR}/src/hw.o ${OBJECTDIR}/src/images.o ${OBJECTDIR}/src/vt100.o ${OBJECTDIR}/src/main.o ${OBJECTDIR}/src/splash.o ${OBJECTDIR}/src/tetrapuzz.o ${OBJECTDIR}/src/box_game.o ${OBJECTDIR}/src/menu.o ${OBJECTDIR}/src/tune_player.o ${OBJECTDIR}/src/post.o
 
 # Source Files
-SOURCEFILES=src/basic/tokenizer.c src/basic/ubasic.c src/Z80/hwz.c src/Z80/iosim.c src/Z80/sim1.c src/Z80/sim2.c src/Z80/sim3.c src/Z80/sim4.c src/Z80/sim5.c src/Z80/sim6.c src/Z80/sim7.c src/Z80/simfun.c src/Z80/simglb.c src/disp.c src/hw.c src/images.c src/vt100.c src/main.c src/splash.c src/tetrapuzz.c src/box_game.c src/menu.c src/tune_player.c
+SOURCEFILES=src/basic/tokenizer.c src/basic/ubasic.c src/Z80/hwz.c src/Z80/iosim.c src/Z80/sim1.c src/Z80/sim2.c src/Z80/sim3.c src/Z80/sim4.c src/Z80/sim5.c src/Z80/sim6.c src/Z80/sim7.c src/Z80/simfun.c src/Z80/simglb.c src/disp.c src/hw.c src/images.c src/vt100.c src/main.c src/splash.c src/tetrapuzz.c src/box_game.c src/menu.c src/tune_player.c src/post.c
 
 
 CFLAGS=
@@ -244,6 +244,12 @@ ${OBJECTDIR}/src/tune_player.o: src/tune_player.c  nbproject/Makefile-${CND_CONF
 	@${RM} ${OBJECTDIR}/src/tune_player.o 
 	@${FIXDEPS} "${OBJECTDIR}/src/tune_player.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -DPK4Tool=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -funroll-loops -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/tune_player.o.d" -o ${OBJECTDIR}/src/tune_player.o src/tune_player.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
 	
+${OBJECTDIR}/src/post.o: src/post.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/src" 
+	@${RM} ${OBJECTDIR}/src/post.o.d 
+	@${RM} ${OBJECTDIR}/src/post.o 
+	@${FIXDEPS} "${OBJECTDIR}/src/post.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -DPK4Tool=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -funroll-loops -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/post.o.d" -o ${OBJECTDIR}/src/post.o src/post.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
+	
 else
 ${OBJECTDIR}/src/basic/tokenizer.o: src/basic/tokenizer.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/src/basic" 
@@ -382,6 +388,12 @@ ${OBJECTDIR}/src/tune_player.o: src/tune_player.c  nbproject/Makefile-${CND_CONF
 	@${RM} ${OBJECTDIR}/src/tune_player.o.d 
 	@${RM} ${OBJECTDIR}/src/tune_player.o 
 	@${FIXDEPS} "${OBJECTDIR}/src/tune_player.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -funroll-loops -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/tune_player.o.d" -o ${OBJECTDIR}/src/tune_player.o src/tune_player.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/src/post.o: src/post.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/src" 
+	@${RM} ${OBJECTDIR}/src/post.o.d 
+	@${RM} ${OBJECTDIR}/src/post.o 
+	@${FIXDEPS} "${OBJECTDIR}/src/post.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -funroll-loops -D_SUPPRESS_PLIB_WARNING -MMD -MF "${OBJECTDIR}/src/post.o.d" -o ${OBJECTDIR}/src/post.o src/post.c    -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD) 
 	
 endif
 

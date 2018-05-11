@@ -2,8 +2,19 @@
 
 #define	USE_RAM_IMAGE	
 #define	USE_ROMDISK
+#define	USE_ROMDISK2
+#define	CUT_ROMDISK2
+
+#ifdef	CUT_ROMDISK2
+#define	ROMDISK2_SIZE	131072-(18*1024)
+#endif
+#ifndef	CUT_ROMDISK2
+#define	ROMDISK2_SIZE	131072
+#endif
 
 #define	RAMDISK_SIZE	(1024*22)
+
+//#define	USE_EEPROM
 
 uint8_t rx_sta (void);
 uint8_t rx_read (void);
@@ -18,8 +29,6 @@ unsigned char	SPI_dat (uint8_t data);
 uint8_t ee_rs (void);
 void ee_wren (void);
 void ee_wrdi (void);
-void read_sector (uint8_t *data, uint16_t addr);
-void write_sector (uint8_t *data, uint16_t addr);
 void init_diskb(void);
 
 uint8_t rxk_sta (void);
@@ -32,8 +41,7 @@ void wait_cyc (uint16_t cyc);
 void init_termint (void);
 
 
-void write_flash_sector (uint8_t * data, uint16_t addr);
-void read_flash_sector (uint8_t *data, uint16_t addr);
+
 void init_first_x_sects (uint8_t i);
 
 void fl_write(uint32_t  addr,uint8_t data);
@@ -47,6 +55,8 @@ void fl_read_128(uint32_t sector,uint8_t * data);
 void fl_write_128(uint32_t sector,uint8_t * data);
 void init_first_x_sects (uint8_t i);
 
+void read_sector (unsigned char *data, unsigned int addr);
+void write_sector (unsigned char *data, unsigned int addr);
 
 #define		IO_CPM_MODE		0
 #define		IO_BASIC_MODE	1

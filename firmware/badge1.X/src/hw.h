@@ -47,6 +47,9 @@
 #define		FLASH_WP	LATDbits.LATD8
 #define		FLASH_HOLD	LATCbits.LATC12
 
+#define		CS_MEM		FLASH_WP
+
+
 #define		GEN_0_PIN	LATDbits.LATD1
 #define		GEN_1_PIN	LATDbits.LATD2
 #define		GEN_2_PIN	LATDbits.LATD3

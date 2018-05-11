@@ -1,0 +1,2 @@
+void post (void);
+
