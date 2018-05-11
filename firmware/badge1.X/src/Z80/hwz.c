@@ -9,8 +9,6 @@
 #include "simglb.h"
 #include "../hw.h"
 
-#define	FLASH_BUFFERING	
-
 extern const uint8_t rom_image[65536];
 extern const uint8_t rd_image[131072];
 uint8_t drive, sector, track,disk_temp_pointer;
@@ -21,7 +19,7 @@ uint8_t flash_buff[4096];
 uint8_t conin_buffer[30];
 uint8_t conin_buffer_pointer;
 
-uint32_t last_addr;
+uint32_t last_addr = 0xFFFFF000;
 uint8_t unwritten;
 
 uint8_t fl_rdsr(void);
@@ -157,7 +155,7 @@ return temp;
 void write_disk_byte (uint8_t dat)
 {
 uint8_t temp;
-uint16_t base;
+uint32_t base;
 uint32_t  ptr;
 base = (((unsigned int)(track))*16) + sector;
 if (drive==0)
@@ -328,7 +326,7 @@ addr = addr&0xFFFFF000;
 #ifdef	FLASH_BUFFERING	
 if (last_addr!=addr)
 	{
-	if (last_addr!=0xFFFF)
+	if (last_addr!=0xFFFFF000)
 		{
 		fl_erase_4k(last_addr);
 		fl_write_4k(last_addr,flash_buff);
@@ -361,7 +359,7 @@ if (unwritten == 1)
 	fl_erase_4k(last_addr);
 	fl_write_4k(last_addr,flash_buff);
 	unwritten = 0;	
-	last_addr = 0xFFFF;
+	last_addr = 0xFFFFF000;
 	}
 #endif
 addr = ((uint32_t )(sector))*128UL;
@@ -372,20 +370,20 @@ void init_first_x_sects (uint8_t i)			//format directory area
 {
 uint32_t j;
 for (j=0;j<128;j++) disk_temp[j]=0xE5;
-for (j=0;j<32;j++) 
+for (j=0;j<i;j++) 
 	{
 	fl_write_128(j,disk_temp);
 	}
 
-for (j=0;j<32;j++) 
+for (j=0;j<i;j++) 
 	{
 	fl_write_128(j+(1*4096),disk_temp);
 	}
-for (j=0;j<32;j++) 
+for (j=0;j<i;j++) 
 	{
 	fl_write_128(j+(2*4096),disk_temp);
 	}
-for (j=0;j<32;j++) 
+for (j=0;j<i;j++) 
 	{
 	fl_write_128(j+(3*4096),disk_temp);
 	}

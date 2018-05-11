@@ -148,7 +148,7 @@ void menu(void)
 					{
 					video_clrscr();
 					stdio_write("...formatting FLASH...");
-					init_first_x_sects(32);
+					init_first_x_sects(64);
 					stdio_write("...done. Reset badge now.");
 					while (1);
 					}			

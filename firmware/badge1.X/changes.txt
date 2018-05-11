@@ -126,4 +126,11 @@
 0.44
 - slower LCD initialization
 
+0.45
+- simple hardware check, available after reset with BRK key pressed
+- fixed timer issue
+
+0.46
+- FLASH handling in Z80 CP/M is now more robust
+- BRK key bug fixed
 
