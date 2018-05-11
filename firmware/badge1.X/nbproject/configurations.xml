@@ -18,6 +18,8 @@
       <itemPath>src/hw.h</itemPath>
       <itemPath>src/vt100.h</itemPath>
       <itemPath>src/splash.h</itemPath>
+      <itemPath>src/menu.h</itemPath>
+      <itemPath>src/tune_player.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -52,6 +54,7 @@
       <itemPath>src/tetrapuzz.c</itemPath>
       <itemPath>src/box_game.c</itemPath>
       <itemPath>src/menu.c</itemPath>
+      <itemPath>src/tune_player.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
