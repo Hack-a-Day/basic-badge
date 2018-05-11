@@ -2,9 +2,10 @@
 #include "menu.h"
 #include <stdint.h>
 #include "vt100.h"
+#include "tune_player.h"
 #include <string.h>
 
-#define HASH_TABLE_LENGTH	10
+#define HASH_TABLE_LENGTH	11
 const uint32_t  hashtable[HASH_TABLE_LENGTH] =
 	{
 	0,				//0
@@ -17,6 +18,7 @@ const uint32_t  hashtable[HASH_TABLE_LENGTH] =
 	138097304,		//7
 	110149,			//8
 	3174374908u,	//9
+	132593272,		//10
 	};
 
 //Prompt handling defines
@@ -163,6 +165,7 @@ void menu(void)
 						case 7: clear_flag = wisecrack("You're in a room filled with hackers", TEXT_LEFT,CRACK_Y); break;
 						case 8: clear_flag = wisecrack("I am afraid I can't do that Dave", TEXT_LEFT,CRACK_Y); break;
 						case 9: show_wrencher(); break;
+						case 10: play_mario_tune(); break;
 						default: clear_flag = wisecrack("Nice try, wise guy",TEXT_LEFT,CRACK_Y); break;
 						}
 					}
