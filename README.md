@@ -41,6 +41,8 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 * `list` - list whole program
 * `more` - list program by pages
 * `clr` - clears all code from the program buffer
+* `free` - prints amount of free program buffer
+
 
 ## Setting Up the Toolchain for BASIC Badge
 
