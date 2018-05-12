@@ -1,5 +1,5 @@
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.58"
+#define FIRMWARE_VERSION "0.59"
 
 //define length of BASIC program RAM buffer
 //increasing the length will allow you to hold larger programs

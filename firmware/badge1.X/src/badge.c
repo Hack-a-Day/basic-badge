@@ -779,8 +779,7 @@ uint8_t cmd_exec (int8_t * cmd)
 			if (brk_key) 
 				{
 				brk_key = 0;
-				handle_display = 1;
-				stdio_write("BRK pressed\n");
+				stdio_write("\nBRK pressed\n");
 				break;
 				}
 		    if (!setjmp(jbuf))
@@ -789,11 +788,11 @@ uint8_t cmd_exec (int8_t * cmd)
 				}
 			else
 				{
-				handle_display = 1;
-				stdio_write("BASIC error\n");
+				stdio_write("\nBASIC error\n");
 				break;
 				}
-		    } 	while(!ubasic_finished());	
+		    } 	while(!ubasic_finished());
+		handle_display = 1;
 	    stdio_write("\n");
 	    }
 	else 

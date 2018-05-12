@@ -176,4 +176,7 @@
 0.58
 - enabled display handling after returning control if termt was 0 in BASIC program
 
+0.59
+- colors are restored to default after exiting BASIC program
+
 
