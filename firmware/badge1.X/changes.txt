@@ -167,4 +167,7 @@
 0.55
 - improved function output handling of print/println functions
 
+0.56
+- adjusted format of RND and EIN function 
+
 
