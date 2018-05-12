@@ -21,17 +21,19 @@
 #include "tune_player.h"
 
 int8_t bprog[BPROG_LEN+1] =
-"1 print rnd (10)\n\
+"1 print rnd 10\n\
 2 edr 0,0\n\
 3 edr 1,1\n\
-10 a = rnd (10)\n\
+10 a = (rnd 10) + 40\n\
 20 print a\n\
-21 print rnd (10)\n\
-22 eout 0,0\n\
+21 chr 32\n\
+22 print rnd 10\n\
+23 eout 0,0\n\
+24 chr 32\n\
 30 wait 500\n\
 31 eout 0,1\n\
 32 wait 500\n\
-33 b = ein (1)\n\
+33 b = ein 1\n\
 34 println b\n\
 40 goto 10\n\
 ";
@@ -1057,7 +1059,6 @@ void stdio_local_buffer_puts (int8_t * data)
 	while (*data!=0)
 		stdio_local_buffer_put(*data++);
 	}
-
 
 void badge_init (void)
 	{

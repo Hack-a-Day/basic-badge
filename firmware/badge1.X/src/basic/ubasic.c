@@ -132,19 +132,19 @@ factor(void)
     break;
   case TOKENIZER_RND:
 	accept(TOKENIZER_RND);
-    accept(TOKENIZER_LEFTPAREN);
+//    accept(TOKENIZER_LEFTPAREN);
     r = expr();
 	temp = get_rnd();
 	temp = temp * (r+1);
 	r = temp / 65535;
-    accept(TOKENIZER_RIGHTPAREN);
+//    accept(TOKENIZER_RIGHTPAREN);
     break;	
    case TOKENIZER_EIN:
 	accept(TOKENIZER_EIN);
-    accept(TOKENIZER_LEFTPAREN);
+//    accept(TOKENIZER_LEFTPAREN);
     r = expr();
 	r = exp_get(r);
-    accept(TOKENIZER_RIGHTPAREN);
+ //   accept(TOKENIZER_RIGHTPAREN);
     break;
   default:
     r = varfactor();
