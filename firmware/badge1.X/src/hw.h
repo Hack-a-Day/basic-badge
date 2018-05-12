@@ -64,7 +64,6 @@
 
 
 
-void delay_us (uint32_t  howmuch);
 void wait_1ms (void);
 void wait_ms (uint32_t count);
 uint8_t keyb_tasks (void);

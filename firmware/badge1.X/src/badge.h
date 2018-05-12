@@ -1,3 +1,6 @@
+//Badge firmware version should be defined as a string here:
+#define FIRMWARE_VERSION "0.50"
+
 //define length of BASIC program RAM buffer
 //increasing the length will allow you to hold larger programs
 // load and save functions are set to 4096B only though
@@ -19,9 +22,6 @@
  * 0x100000-0x17FFFF - E disk of CP/M machine
  * 0x180000-0x1FFFFF - F disk of CP/M machine
  */
-
-//Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.49"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0

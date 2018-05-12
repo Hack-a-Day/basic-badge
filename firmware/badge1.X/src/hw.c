@@ -440,7 +440,7 @@ void hw_init (void)
 	LCD_BKLT = 0;					//turn backlight on
 	fl_rst_pb();
 
-
+	
   	}
 
 
@@ -493,11 +493,6 @@ uint8_t keyb_tasks (void)
 	return retval;
 	}
 
-
-void delay_us (uint32_t  howmuch)
-	{
-//nope, need to rework
-	}
 
 
 void wait_ms (uint32_t count)
