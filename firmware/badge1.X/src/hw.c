@@ -520,20 +520,22 @@ uint16_t get_rnd (void)
 	return var;
 	}
 
-
-void __ISR(_TIMER_2_VECTOR, ipl6) Timer2Handler(void)
+void __ISR(_TIMER_2_VECTOR, IPL6AUTO) Timer2Handler(void)
+//void __ISR(_TIMER_2_VECTOR, ipl6) Timer2Handler(void)
 	{
     IFS0bits.T2IF = 0;
 	GEN_0_PIN = ~ GEN_0_PIN;
 	rnd_var3++;
 	}
-void __ISR(_TIMER_3_VECTOR, ipl6) Timer3Handler(void)
+void __ISR(_TIMER_3_VECTOR, IPL6AUTO) Timer3Handler(void)
+//void __ISR(_TIMER_3_VECTOR, ipl6) Timer3Handler(void)
 	{
     IFS0bits.T3IF = 0;
 	GEN_1_PIN = ~ GEN_1_PIN;
 	rnd_var3++;
 	}
-void __ISR(_TIMER_4_VECTOR, ipl6) Timer4Handler(void)
+void __ISR(_TIMER_4_VECTOR, IPL6AUTO) Timer4Handler(void)
+//void __ISR(_TIMER_4_VECTOR, ipl6) Timer4Handler(void)
 	{
     IFS0bits.T4IF = 0;
 	GEN_2_PIN = ~ GEN_2_PIN;

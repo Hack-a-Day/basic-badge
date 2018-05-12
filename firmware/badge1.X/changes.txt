@@ -152,4 +152,7 @@
 0.51
 - more configuration options
 
+0.52
+- adjusted interrupt priorities to get cleaner sound
+
 

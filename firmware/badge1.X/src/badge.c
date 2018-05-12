@@ -21,7 +21,9 @@
 #include "tune_player.h"
 
 int8_t bprog[BPROG_LEN+1] =
-"3 chr 205\n\
+"1 tune 60,64,67,3000\n\
+2 tune 64,68,71,3000\n\
+3 chr 205\n\
 4 chr 205\n\
 5 setxy 2,2\n\
 6 chr 206\n\
@@ -860,8 +862,8 @@ void list_more (void)
 		}	
 	}
 
-
-void __ISR(_TIMER_5_VECTOR, ipl3) Timer5Handler(void)
+void __ISR(_TIMER_5_VECTOR, IPL3AUTO) Timer5Handler(void)
+//void __ISR(_TIMER_5_VECTOR, ipl3) Timer5Handler(void)
 {
     uint8_t key_temp;
     IFS0bits.T5IF = 0;
@@ -878,14 +880,14 @@ void __ISR(_TIMER_5_VECTOR, ipl3) Timer5Handler(void)
 		}
 
 }
-
-void __ISR(_TIMER_1_VECTOR, ipl4) Timer1Handler(void)
+void __ISR(_TIMER_1_VECTOR, IPL4AUTO) Timer1Handler(void)
+//void __ISR(_TIMER_1_VECTOR, ipl4) Timer1Handler(void)
 {
     IFS0bits.T1IF = 0;
     ++ticks;
 }
-
-void __ISR(_EXTERNAL_2_VECTOR, ipl4) Int2Handler(void)
+void __ISR(_EXTERNAL_2_VECTOR, IPL4AUTO) Int2Handler(void)
+//void __ISR(_EXTERNAL_2_VECTOR, ipl4) Int2Handler(void)
 	{
 	IEC0bits.INT2IE = 0;
 	}
