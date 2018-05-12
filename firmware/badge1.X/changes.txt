@@ -155,4 +155,7 @@
 0.52
 - adjusted interrupt priorities to get cleaner sound
 
+0.53
+- the badge has now somehow better POST test, more stuff to come
+
 

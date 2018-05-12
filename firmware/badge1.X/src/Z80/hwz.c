@@ -24,7 +24,7 @@ uint32_t last_addr = 0xFFFFF000;
 uint8_t unwritten;
 
 uint8_t fl_rdsr(void);
-uint8_t fl_rdid(void);
+uint32_t fl_rdid(void);
 
 #ifdef	USE_RAM_IMAGE
 extern const uint8_t ram_image[65536];
@@ -240,15 +240,18 @@ return temp;
 }
 
 
-uint8_t fl_rdid(void)
+uint32_t fl_rdid(void)
 {
-volatile uint8_t temp;
+uint8_t temp1,temp2,temp3;
+uint32_t retval;
 CS_FLASH = 0;
 SPI_dat(0x9F);
-temp = SPI_dat(0xFF);
-temp = SPI_dat(0x55);
-temp = SPI_dat(0xAA);
+temp3 = SPI_dat(0xFF);
+temp2 = SPI_dat(0x55);
+temp1 = SPI_dat(0xAA);
 CS_FLASH = 1;
+retval = (((uint32_t)(temp3))<<16)|(((uint32_t)(temp2))<<8)|(((uint32_t)(temp1))<<0);
+return retval;
 }
 
 void fl_read_4k(uint32_t  addr, uint8_t * data)

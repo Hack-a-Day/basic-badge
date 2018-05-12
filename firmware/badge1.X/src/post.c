@@ -9,24 +9,45 @@
 #include "vt100.h"
 #include "menu.h"
 #include "post.h"
+#include "disp.h"
 
 uint16_t i;
 const int8_t post_char_table[4*11] = "1234567890=qwertyuiop;/asdfghjkl\n\0zxcvbnm,.\0";
-
+extern uint8_t handle_display;
 
 void post (void)
 	{
-	uint8_t retval,index,line,position;
+	uint8_t retval,index,line,position,color;
+	uint32_t flash_id;
+	int8_t temp_string[30];
+	handle_display = 0;
+	set_led(0,1);
+	set_led(1,1);
+	set_led(2,1);	
+	wait_ms(400);
 	tft_fill_area(0,0,320,240,0xFF0000);
-	wait_ms(400);
+	wait_ms(1000);
 	tft_fill_area(0,0,320,240,0x00FF00);
-	wait_ms(400);
+	wait_ms(1000);
 	tft_fill_area(0,0,320,240,0x0000FF);
-	wait_ms(400);
+	wait_ms(1000);
+	handle_display = 1;
 	term_init();
-	
+	set_led(0,0);
+	set_led(1,0);
+	set_led(2,0);	
 	while (1)
 		{
+		flash_id = fl_rdid();
+		if (flash_id==0xC22315)
+			video_set_color(EGA_GREEN,EGA_BLACK);
+		else
+			video_set_color(EGA_RED,EGA_BLACK);
+		video_gotoxy(0,15);
+		sprintf(temp_string,"FLASH ID is %x\n",flash_id);
+		stdio_write(temp_string);
+		video_set_color(EGA_WHITE,EGA_BLACK);
+		stdio_write("Press LCTRL+ENTER to continue\n");
 		wait_ms(200);
 		video_set_color(11,1);
 		video_gotoxy(1,1);
@@ -101,14 +122,65 @@ void post (void)
 				if (retval==K_DN) video_gotoxy(1,3);
 				if (retval==K_LT) video_gotoxy(0,2);
 				if (retval==K_RT) video_gotoxy(2,2);
-				if (retval==NEWLINE) video_gotoxy(21,6);
 				if (retval==K_DEL) video_gotoxy(24,3);
+				if (retval==NEWLINE) video_gotoxy(21,6);
+				if (retval == K_ECR) break;
 				video_set_color(11,4);
 				stdio_write("  ");						
 				}
 			}
 		}
-	
+	video_clrscr();
+	term_init();
+	color=0;
+	while (1)
+		{
+		video_gotoxy(0,2);
+		if (color==3) color = 0;
+		if (color==0)
+			{
+			set_led(0,1);
+			set_led(1,0);
+			set_led(2,0);
+			stdio_write("red LED  \n");
+			stdio_write("generator 1, playing F4, ~349Hz  \n");
+			wait_ms(600);
+			sound_play_notes(65,0,0,200);
+			}
+		if (color==1)
+			{
+			set_led(0,0);
+			set_led(1,1);
+			set_led(2,0);
+			stdio_write("green LED  \n");
+			stdio_write("generator 2, playing A4, 440Hz  \n");
+			wait_ms(600);
+			sound_play_notes(0,69,0,200);
+			}
+		if (color==2)
+			{
+			set_led(0,0);
+			set_led(1,0);
+			set_led(2,1);
+			stdio_write("blue LED  \n");
+			stdio_write("generator 3, playing C5, ~523Hz  \n");
+			wait_ms(600);
+			sound_play_notes(0,0,72,200);
+			}
+		video_set_color(EGA_WHITE,EGA_BLACK);
+		stdio_write("Press LCTRL+ENTER to continue\n");
+		if (stdio_get(&retval)!=0)
+			{
+			if (retval == K_ECR) break;
+			}
+		color++;
+		}
+	set_led(0,0);
+	set_led(1,0);
+	set_led(2,0);
+	video_clrscr();
+	term_init();
+	stdio_write("Reset badge now\n");
 	while(1);
 	}
 
