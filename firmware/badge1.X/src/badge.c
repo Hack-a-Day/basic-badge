@@ -21,21 +21,26 @@
 #include "tune_player.h"
 
 int8_t bprog[BPROG_LEN+1] =
-"1 print rnd 10\n\
-2 edr 0,0\n\
-3 edr 1,1\n\
-10 a = (rnd 10) + 40\n\
-20 print a\n\
-21 chr 32\n\
-22 print rnd 10\n\
-23 eout 0,0\n\
-24 chr 32\n\
-30 wait 500\n\
-31 eout 0,1\n\
-32 wait 500\n\
-33 b = ein 1\n\
-34 println b\n\
-40 goto 10\n\
+"5 termt 0\n\
+10 let x = 39\n\
+20 let d = 0\n\
+30 clrscr\n\
+40 color 11,0\n\
+50 setxy x,10\n\
+60 chr 32\n\
+70 if d = 1 then gosub 200\n\
+80 if d = 0 then gosub 300\n\
+90 chr 254\n\
+95 termup\n\
+100 if x = 0 then d = 1\n\
+110 if x = 39 then d = 0\n\
+120 wait 50\n\
+130 goto 50\n\
+200 x = x + 1\n\
+210 return\n\
+300 x = x - 1\n\
+310 setxy x,10\n\
+320 return\n\
 ";
 
 int16_t prog_ptr;

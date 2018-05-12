@@ -39,6 +39,7 @@
 
 #include "ubasic.h"
 #include "../hw.h"
+#include "../vt100.h"
 #include "tokenizer.h"
 
 #include <stdio.h> /* printf() */
@@ -46,6 +47,10 @@
 #include <setjmp.h>
 
 extern jmp_buf jbuf;
+extern uint8_t handle_display;
+extern int8_t disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
+extern int8_t color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
+
 char err_msg[40];
 int last_linenum;
 
@@ -299,10 +304,7 @@ sprintf(str_out," ");
     } 
   } while(tokenizer_token() != TOKENIZER_CR &&
 	  tokenizer_token() != TOKENIZER_ENDOFINPUT);
-  if (term_vt100==1)
 	stdio_write(str_out);
-  else
-	write_direct(&term_x,&term_y,str_out);
   DEBUG_PRINTF("End of print\n");
   tokenizer_next();
 }
@@ -328,10 +330,7 @@ sprintf(str_out," ");
     }
   } while(tokenizer_token() != TOKENIZER_CR &&
 	  tokenizer_token() != TOKENIZER_ENDOFINPUT);
-  if (term_vt100==1)
 	stdio_write(str_out);
-  else
-	write_direct(&term_x,&term_y,str_out);
   DEBUG_PRINTF("End of print\n");
   tokenizer_next();
 }
@@ -513,13 +512,7 @@ setxy_statement(void)
 	accept(TOKENIZER_COMMA);
 	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) y_temp =  expr();
 	tokenizer_next();
-	if (term_vt100 == 1)
-		video_gotoxy(x_temp,y_temp);
-	else
-		{
-		term_x = x_temp;
-		term_y = y_temp;
-		}
+	video_gotoxy(x_temp,y_temp);
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -528,8 +521,16 @@ termt_statement(void)
 int type;
 	accept(TOKENIZER_TERMT);
 	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) type =  expr();
-	if (type==0) term_vt100 = 0;
-	else term_vt100 = 1;
+	if (type==0) 
+		{
+		term_vt100 = 0;
+		handle_display = 0;
+		}
+	else 
+		{
+		term_vt100 = 1;
+		handle_display = 1;
+		}
 	tokenizer_next();
 }
 /*---------------------------------------------------------------------------*/
@@ -614,6 +615,15 @@ int c1,c2;
 }
 /*---------------------------------------------------------------------------*/
 static void
+termup_statement(void)
+{
+	accept(TOKENIZER_TERMUP);
+	if (handle_display==0)
+		tft_disp_buffer_refresh(disp_buffer,color_buffer);
+	tokenizer_next();
+}
+/*---------------------------------------------------------------------------*/
+static void
 statement(void)
 {
   int token;
@@ -686,6 +696,9 @@ statement(void)
     break;
   case TOKENIZER_EOUT:
     eout_statement();
+    break;
+  case TOKENIZER_TERMUP:
+    termup_statement();
     break;
   default:
     sprintf(err_msg,"Bad token %d at line %d\n", token,last_linenum);

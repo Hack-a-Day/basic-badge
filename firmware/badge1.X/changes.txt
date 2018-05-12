@@ -170,4 +170,7 @@
 0.56
 - adjusted format of RND and EIN function 
 
+0.57
+- added word termup
+
 
