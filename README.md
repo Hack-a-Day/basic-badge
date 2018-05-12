@@ -11,6 +11,7 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 
 ### Standard Words:
 * `print`
+* `println`
 * `if`
 * `goto`
 * `gosub`
@@ -22,16 +23,18 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 
 ### Badge Custom Words
 
-* `out X` - not completely implemented yet
 * `led X,Y` - control LED, X[0..2] RGB, Y[0..1] on/off
 * `tune A,B,C,D` - plays tones A, B, C for duration D
 * `clrscr` - clear screen
 * `setxy X,Y` - set cursor at X,Y
 * `wait X` - wait for X ms
 * `color X,Y` - X=Foreground, Y=Background using EGA 16-color palette
-* `rnd V,X` - assigns random number 0..X to variable V
 * `chr X` - prints character with ASCII representation X
 * `termt X` - sets VT100 terminal on or off (1-on, 0-off)
+* `rnd X` - function to return random number 0..X
+* `ein X` - function to return value of expansion pin X
+* `eout X,Y` - control expansion pin, X[0..3], Y[0..1] on/off
+* `edr X,Y` - sets expansion pin function X[0..3], Y[0..1] output/input
 
 ### BASIC CLI commands
 
