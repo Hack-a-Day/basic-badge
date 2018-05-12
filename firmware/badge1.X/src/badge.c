@@ -779,6 +779,7 @@ uint8_t cmd_exec (int8_t * cmd)
 			if (brk_key) 
 				{
 				brk_key = 0;
+				handle_display = 1;
 				stdio_write("BRK pressed\n");
 				break;
 				}
@@ -788,6 +789,7 @@ uint8_t cmd_exec (int8_t * cmd)
 				}
 			else
 				{
+				handle_display = 1;
 				stdio_write("BASIC error\n");
 				break;
 				}

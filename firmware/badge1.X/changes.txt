@@ -173,4 +173,7 @@
 0.57
 - added word termup
 
+0.58
+- enabled display handling after returning control if termt was 0 in BASIC program
+
 
