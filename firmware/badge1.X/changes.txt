@@ -144,4 +144,7 @@
 - consoles for stdio are now switchable via LSHIFT+BRK
 
 
+0.49
+- zork now available from badge main menu
+
 

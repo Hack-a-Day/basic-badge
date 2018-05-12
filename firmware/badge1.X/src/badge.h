@@ -21,7 +21,7 @@
  */
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.48"
+#define FIRMWARE_VERSION "0.49"
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0

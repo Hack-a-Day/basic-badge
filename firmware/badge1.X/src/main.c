@@ -86,6 +86,10 @@ void enable_display_scanning(uint8_t onoff);
 uint32_t millis(void);
 void list_more (void);
 
+uint8_t stdio_local_buffer_state (void);
+int8_t stdio_local_buffer_get (void);
+void stdio_local_buffer_put (int8_t data);
+void stdio_local_buffer_puts (int8_t * data);
 
 uint8_t flash_init = 0;
 uint8_t handle_display = 1;
@@ -106,7 +110,6 @@ int16_t main(void)
 	stdio_src = STDIO_LOCAL;
 //	stdio_src = STDIO_TTY1;
 	term_init();
-
 	if (KEY_BRK==0)
 		post();
 	
@@ -585,6 +588,8 @@ else if (stdio_src==STDIO_TTY1)
 
 int8_t stdio_get_state (void)
 	{
+	if (stdio_local_buffer_state()!=0)
+		return 1;
 	if (stdio_src==STDIO_LOCAL)
 		return term_k_stat();
 	else if (stdio_src==STDIO_TTY1)
@@ -593,6 +598,11 @@ int8_t stdio_get_state (void)
 
 int8_t stdio_get (int8_t * dat)
 {
+if (stdio_local_buffer_state()!=0)
+	{
+	*dat = stdio_local_buffer_get();
+	return 1;
+	}
 if (stdio_src==STDIO_LOCAL)
 	{
 	return term_k_char(dat);
@@ -647,4 +657,41 @@ void boot_animation(void)
 	handle_display = 1; //Go back to character display
 }
 
+#define STDIO_LOCAL_BUFF_SIZE	25
+uint8_t stdio_local_len=0;
+int8_t stdio_local_buff[STDIO_LOCAL_BUFF_SIZE];
+uint8_t stdio_local_buffer_state (void)
+	{
+	if (stdio_local_len>0)
+		return 1;
+	else
+		return 0;
+	}
 
+int8_t stdio_local_buffer_get (void)
+	{
+	int8_t retval=0;
+	if (stdio_local_len>0)
+		{
+		retval = stdio_local_buff[0];
+		for (i=1;i<STDIO_LOCAL_BUFF_SIZE;i++)
+			{
+			stdio_local_buff[i-1] = stdio_local_buff[i];
+			}
+		stdio_local_buff[STDIO_LOCAL_BUFF_SIZE-1]=0;
+		stdio_local_len--;
+		}
+	return retval;
+	}
+
+void stdio_local_buffer_put (int8_t data)
+	{
+	if (stdio_local_len<(STDIO_LOCAL_BUFF_SIZE-1))
+		stdio_local_buff[stdio_local_len++] = data;
+	}
+
+void stdio_local_buffer_puts (int8_t * data)
+	{
+	while (*data!=0)
+		stdio_local_buffer_put(*data++);
+	}
