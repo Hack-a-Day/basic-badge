@@ -259,6 +259,10 @@ void badge_menu(void)
 					{
 					stdio_local_buffer_puts("c:\nzork1\n");
 					video_clrscr();
+					video_set_color(0,14);
+					stdio_write("\n\n\n\n\n\nPROTIP:\n\tUse Shift-Enter when playing ZORK!\n\n");
+					video_set_color(15,0);
+					wait_ms(2000);
 					init_z80_cpm();
 					while (1) loop_z80_cpm();
 					}				
