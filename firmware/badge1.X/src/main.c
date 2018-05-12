@@ -17,14 +17,10 @@
 #include "splash.h"
 #include "tetrapuzz.h"
 #include "post.h"
+#include "badge.h"
 
-//Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.47"
 
-//Set SHOW_SPLASH to 0 to skip splash screen at boot
-#define SHOW_SPLASH	0
-
-int8_t bprog[4097] =
+int8_t bprog[BPROG_LEN+1] =
 "3 chr 205\n\
 4 chr 205\n\
 5 setxy 2,2\n\
@@ -51,15 +47,15 @@ void tx_write (uint8_t data);
 uint8_t cmd_exec (int8_t * cmd);
 uint8_t basic_save_program (uint8_t * data, uint8_t slot);
 uint8_t basic_load_program (uint8_t * data, uint8_t slot);
+uint16_t get_free_mem(uint8_t * prog, uint16_t max_mem);
 
 int8_t term_buffer[TBUF_LEN];
 int8_t term_screen_buffer[TERM_WIDTH*TERM_LINES];
 //a lot of magic numbers here, should be done properly
-int8_t stdio_buff[25];
-int8_t term_input[50],term_input_p,term_key_stat_old;
+int8_t stdio_buff[50];
 uint16_t term_pointer,vertical_shift;
 int8_t key_buffer[10];
-int8_t stdio_src;
+volatile int8_t stdio_src;
 uint8_t key_buffer_ptr =0;
 
 int8_t disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
@@ -72,7 +68,6 @@ uint8_t cmd_line_buff[30], cmd_line_pointer,cmd_line_key_stat_old,prompt;
 
 jmp_buf jbuf;
 int8_t char_out;
-extern uint8_t flash_buff[4096];
 extern const uint8_t ram_image[65536];
 extern uint8_t ram_disk[RAMDISK_SIZE];
 
@@ -102,10 +97,6 @@ extern const uint8_t b2_rom[2048];
 extern const uint8_t ram_init [30];
 
 
-
-
-
-
 int16_t main(void)
 	{
 	
@@ -130,6 +121,9 @@ int16_t main(void)
 //housekeeping stuff. call this function often
 void loop_badge(void)
 	{
+	volatile uint16_t dbg;
+	static uint8_t brk_is_pressed;
+	dbg = PORTD;
 	if (K_PWR==0)
 		{
 		while (K_PWR==0);
@@ -141,8 +135,19 @@ void loop_badge(void)
 		}
 	if (KEY_BRK==0)
 		{
-		brk_key = 1;
+		if ((K_SHIFTL==0)&(brk_is_pressed==9))
+			{
+			if (stdio_src == STDIO_TTY1)
+				stdio_src = STDIO_LOCAL;
+			else
+				stdio_src = STDIO_TTY1;
+			}
+		else
+			brk_key = 1;
+		if (brk_is_pressed<10) brk_is_pressed++;
 		}
+	else
+		brk_is_pressed = 0;
 	}
 
 void enable_display_scanning(uint8_t onoff)
@@ -278,13 +283,22 @@ const char* get_firmware_string(void) {
 	return FIRMWARE_VERSION;
 	}
 
+uint16_t get_free_mem(uint8_t * prog, uint16_t max_mem)
+	{
+	uint16_t prog_len;
+	prog_len = strlen(prog);
+	return (max_mem-prog_len);
+	}
+
 uint8_t add_prog_line (int8_t * line, int8_t * prog, int16_t linenum)
     {
     uint8_t * prog_ptr=prog, * prog_ptr_prev, * prog_ptr_dest;
-    int16_t linenum_now,linenum_prev=0,line_exp_len,cnt;
+    int16_t linenum_now,linenum_prev=0,line_exp_len,cnt, prog_len;
     int8_t line_rest[50],line_exp[50],ret;
     sprintf(line_exp,"%d %s\n",linenum,line);
     line_exp_len = strlen(line_exp);
+	prog_len = strlen(prog);
+	if ((prog_len + line_exp_len)>BPROG_LEN) return 1;
     while (1)
 	{
 	ret = sscanf(prog_ptr,"%d %[^\n]s",&linenum_now,line_rest);
@@ -355,6 +369,11 @@ uint8_t cmd_exec (int8_t * cmd)
 	    {
 	    bprog[0]=0;
 	    }
+	else if (strcmp("free",cmd)==0)
+	    {
+		sprintf(stdio_buff,"%d B of memory free\n",get_free_mem(bprog,BPROG_LEN));
+		stdio_write(stdio_buff);
+	    }	
 	else if (strcmp("more",cmd)==0)
 	    {
 	    list_more();
@@ -407,7 +426,7 @@ uint8_t cmd_exec (int8_t * cmd)
 	    {
 		if (strlen(cmd)>0)
 			{
-			sprintf(tprog,"10 %s\n",cmd);
+			sprintf(tprog,"0 %s\n",cmd);
 			ubasic_init(tprog);
 			do 
 				{

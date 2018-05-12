@@ -137,23 +137,21 @@ if (drive==2)
 
 if (drive==3)
 	{
-	if (disk_temp_pointer==0) fl_read_128(base,disk_temp);
+	if (disk_temp_pointer==0) fl_read_128(base+(CPM1_DISK1_OFFSET),disk_temp);
 	temp = disk_temp[disk_temp_pointer];
 	}
 if (drive==4)
 	{
-	if (disk_temp_pointer==0) fl_read_128(base+4096,disk_temp);
+	if (disk_temp_pointer==0) fl_read_128(base+(CPM1_DISK2_OFFSET),disk_temp);
 	temp = disk_temp[disk_temp_pointer];
 	}
 if (drive==5)
 	{
-	if (disk_temp_pointer==0) fl_read_128(base+(2*4096),disk_temp);
+	if (disk_temp_pointer==0) fl_read_128(base+(CPM1_DISK3_OFFSET),disk_temp);
 	temp = disk_temp[disk_temp_pointer];
 	}
 if (drive==6)
 	{
-	if (disk_temp_pointer==0) fl_read_128(base+(3*4096),disk_temp);
-	temp = disk_temp[disk_temp_pointer];
 	}
 
 disk_temp_pointer++;
@@ -193,7 +191,7 @@ if (drive==3)
 	disk_temp[disk_temp_pointer] = dat;
 	if (disk_temp_pointer==127) 
 		{
-		fl_write_128(base,disk_temp);
+		fl_write_128(base+(CPM1_DISK1_OFFSET),disk_temp);
 		}
 	}
 if (drive==4)
@@ -201,7 +199,7 @@ if (drive==4)
 	disk_temp[disk_temp_pointer] = dat;
 	if (disk_temp_pointer==127) 
 		{
-		fl_write_128(base+(1*4096),disk_temp);
+		fl_write_128(base+(CPM1_DISK2_OFFSET),disk_temp);
 		}
 	}
 if (drive==5)
@@ -209,18 +207,12 @@ if (drive==5)
 	disk_temp[disk_temp_pointer] = dat;
 	if (disk_temp_pointer==127) 
 		{
-		fl_write_128(base+(2*4096),disk_temp);
+		fl_write_128(base+(CPM1_DISK3_OFFSET),disk_temp);
 		}
 	}
 if (drive==6)
 	{
-	disk_temp[disk_temp_pointer] = dat;
-	if (disk_temp_pointer==127) 
-		{
-		fl_write_128(base+(3*4096),disk_temp);
-		}
 	}
-
 disk_temp_pointer++;
 }
 
@@ -392,11 +384,6 @@ for (j=0;j<i;j++)
 	write_sector(disk_temp,j);
 	}
 #endif
-for (j=0;j<i;j++) 
-	{
-	fl_write_128(j,disk_temp);
-	}
-
 for (j=0;j<i;j++) 
 	{
 	fl_write_128(j+(1*4096),disk_temp);

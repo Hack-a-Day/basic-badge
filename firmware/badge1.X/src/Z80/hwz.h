@@ -1,8 +1,6 @@
 #include <stdint.h>
+#include "../badge.h"
 
-#define	USE_RAM_IMAGE	
-#define	USE_ROMDISK
-#define	USE_ROMDISK2
 #define	CUT_ROMDISK2
 
 #ifdef	CUT_ROMDISK2
@@ -13,6 +11,10 @@
 #endif
 
 #define	RAMDISK_SIZE	(1024*22)
+
+#define	CPM1_DISK1_OFFSET	1*4096
+#define	CPM1_DISK2_OFFSET	2*4096
+#define	CPM1_DISK3_OFFSET	3*4096
 
 //#define	USE_EEPROM
 

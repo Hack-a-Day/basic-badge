@@ -138,5 +138,9 @@
 - fixed line insertion algorithm
 - new disk C in CP/M, containing zork and sargon
 
+0.48 
+- fixed problem with FLASH addressing, lost one CP/M drive though
+- less magic numbers in sources
+- consoles for stdio are now switchable via LSHIFT+BRK
 
 

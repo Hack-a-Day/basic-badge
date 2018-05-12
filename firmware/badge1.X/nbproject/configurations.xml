@@ -21,6 +21,7 @@
       <itemPath>src/menu.h</itemPath>
       <itemPath>src/tune_player.h</itemPath>
       <itemPath>src/post.h</itemPath>
+      <itemPath>src/badge.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"

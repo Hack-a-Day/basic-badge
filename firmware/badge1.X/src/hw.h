@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "badge.h"
 
 #define		LCD_PORT	LATE
 #define		LCD_WR		LATDbits.LATD4
@@ -30,8 +31,8 @@
 #define     K_C8        PORTBbits.RB4
 #define     K_C9        PORTBbits.RB3
 #define     K_C10        PORTBbits.RB2
-#define     K_SHIFTL    PORTDbits.RD9
-#define     K_SHIFTR    PORTDbits.RD10
+#define     K_SHIFTR    PORTDbits.RD9
+#define     K_SHIFTL    PORTDbits.RD10
 #define		K_PWR		PORTGbits.RG6
 #define		KEY_BRK		PORTGbits.RG9
 
@@ -59,10 +60,9 @@
 #define		LED_G		LATFbits.LATF1
 #define		LED_B		LATDbits.LATD7
 
-#define		BASIC_SAVNUM	16
-#define		BASIC_BASEADDR	1024*1024*2
 
-#define	FLASH_BUFFERING
+
+
 
 void delay_us (uint32_t  howmuch);
 void wait_1ms (void);
