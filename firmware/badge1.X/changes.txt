@@ -149,4 +149,7 @@
 0.50
 - sources restructured a bit
 
+0.51
+- more configuration options
+
 

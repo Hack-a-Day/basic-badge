@@ -30,8 +30,9 @@ uint8_t fl_rdid(void);
 extern const uint8_t ram_image[65536];
 #endif
 
+#ifdef	USE_RAMDISK
 uint8_t ram_disk[RAMDISK_SIZE];
-
+#endif
 
 void reload_cpm_warm (void)
 {
@@ -112,9 +113,14 @@ base = (((uint32_t )(track))*16) + sector;
 if (drive==0)
 	{
 	base = base*128;
+#ifdef USE_RAMDISK
 	ptr = base + disk_temp_pointer;
 	if (ptr<RAMDISK_SIZE)
 		temp = ram_disk[ptr];
+#endif
+#ifndef	USE_RAMDISK
+	temp = 0xA5;
+#endif
 	}
 if (drive==1)
 	{
@@ -166,10 +172,12 @@ uint32_t  ptr;
 base = (((unsigned int)(track))*16) + sector;
 if (drive==0)
 	{
+#ifdef	USE_RAMDISK
 	base = base*128;
 	ptr = base + disk_temp_pointer;
 	if (ptr<RAMDISK_SIZE)
 		ram_disk[ptr] = dat;
+#endif
 	}
 if (drive==1)
 	{

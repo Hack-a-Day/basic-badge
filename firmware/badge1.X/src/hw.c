@@ -440,7 +440,6 @@ void hw_init (void)
 	LCD_BKLT = 0;					//turn backlight on
 	fl_rst_pb();
 
-	
   	}
 
 

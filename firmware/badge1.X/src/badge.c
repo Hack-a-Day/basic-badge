@@ -20,9 +20,6 @@
 #include "badge.h"
 #include "tune_player.h"
 
-
-
-
 int8_t bprog[BPROG_LEN+1] =
 "3 chr 205\n\
 4 chr 205\n\
@@ -72,7 +69,10 @@ uint8_t cmd_line_buff[30], cmd_line_pointer,cmd_line_key_stat_old,prompt;
 jmp_buf jbuf;
 int8_t char_out;
 extern const uint8_t ram_image[65536];
+
+#ifdef USE_RAMDISK
 extern uint8_t ram_disk[RAMDISK_SIZE];
+#endif
 
 void init_z80_cpm (void);
 void init_basic (void);
@@ -551,7 +551,9 @@ void init_z80_cpm (void)
 #ifdef	USE_RAM_IMAGE	
 	for (i=0;i<65536;i++) ram[i] = ram_image[i];
 #endif	
+#ifdef	USE_RAMDISK
 	for (i=0;i<RAMDISK_SIZE;i++) ram_disk[i] = 0xE5;
+#endif
 	wrk_ram	= PC = STACK = ram;
 	init_io(IO_CPM_MODE);
 	}

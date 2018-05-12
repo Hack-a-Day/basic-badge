@@ -1,5 +1,5 @@
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.50"
+#define FIRMWARE_VERSION "0.51"
 
 //define length of BASIC program RAM buffer
 //increasing the length will allow you to hold larger programs
@@ -26,13 +26,15 @@
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
 #define SHOW_SPLASH	0
 
-//this one enables 64k or RAM image for CP/M, disabling this one 
-//disables all CP/M stuff and leaves "empty" Z80 machine
+//this one enables 64k of RAM image for CP/M 
+//if off, disables all CP/M stuff and leaves "empty" Z80 machine
 #define	USE_RAM_IMAGE	
 //first ROM disk, full of utils, mapped as disk B. you can disable this one
 #define	USE_ROMDISK
-//first ROM disk, with games, mapped as disk C. you can disable this one
+//second ROM disk, with games, mapped as disk C. you can disable this one
 #define	USE_ROMDISK2
+//RAM disk, you can save 22kb of RAM by disabling it
+#define	USE_RAMDISK
 
 //FLASH buffering of CP/M disk drives. 
 //enabled - use RAM buffering, faster, less wear-out
