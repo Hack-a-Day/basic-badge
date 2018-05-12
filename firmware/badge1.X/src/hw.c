@@ -541,3 +541,28 @@ void __ISR(_TIMER_4_VECTOR, IPL6AUTO) Timer4Handler(void)
 	GEN_2_PIN = ~ GEN_2_PIN;
 	rnd_var3++;
 	}
+
+void exp_set(uint8_t pos, uint8_t val)
+	{
+	if (pos==0) EXP_0_OUT = val;
+	if (pos==1) EXP_1_OUT = val;
+	if (pos==2) EXP_2_OUT = val;
+	if (pos==3) EXP_3_OUT = val;
+	}
+
+void exp_ddr(uint8_t pos, uint8_t val)
+	{
+	if (pos==0) EXP_0_T = val;
+	if (pos==1) EXP_1_T = val;
+	if (pos==2) EXP_2_T = val;
+	if (pos==3) EXP_3_T = val;
+	}
+
+uint8_t exp_get (uint8_t pos)
+	{
+	if (pos==0) return EXP_0_IN;
+	if (pos==1) return EXP_1_IN;
+	if (pos==2) return EXP_2_IN;
+	if (pos==3) return EXP_3_IN;
+	return 0;
+	}

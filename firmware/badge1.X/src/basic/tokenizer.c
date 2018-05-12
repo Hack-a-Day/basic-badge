@@ -55,6 +55,7 @@ static int current_token = TOKENIZER_ERROR;
 static const struct keyword_token keywords[] = {
   {"let", TOKENIZER_LET},
   {"print", TOKENIZER_PRINT},
+  {"println", TOKENIZER_PRINTLN},
   {"if", TOKENIZER_IF},
   {"then", TOKENIZER_THEN},
   {"else", TOKENIZER_ELSE},
@@ -76,6 +77,9 @@ static const struct keyword_token keywords[] = {
   {"color", TOKENIZER_COLOR},
   {"rnd", TOKENIZER_RND},
   {"chr", TOKENIZER_CHR},
+  {"ein", TOKENIZER_EIN},
+  {"eout", TOKENIZER_EOUT},
+  {"edr", TOKENIZER_EDR},
   {NULL, TOKENIZER_ERROR}
 };
 

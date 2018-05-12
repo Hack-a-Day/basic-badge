@@ -21,16 +21,17 @@
 #include "tune_player.h"
 
 int8_t bprog[BPROG_LEN+1] =
-"1 tune 60,64,67,3000\n\
-2 tune 64,68,71,3000\n\
-3 chr 205\n\
-4 chr 205\n\
-5 setxy 2,2\n\
-6 chr 206\n\
-7 setxy 4,4\n\
-8 chr 215\n\
-9 wait 1000\n\
-11 clrscr \n\
+"1 edr 0,0\n\
+2 edr 1,1\n\
+10 a = rnd (10)\n\
+20 print a\n\
+21 eout 0,0\n\
+30 wait 500\n\
+31 eout 0,1\n\
+32 wait 500\n\
+33 b = ein (1)\n\
+34 println b\n\
+40 goto 10\n\
 ";
 
 int16_t prog_ptr;
@@ -125,7 +126,7 @@ const uint32_t  hashtable[HASH_TABLE_LENGTH] =
 //Prompt handling defines
 #define COMMAND_MAX 32
 #define TEXT_LEFT	4
-#define PROMPT_Y	13
+#define PROMPT_Y	15
 #define CRACK_Y		17
 #define VERSION_X	33
 #define VERSION_Y	18
@@ -252,14 +253,6 @@ void badge_menu(void)
 					init_z80_cpm();
 					while (1) loop_z80_cpm();
 					}				
-				else if (strcmp(menu_buff,"7")==0)
-					{
-					video_clrscr();
-					stdio_write("...formatting FLASH...");
-					init_first_x_sects(64);
-					stdio_write("...done. Reset badge now.");
-					while (1);
-					}			
 				else
 					{
 					switch (get_command_index(hash(menu_buff)))
@@ -387,8 +380,6 @@ void showmenu(void)
 	stdio_write("5 - User Program");
 	video_gotoxy(TEXT_LEFT,11);
 	stdio_write("6 - Zork @ CP/M @ Z80");
-	video_gotoxy(TEXT_LEFT,12);
-	stdio_write("7 - !!!CP/M disk formatter!!!");
 	
 	video_set_color(MENU_VERSION_FG,MENU_DEFAULT_BG);
 	video_gotoxy(VERSION_X,VERSION_Y);

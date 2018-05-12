@@ -80,6 +80,10 @@ enum {
   TOKENIZER_COLOR,
   TOKENIZER_RND,
   TOKENIZER_CHR,
+  TOKENIZER_EIN,
+  TOKENIZER_EOUT,
+  TOKENIZER_EDR,
+  TOKENIZER_PRINTLN,
 };
 
 void tokenizer_init(const char *program);

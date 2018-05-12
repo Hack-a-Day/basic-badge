@@ -60,8 +60,18 @@
 #define		LED_G		LATFbits.LATF1
 #define		LED_B		LATDbits.LATD7
 
-
-
+#define		EXP_0_IN	PORTGbits.RG2
+#define		EXP_0_OUT	LATGbits.LATG2
+#define		EXP_0_T		TRISGbits.TRISG2
+#define		EXP_1_IN	PORTGbits.RG3
+#define		EXP_1_OUT	LATGbits.LATG3
+#define		EXP_1_T		TRISGbits.TRISG3
+#define		EXP_2_IN	PORTBbits.RB0
+#define		EXP_2_OUT	LATBbits.LATB0
+#define		EXP_2_T		TRISBbits.TRISB0
+#define		EXP_3_IN	PORTBbits.RB1
+#define		EXP_3_OUT	LATBbits.LATB1
+#define		EXP_3_T		TRISBbits.TRISB1
 
 
 void wait_1ms (void);
@@ -75,7 +85,10 @@ void hw_sleep (void);
 void (*start_after_wake)(void);
 void wake_return(void);
 void set_led (uint8_t led_n, uint8_t led_v);
-
+uint16_t get_rnd (void);
+void exp_set(uint8_t pos, uint8_t val);
+void exp_ddr(uint8_t pos, uint8_t val);
+uint8_t exp_get (uint8_t pos);
 
 typedef union
 {

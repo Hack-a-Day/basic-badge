@@ -158,4 +158,10 @@
 0.53
 - the badge has now somehow better POST test, more stuff to come
 
+0.54
+- changed format of RND word usage to something more sensible
+- added word println
+- changed word print
+- added words to manipulate IO on expansion port
+
 

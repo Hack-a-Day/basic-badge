@@ -117,7 +117,7 @@ static int
 factor(void)
 {
   int r;
-
+  long temp;
   DEBUG_PRINTF("factor: token %d\n", tokenizer_token());
   switch(tokenizer_token()) {
   case TOKENIZER_NUMBER:
@@ -128,6 +128,22 @@ factor(void)
   case TOKENIZER_LEFTPAREN:
     accept(TOKENIZER_LEFTPAREN);
     r = expr();
+    accept(TOKENIZER_RIGHTPAREN);
+    break;
+  case TOKENIZER_RND:
+	accept(TOKENIZER_RND);
+    accept(TOKENIZER_LEFTPAREN);
+    r = expr();
+	temp = get_rnd();
+	temp = temp * (r+1);
+	r = temp / 65535;
+    accept(TOKENIZER_RIGHTPAREN);
+    break;	
+   case TOKENIZER_EIN:
+	accept(TOKENIZER_EIN);
+    accept(TOKENIZER_LEFTPAREN);
+    r = expr();
+	r = exp_get(r);
     accept(TOKENIZER_RIGHTPAREN);
     break;
   default:
@@ -267,6 +283,38 @@ print_statement(void)
 char str_out[40];
 
   accept(TOKENIZER_PRINT);
+  do {
+    DEBUG_PRINTF("Print loop\n");
+    if(tokenizer_token() == TOKENIZER_STRING) {
+      tokenizer_string(string, sizeof(string));
+      sprintf(str_out,"%s", string);
+      tokenizer_next();
+    } else if(tokenizer_token() == TOKENIZER_COMMA) {
+      sprintf(str_out," ");
+      tokenizer_next();
+    } else if(tokenizer_token() == TOKENIZER_SEMICOLON) {
+      tokenizer_next();
+    } else if(tokenizer_token() == TOKENIZER_VARIABLE ||
+	      tokenizer_token() == TOKENIZER_NUMBER) {
+      sprintf(str_out,"%d", expr());
+    } else {
+      break;
+    }
+  } while(tokenizer_token() != TOKENIZER_CR &&
+	  tokenizer_token() != TOKENIZER_ENDOFINPUT);
+  if (term_vt100==1)
+	stdio_write(str_out);
+  else
+	write_direct(&term_x,&term_y,str_out);
+  DEBUG_PRINTF("End of print\n");
+  tokenizer_next();
+}
+/*---------------------------------------------------------------------------*/
+println_statement(void)
+{
+char str_out[40];
+
+  accept(TOKENIZER_PRINTLN);
   do {
     DEBUG_PRINTF("Print loop\n");
     if(tokenizer_token() == TOKENIZER_STRING) {
@@ -537,22 +585,6 @@ int c1,c2;
 }
 /*---------------------------------------------------------------------------*/
 static void
-rnd_statement(void)
-{
-int var,c1;
-long temp;
-	accept(TOKENIZER_RND);
-	var = tokenizer_variable_num();
-	accept(TOKENIZER_VARIABLE);
-	accept(TOKENIZER_COMMA);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
-	temp = get_rnd();
-	temp = temp * (c1+1);
-	temp = temp / 65535;
-	ubasic_set_variable(var,temp);
-	tokenizer_next();
-}/*---------------------------------------------------------------------------*/
-static void
 chr_statement(void)
 {
 int var,c1;
@@ -561,7 +593,32 @@ long temp;
 	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
 	stdio_c(c1);
 	tokenizer_next();
-}/*---------------------------------------------------------------------------*/
+}
+/*---------------------------------------------------------------------------*/
+static void
+edr_statement(void)
+{
+int c1,c2;
+	accept(TOKENIZER_EDR);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	accept(TOKENIZER_COMMA);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c2 =  expr();
+	exp_ddr(c1,c2);
+	tokenizer_next();
+}
+/*---------------------------------------------------------------------------*/
+static void
+eout_statement(void)
+{
+int c1,c2;
+	accept(TOKENIZER_EOUT);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	accept(TOKENIZER_COMMA);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c2 =  expr();
+	exp_set(c1,c2);
+	tokenizer_next();
+}
+/*---------------------------------------------------------------------------*/
 static void
 statement(void)
 {
@@ -572,6 +629,9 @@ statement(void)
   switch(token) {
   case TOKENIZER_PRINT:
     print_statement();
+    break;
+  case TOKENIZER_PRINTLN:
+    println_statement();
     break;
   case TOKENIZER_IF:
     if_statement();
@@ -624,11 +684,14 @@ statement(void)
   case TOKENIZER_COLOR:
     color_statement();
     break;
-  case TOKENIZER_RND:
-    rnd_statement();
-    break;
   case TOKENIZER_CHR:
     chr_statement();
+    break;
+  case TOKENIZER_EDR:
+    edr_statement();
+    break;
+  case TOKENIZER_EOUT:
+    eout_statement();
     break;
   default:
     sprintf(err_msg,"Bad token %d at line %d\n", token,last_linenum);
