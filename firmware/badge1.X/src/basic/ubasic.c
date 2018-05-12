@@ -281,7 +281,7 @@ static void
 print_statement(void)
 {
 char str_out[40];
-
+sprintf(str_out," ");
   accept(TOKENIZER_PRINT);
   do {
     DEBUG_PRINTF("Print loop\n");
@@ -294,12 +294,9 @@ char str_out[40];
       tokenizer_next();
     } else if(tokenizer_token() == TOKENIZER_SEMICOLON) {
       tokenizer_next();
-    } else if(tokenizer_token() == TOKENIZER_VARIABLE ||
-	      tokenizer_token() == TOKENIZER_NUMBER) {
+    } else  {
       sprintf(str_out,"%d", expr());
-    } else {
-      break;
-    }
+    } 
   } while(tokenizer_token() != TOKENIZER_CR &&
 	  tokenizer_token() != TOKENIZER_ENDOFINPUT);
   if (term_vt100==1)
@@ -313,7 +310,7 @@ char str_out[40];
 println_statement(void)
 {
 char str_out[40];
-
+sprintf(str_out," ");
   accept(TOKENIZER_PRINTLN);
   do {
     DEBUG_PRINTF("Print loop\n");
@@ -326,11 +323,8 @@ char str_out[40];
       tokenizer_next();
     } else if(tokenizer_token() == TOKENIZER_SEMICOLON) {
       tokenizer_next();
-    } else if(tokenizer_token() == TOKENIZER_VARIABLE ||
-	      tokenizer_token() == TOKENIZER_NUMBER) {
+    } else{
       sprintf(str_out,"%d\n", expr());
-    } else {
-      break;
     }
   } while(tokenizer_token() != TOKENIZER_CR &&
 	  tokenizer_token() != TOKENIZER_ENDOFINPUT);

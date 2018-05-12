@@ -3,7 +3,6 @@
 #include "hw.h"
 
 
-extern int8_t bprog[BPROG_LEN+1];
 int16_t main(void)
 	{
 	hw_init();

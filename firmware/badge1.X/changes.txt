@@ -164,4 +164,7 @@
 - changed word print
 - added words to manipulate IO on expansion port
 
+0.55
+- improved function output handling of print/println functions
+
 

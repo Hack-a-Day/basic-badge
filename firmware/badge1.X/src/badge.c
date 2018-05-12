@@ -21,11 +21,13 @@
 #include "tune_player.h"
 
 int8_t bprog[BPROG_LEN+1] =
-"1 edr 0,0\n\
-2 edr 1,1\n\
+"1 print rnd (10)\n\
+2 edr 0,0\n\
+3 edr 1,1\n\
 10 a = rnd (10)\n\
 20 print a\n\
-21 eout 0,0\n\
+21 print rnd (10)\n\
+22 eout 0,0\n\
 30 wait 500\n\
 31 eout 0,1\n\
 32 wait 500\n\
