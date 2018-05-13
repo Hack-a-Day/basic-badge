@@ -93,7 +93,7 @@ void post (void)
 			}	
 		if (stdio_get(&retval)!=0)
 			{
-			if ((retval>=' ')&(retval<=0x7F))
+			if ((retval>=' ')&(retval<0x7F))
 				{
 				index = 255;
 				for (i=0;i<44;i++)

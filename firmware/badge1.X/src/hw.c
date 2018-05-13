@@ -46,7 +46,7 @@ const int8_t keys_normal[50] =
 	'e','r','w','t','q','o','y','u','p','i',
 	's','d','a','f','/','k','g','h','l','j',
 	'x','c','z','v',' ',0x2c,'b','n','.','m',
-	K_DN,K_RT,K_LT,';',K_UP,K_DEL,'=',K_ENT,BACKSPACE,'_',
+	K_DN,K_RT,K_LT,';',K_UP,K_DEL,'=',K_ENT,BACKSPACE,'-',
 	};
 
 const int8_t keys_shift_l[50] = 
@@ -55,7 +55,7 @@ const int8_t keys_shift_l[50] =
 	'E','R','W','T','Q','O','Y','U','P','I',
 	'S','D','A','F','?','K','G','H','L','J',
 	'X','C','Z','V',' ','<','B','N','>','M',
-	K_DN,K_RT,K_LT,':',K_UP,K_DEL,'+',K_ECR,BACKSPACE,'"',
+	K_DN,K_RT,K_LT,':',K_UP,K_DEL,'+',K_ECR,BACKSPACE,'_',
 	};
 const int8_t keys_shift_r[50] = 
 	{

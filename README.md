@@ -45,6 +45,8 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 * `more` - list program by pages
 * `clr` - clears all code from the program buffer
 * `free` - prints amount of free program buffer
+* `sload` - load new program into buffer from serial port
+* `ssave` - output program buffer via serial port
 
 
 ## Setting Up the Toolchain for BASIC Badge

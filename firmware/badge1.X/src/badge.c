@@ -59,7 +59,8 @@ uint8_t basic_save_program (uint8_t * data, uint8_t slot);
 uint8_t basic_load_program (uint8_t * data, uint8_t slot);
 uint16_t get_free_mem(uint8_t * prog, uint16_t max_mem);
 const char* get_firmware_string(void);
-
+uint16_t basic_loads (int8_t * data, uint16_t maxlen);
+uint16_t basic_saves (int8_t * data, uint16_t maxlen);
 
 int8_t term_buffer[TBUF_LEN];
 int8_t term_screen_buffer[TERM_WIDTH*TERM_LINES];
@@ -105,6 +106,8 @@ uint8_t stdio_local_buffer_state (void);
 int8_t stdio_local_buffer_get (void);
 void stdio_local_buffer_put (int8_t data);
 void stdio_local_buffer_puts (int8_t * data);
+
+void serial_flush (void);
 
 uint8_t flash_init = 0;
 uint8_t handle_display = 1;
@@ -511,6 +514,7 @@ void loop_badge(void)
 		{
 		if ((K_SHIFTL==0)&(brk_is_pressed==9))
 			{
+			serial_flush();
 			if (stdio_src == STDIO_TTY1)
 				stdio_src = STDIO_LOCAL;
 			else
@@ -774,6 +778,25 @@ uint8_t cmd_exec (int8_t * cmd)
 			stdio_write("OK\n");
 			}
 	    }	
+	else if (strncmp("ssave",cmd,5)==0)
+	    {
+		stdio_write("Transmitting via serial port...\n");
+		i = basic_saves(bprog,BPROG_LEN);
+		sprintf(stdio_buff,"\nOK, transmitted %d bytes.\n",i);
+		stdio_write(stdio_buff);
+	    }	
+	else if (strncmp("sload",cmd,5)==0)
+	    {
+		stdio_write("Loading new program from serial port\n");
+		stdio_write("Press BRK to exit...\n");
+		serial_flush();
+		handle_display = 0;
+		tft_disp_buffer_refresh(disp_buffer,color_buffer);
+		i = basic_loads(bprog,BPROG_LEN);
+		handle_display = 1;
+		sprintf(stdio_buff,"\nOK, received %d bytes.\n",i);
+		stdio_write(stdio_buff);
+	    }	
 	else if (strcmp("run",cmd)==0)
 	    {
 	    ubasic_init(bprog);
@@ -822,6 +845,44 @@ uint8_t cmd_exec (int8_t * cmd)
 	}
     
     }
+
+
+uint16_t basic_loads (int8_t * data, uint16_t maxlen)
+	{
+	uint8_t rx_char;
+	uint16_t len=0;
+	while (1)
+		{
+		if (rx_sta())
+			{
+			rx_char = rx_read();
+			if ((rx_char>=' ')|(rx_char==NEWLINE)|(rx_char==0))
+				data[len++] = rx_char;
+			if (rx_char==0) return len;
+			if (len==maxlen) return len;
+			}
+		if (brk_key) 
+			{
+			if (len>0) data[len] = 0;
+			brk_key = 0;
+			return len;
+			}
+		}
+	return 0;
+	}
+
+uint16_t basic_saves (int8_t * data, uint16_t maxlen)
+	{
+	uint16_t len=0;
+	while (1)
+		{
+		tx_write(data[len]);
+		if (data[len]==0) return len;
+		if (len==maxlen) return len;
+		len++;
+		}
+	return 0;
+	}
 
 
 uint8_t basic_save_program (uint8_t * data, uint8_t slot)
@@ -899,6 +960,13 @@ void __ISR(_EXTERNAL_2_VECTOR, IPL4AUTO) Int2Handler(void)
 
 //*****************************************************************************/
 
+
+void serial_flush (void)
+	{
+	while (rx_sta()) rx_read();
+	if (U3STAbits.OERR) U3STAbits.OERR = 0;
+	while (rx_sta()) rx_read();
+	}
 
 uint8_t rx_sta (void)
 {

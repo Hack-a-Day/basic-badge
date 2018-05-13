@@ -1,6 +1,4 @@
 - api for user code
 - remove dependancy from PLIB
-- basic load/save via serial
-- some kind of IO pin control from BASIC code, there is already reserved work for it
 
 

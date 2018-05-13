@@ -116,7 +116,7 @@ uint8_t CHAR;
 #define	K_LT		0x1E
 #define	K_RT		0x1F
 #define	ESCAPE		0x1B
-#define	K_DEL		0x08
+#define	K_DEL		0x7F
 #define	K_COL		0x01
 #define	K_BRK		0x02
 

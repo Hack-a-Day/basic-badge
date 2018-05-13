@@ -179,4 +179,7 @@
 0.59
 - colors are restored to default after exiting BASIC program
 
+0.60
+- added commands sload and ssave to load/save BASIC program via serial port
+
 
