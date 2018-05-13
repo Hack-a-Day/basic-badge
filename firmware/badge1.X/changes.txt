@@ -182,4 +182,7 @@
 0.60
 - added commands sload and ssave to load/save BASIC program via serial port
 
+0.61
+- tweaks to achieve lower current consumption in sleep mode.
+
 

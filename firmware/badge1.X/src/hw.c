@@ -55,7 +55,7 @@ const int8_t keys_shift_l[50] =
 	'E','R','W','T','Q','O','Y','U','P','I',
 	'S','D','A','F','?','K','G','H','L','J',
 	'X','C','Z','V',' ','<','B','N','>','M',
-	K_DN,K_RT,K_LT,':',K_UP,K_DEL,'+',K_ECR,BACKSPACE,'_',
+	K_DN,K_RT,K_LT,':',K_UP,K_DEL,'+',K_ECR,BACKSPACE,'"',
 	};
 const int8_t keys_shift_r[50] = 
 	{
@@ -63,7 +63,7 @@ const int8_t keys_shift_r[50] =
 	'E','R','W','T','Q','O','Y','U','P','I',
 	'S','D','A','F','?','K','G','H','L','J',
 	'X','C','Z','V',' ','<','B','N','>','M',
-	K_DN,K_RT,K_LT,':',K_UP,K_DEL,'+',K_ECR,BACKSPACE,'"',
+	K_DN,K_RT,K_LT,':',K_UP,K_DEL,'+',K_ECR,BACKSPACE,'_',
 	};
 
 int8_t key_char;
@@ -291,8 +291,8 @@ void hw_sleep (void)
 	TRISGbits.TRISG9 = 1;
 	TRISGbits.TRISG6 = 1;
 	TRISC = 0;
-	LATC = 0;
-	TRISD = 0;
+	LATC = 0x8000;
+	TRISD = 0X0;
 	LATD = 0;
 	TRISDbits.TRISD9 = 1;
 	TRISDbits.TRISD10 = 1;
