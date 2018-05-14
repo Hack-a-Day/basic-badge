@@ -52,6 +52,7 @@ struct keyword_token {
 
 static int current_token = TOKENIZER_ERROR;
 
+//B_BAS001 - list of tokens
 static const struct keyword_token keywords[] = {
   {"let", TOKENIZER_LET},
   {"print", TOKENIZER_PRINT},

@@ -13,12 +13,7 @@ extern const uint8_t rom_image[65536];
 extern const uint8_t rd_image[131072];
 extern const uint8_t rd_image2[ROMDISK2_SIZE];
 uint8_t drive, sector, track,disk_temp_pointer;
-uint8_t disk_temp[128];
-
-uint8_t flash_buff[4096];
-
-uint8_t conin_buffer[30];
-uint8_t conin_buffer_pointer;
+uint8_t disk_temp[128],flash_buff[4096], conin_buffer[30], conin_buffer_pointer;
 
 uint32_t last_addr = 0xFFFFF000;
 uint8_t unwritten;
@@ -42,29 +37,6 @@ uint16_t i;
 #endif
 }
 
-
-void init_usart (void)
-{
-/*
-U3AMODEbits.ON = 1;
-U3ASTAbits.URXEN = 1;
-U3ASTAbits.UTXEN = 1;
-U3ABRG = ((PB_CLK*1000)/(16*BAUD_U3A)) - 1;
-INTEnable(INT_SOURCE_UART_RX(UART3A), INT_ENABLED);
-IPC8bits.U3AIP = 2;
-
-U3BMODEbits.ON = 1;
-U3BSTAbits.URXEN = 1;
-U3BSTAbits.UTXEN = 1;
-U3BBRG = ((PB_CLK*1000)/(16*BAUD_U3A)) - 1;
-//INTEnable(INT_SOURCE_UART_RX(UART3B), INT_ENABLED);
-
-AD1PCFG=0xFFFFFFFF;
-*/
-}
-
-
-
 //-------------------device at 0x68-----------------
 uint8_t rxm_sta (void)
 {
@@ -86,8 +58,6 @@ U3BTXREG = data;
 while (U3BSTAbits.UTXBF==1);
  */
 }
-
-
 
 void set_drive (uint8_t dat)
 {
@@ -223,11 +193,6 @@ if (drive==6)
 	}
 disk_temp_pointer++;
 }
-
-
-
-
-
 
 uint8_t fl_rdsr(void)
 {

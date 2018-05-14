@@ -87,16 +87,16 @@ if (iosim_mode==IO_CPM_MODE)
 		{
 		return read_disk_byte();
 		}
-
+	//B_CPM001
 	if (adr==0x0A)						//reader device
 		{
+	//not implemented by now
 	//	while (rx_sta()==0x00);
 	//	return rx_read();
 		}
 
 	if (adr==0x68)
 		{
-	//	return rxm_read();
 		return rx_read();
 		}
 	if (adr==0x6D)
@@ -157,20 +157,19 @@ if (iosim_mode==IO_CPM_MODE)
 		{
 		write_disk_byte(data);
 		}
+	//B_CPM002
 	if (adr==0x09)					//punch device
 		{
-	//	tx_write(data);
+	//	tx_write(data);				//not implemented by now
 		}
 	if (adr==0x0B)					//list device
 		{
-	//	tx_write(data);
+	//	tx_write(data);				//not implemented by now
 		}
 	if (adr==0x68)
 		{
 		tx_write(data);
-	//	txm_write(data);
 		}
-
 	if (adr==0xFF)
 		{
 		reload_cpm_warm();

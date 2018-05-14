@@ -21,6 +21,7 @@
       <itemPath>src/menu.h</itemPath>
       <itemPath>src/tune_player.h</itemPath>
       <itemPath>src/post.h</itemPath>
+      <itemPath>src/badge_settings.h</itemPath>
       <itemPath>src/badge.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -80,7 +81,7 @@
         <platformTool>PK4Tool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.05</languageToolchainVersion>
-        <platform>2</platform>
+        <platform>3</platform>
       </toolsSet>
       <compileType>
         <linkerTool>

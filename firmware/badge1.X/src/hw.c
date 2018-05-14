@@ -333,12 +333,7 @@ void hw_sleep (void)
 	start_after_wake();
 	}
 
-void wake_return(void)
-	{
-	//By default, this will be called after waking from sleep. It should do
-	//noting. This is a placeholder for user programs to set the function pointer.
-	return;
-	}
+
 
 void hw_init (void)
 	{
@@ -566,3 +561,29 @@ uint8_t exp_get (uint8_t pos)
 	if (pos==3) return EXP_3_IN;
 	return 0;
 	}
+
+void serial_flush (void)
+	{
+	while (rx_sta()) rx_read();
+	if (U3STAbits.OERR) U3STAbits.OERR = 0;
+	while (rx_sta()) rx_read();
+	}
+
+uint8_t rx_sta (void)
+{
+if (U3STAbits.URXDA==1) return 0xFF;
+else return 0x00;
+}
+
+uint8_t rx_read (void)
+{
+	uint8_t data;
+	data = U3RXREG;
+	return data;
+}
+void tx_write (uint8_t data)
+{   
+U3TXREG = data;
+while (U3STAbits.UTXBF==1); 
+}
+

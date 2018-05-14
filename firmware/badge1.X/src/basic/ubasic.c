@@ -82,6 +82,8 @@ unsigned int term_x=0,term_y=0;
 static int expr(void);
 static void line_statement(void);
 static void statement(void);
+
+//B_BAS009
 /*---------------------------------------------------------------------------*/
 void
 ubasic_init(const char *program)
@@ -117,6 +119,8 @@ varfactor(void)
   accept(TOKENIZER_VARIABLE);
   return r;
 }
+
+//B_BAS004
 /*---------------------------------------------------------------------------*/
 static int
 factor(void)
@@ -622,6 +626,8 @@ termup_statement(void)
 		tft_disp_buffer_refresh(disp_buffer,color_buffer);
 	tokenizer_next();
 }
+
+//B_BAS002
 /*---------------------------------------------------------------------------*/
 static void
 statement(void)
@@ -717,6 +723,7 @@ line_statement(void)
   statement();
   return;
 }
+//B_BAS010
 /*---------------------------------------------------------------------------*/
 void
 ubasic_run(void)

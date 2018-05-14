@@ -15,6 +15,7 @@ uint16_t i;
 const int8_t post_char_table[4*11] = "1234567890=qwertyuiop;/asdfghjkl\n\0zxcvbnm,.\0";
 extern uint8_t handle_display;
 
+//B_BDG001
 void post (void)
 	{
 	uint8_t retval,index,line,position,color;

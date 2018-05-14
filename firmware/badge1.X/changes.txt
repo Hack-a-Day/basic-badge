@@ -185,4 +185,7 @@
 0.61
 - tweaks to achieve lower current consumption in sleep mode.
 
+0.62
+- comments added, some sources reorganziation made
+
 

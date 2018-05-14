@@ -1,5 +1,6 @@
+//#include <xc.h>
 #include <stdint.h>
-#include "badge.h"
+#include "badge_settings.h"
 
 #define		LCD_PORT	LATE
 #define		LCD_WR		LATDbits.LATD4
@@ -136,3 +137,10 @@ int8_t stdio_get (int8_t * dat);
 
 #define	FCY		48000000UL
 #define	FPB		FCY/1
+
+void serial_flush (void);
+uint8_t rx_sta (void);
+uint8_t rx_read (void);
+void tx_write (uint8_t data);
+
+

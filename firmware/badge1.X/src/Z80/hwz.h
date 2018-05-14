@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "../badge.h"
+#include "../badge_settings.h"
 
 #define	CUT_ROMDISK2
 
