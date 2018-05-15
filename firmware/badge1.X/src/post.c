@@ -52,8 +52,6 @@ void post (void)
 	video_set_color(11,1);
 	video_gotoxy(1,1);
 	stdio_write("u ");
-	video_gotoxy(24,1);
-	stdio_write("p ");
 	video_gotoxy(0,2);
 	stdio_write("l r ");
 	video_gotoxy(22,2);
@@ -61,7 +59,7 @@ void post (void)
 	video_gotoxy(1,3);
 	stdio_write("d ");
 	video_gotoxy(22,3);
-	stdio_write("_ d ");
+	stdio_write("- d ");
 	video_gotoxy(1,4);
 	stdio_write("1 2 3 4 5 6 7 9 8 0 = ");
 	video_gotoxy(1,5);
@@ -112,7 +110,7 @@ void post (void)
 					}
 				else
 					{
-					if (retval=='_')
+					if (retval=='-')
 						{
 						video_gotoxy(22,3);
 						video_set_color(11,2);
