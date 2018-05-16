@@ -550,7 +550,7 @@ void loop_basic (void)
 			else if (char_out==BACKSPACE)
 				{
 				if (cmd_line_pointer>0) 
-					cmd_line_buff[cmd_line_pointer--]=0;
+					cmd_line_buff[--cmd_line_pointer]=0;
 				}
 
 			}
