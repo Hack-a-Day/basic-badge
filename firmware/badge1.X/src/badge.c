@@ -23,9 +23,11 @@
 #include "snake.h"
 
 int8_t bprog[BPROG_LEN+1] =
-"5 println 123\n\
-10 rem println 234\n\
-20 println 345\n\
+"5 rem UART repeater\n\
+10 let a = uin 0\n\
+20 if a > 0 then uout a\n\
+30 wait 100\n\
+40 goto 10\n\
 ";
 
 //a lot of magic numbers here, should be done properly

@@ -194,4 +194,4 @@
 0.64
 - REM word added
 
-
+0.65 added BASIC words uin and uout for serial port handling

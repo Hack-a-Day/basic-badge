@@ -86,6 +86,8 @@ enum {
   TOKENIZER_PRINTLN,
   TOKENIZER_TERMUP,
   TOKENIZER_REM,
+  TOKENIZER_UIN,
+  TOKENIZER_UOUT,
 };
 
 void tokenizer_init(const char *program);

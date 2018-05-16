@@ -82,6 +82,8 @@ unsigned int term_x=0,term_y=0;
 static int expr(void);
 static void line_statement(void);
 static void statement(void);
+extern volatile int8_t brk_key;
+
 
 //B_BAS009
 /*---------------------------------------------------------------------------*/
@@ -141,25 +143,47 @@ factor(void)
     break;
   case TOKENIZER_RND:
 	accept(TOKENIZER_RND);
-//    accept(TOKENIZER_LEFTPAREN);
     r = expr();
 	temp = get_rnd();
 	temp = temp * (r+1);
 	r = temp / 65535;
-//    accept(TOKENIZER_RIGHTPAREN);
     break;	
    case TOKENIZER_EIN:
 	accept(TOKENIZER_EIN);
-//    accept(TOKENIZER_LEFTPAREN);
     r = expr();
 	r = exp_get(r);
- //   accept(TOKENIZER_RIGHTPAREN);
     break;
-  default:
-    r = varfactor();
+	
+   case TOKENIZER_UIN:
+	accept(TOKENIZER_UIN);
+    r = expr();
+	if (r==0)
+		{
+		if (rx_sta()!=0)
+			r = rx_read();
+		else
+			r = 0;
+		}
+	else
+		{
+		while (1)
+			{
+			if (rx_sta()!=0)
+				{
+				r = rx_read();
+				break;
+				}
+			if (brk_key)
+				break;
+			}
+		}
     break;
-  }
-  return r;
+	
+   default:
+	r = varfactor();
+	break;
+	}
+return r;
 }
 /*---------------------------------------------------------------------------*/
 static int
@@ -640,6 +664,17 @@ rem_statement(void)
       }
 //	tokenizer_next();
 }
+/*---------------------------------------------------------------------------*/
+static void
+uout_statement(void)
+{
+int c1;
+	accept(TOKENIZER_UOUT);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	tx_write(c1);
+	tokenizer_next();
+}
+
 //B_BAS002
 /*---------------------------------------------------------------------------*/
 static void
@@ -721,6 +756,9 @@ statement(void)
     break;
   case TOKENIZER_REM:
     rem_statement();
+    break;
+  case TOKENIZER_UOUT:
+    uout_statement();
     break;
   default:
     sprintf(err_msg,"Bad token %d at line %d\n", token,last_linenum);
