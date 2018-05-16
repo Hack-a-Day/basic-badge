@@ -116,7 +116,9 @@ static const struct keyword_token keywords[] = {
   {"UIN", TOKENIZER_UIN},
   {"uout", TOKENIZER_UOUT},
   {"UOUT", TOKENIZER_UOUT},
-{NULL, TOKENIZER_ERROR}
+  {"input", TOKENIZER_INPUT},
+  {"INPUT", TOKENIZER_INPUT},
+  {NULL, TOKENIZER_ERROR}
 };
 
 /*---------------------------------------------------------------------------*/

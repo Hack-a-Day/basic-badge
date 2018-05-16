@@ -178,7 +178,18 @@ factor(void)
 			}
 		}
     break;
-	
+
+	  case TOKENIZER_INPUT:
+		accept(TOKENIZER_INPUT);
+		if(tokenizer_token() == TOKENIZER_STRING) 
+			{
+			tokenizer_string(string, sizeof(string));
+			stdio_write(string);
+			tokenizer_next();
+			}		  
+		  r = get_user_value();
+		  break;
+
    default:
 	r = varfactor();
 	break;

@@ -45,6 +45,8 @@ void show_wrencher(void);
 uint8_t playriff(unsigned char);
 
 
+int16_t get_user_value (void);
+
 #define STDIO_LOCAL_BUFF_SIZE	25
 
 //Prompt handling defines

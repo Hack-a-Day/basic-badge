@@ -24,10 +24,9 @@
 
 int8_t bprog[BPROG_LEN+1] =
 "5 rem UART repeater\n\
-10 let a = uin 0\n\
-20 if a > 0 then uout a\n\
-30 wait 100\n\
-40 goto 10\n\
+10 let a = input \"Enter value\"\n\
+19 print \"You entered: \"\n\
+20 println a\n\
 ";
 
 //a lot of magic numbers here, should be done properly
@@ -1025,3 +1024,35 @@ void __ISR(_EXTERNAL_2_VECTOR, IPL4AUTO) Int2Handler(void)
 	{
 	IEC0bits.INT2IE = 0;
 	}
+
+
+int16_t get_user_value (void)
+	{
+	int8_t temp_arr[20];
+	uint8_t temp_arr_p=0,char_val,stat;
+	uint32_t retval;
+	stdio_write(" :");
+	while (1)
+		{
+		stat = stdio_get(&char_val);
+		if ((char_val!=NEWLINE)&(stat!=0))
+			{
+			stdio_c(char_val);
+			if (char_val>=' ') temp_arr[temp_arr_p++] = char_val;
+			else if (char_val==BACKSPACE)
+				{
+				if (temp_arr_p>0) temp_arr[--temp_arr_p]=0;
+				}
+			}
+	    if ((char_val==NEWLINE)&(stat!=0))
+			{
+			temp_arr[temp_arr_p] = 0;
+			sscanf(temp_arr,"%d",&retval);
+			stdio_c('\n');
+			return retval;
+			}
+		if (brk_key) return 0;
+		}
+	}
+
+

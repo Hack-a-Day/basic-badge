@@ -4,6 +4,8 @@
 #include "hw.h"
 #include "post.h"
 
+int16_t val;
+
 int16_t main(void)
 	{
 	hw_init();
@@ -13,6 +15,11 @@ int16_t main(void)
 	badge_menu();
 	while (1); //menu is never left, but anyway
 	}
+
+
+
+
+
 /*
  * Interesting places to take look at, in MPLABX use CtrlCtrl+Shift+F to search in all files
  * for those "bookmarks"

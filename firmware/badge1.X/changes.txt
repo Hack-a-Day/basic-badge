@@ -203,4 +203,7 @@
 0.67
 - improved handling of backspace character in BASIC command line mode
 
+0.68
+- added word for user numeric input
+
 
