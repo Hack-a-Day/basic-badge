@@ -206,4 +206,7 @@
 0.68
 - added word for user numeric input
 
+0.70
+- minor typos
+
 

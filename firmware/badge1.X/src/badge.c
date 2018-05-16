@@ -23,7 +23,7 @@
 #include "snake.h"
 
 int8_t bprog[BPROG_LEN+1] =
-"5 rem UART repeater\n\
+"5 rem user value repeater\n\
 10 let a = input \"Enter value\"\n\
 19 print \"You entered: \"\n\
 20 println a\n\

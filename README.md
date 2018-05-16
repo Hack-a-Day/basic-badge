@@ -39,6 +39,7 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 * `edr X,Y` - sets expansion pin function X[0..3], Y[0..1] output/input
 * `uin X` - function to return received byte from serial port, if X=0, function is non-blocking, if X=1, function is blocking
 * `uout X` - outputs value X to serial port as single byte
+* `input "string"` - prints string and returns user entered value
 
 ### BASIC CLI commands
 
