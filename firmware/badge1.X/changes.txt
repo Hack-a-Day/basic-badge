@@ -194,4 +194,10 @@
 0.64
 - REM word added
 
-0.65 added BASIC words uin and uout for serial port handling
+0.65 
+- added BASIC words uin and uout for serial port handling
+
+0.66
+- POST now allows testing IO pins on expansion header and FLASH formatting for CP/M system
+
+

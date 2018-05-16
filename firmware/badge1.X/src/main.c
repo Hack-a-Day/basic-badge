@@ -1,6 +1,8 @@
 #include <xc.h>
 #include "badge_settings.h"
+#include "badge.h"
 #include "hw.h"
+#include "post.h"
 
 int16_t main(void)
 	{

@@ -9,10 +9,15 @@
 #include "vt100.h"
 #include "post.h"
 #include "disp.h"
+#include "Z80/hwz.h"
 
 uint16_t i;
 const int8_t post_char_table[4*11] = "1234567890=qwertyuiop;/asdfghjkl\n\0zxcvbnm,.\0";
 extern uint8_t handle_display;
+
+void io_test_state (uint8_t state);
+
+
 
 //B_BDG001
 void post (void)
@@ -188,7 +193,115 @@ void post (void)
 	set_led(2,0);
 	video_clrscr();
 	term_init();
-	stdio_write("Reset badge now\n");
+	U3MODEbits.ON = 0;
+	TRISCbits.TRISC13 = 0;
+	TRISCbits.TRISC14 = 0;
+	TRISBbits.TRISB0 = 0;
+	TRISBbits.TRISB1 = 0;
+	while (1)
+		{
+		wait_ms(500);
+		video_gotoxy(0,2);
+		if (color==6) color = 0;
+		io_test_state(color);
+		video_gotoxy(1,7);
+		video_set_color(EGA_WHITE,EGA_BLACK);
+		sprintf(temp_string,"pin # %d\n",color);
+		stdio_write(temp_string);
+		stdio_write("Press LCTRL+ENTER to continue\n");
+		if (stdio_get(&retval)!=0)
+			{
+			if (retval == K_ECR) break;
+			}
+		color++;
+		}
+	video_clrscr();
+	term_init();
+	video_gotoxy(1,7);
+	stdio_write("Press f to format FLASH\n");
+	while (1)
+		{
+		if (stdio_get(&retval)!=0)
+			{
+			if (retval == 'f') 
+				{
+				stdio_write("Formatting FLASH...\n");
+				init_first_x_sects(32);
+				stdio_write("OK\n");
+				break;
+				}
+			}
+		}
+	stdio_write("End of test, reset badge now\n");
 	while(1);
 	}
 
+
+void io_test_state (uint8_t state)
+	{
+	if (state==0)
+		{
+		LATCbits.LATC13 = 1;
+		LATCbits.LATC14 = 0;
+		LATGbits.LATG2 = 0;
+		LATGbits.LATG3 = 0;
+		LATBbits.LATB0 = 0;
+		LATBbits.LATB1 = 0;
+		}
+	else if (state==1)
+		{
+		LATCbits.LATC13 = 0;
+		LATCbits.LATC14 = 1;
+		LATGbits.LATG2 = 0;
+		LATGbits.LATG3 = 0;
+		LATBbits.LATB0 = 0;
+		LATBbits.LATB1 = 0;
+		}
+	else if (state==2)
+		{
+		LATCbits.LATC13 = 0;
+		LATCbits.LATC14 = 0;
+		LATGbits.LATG2 = 1;
+		LATGbits.LATG3 = 0;
+		LATBbits.LATB0 = 0;
+		LATBbits.LATB1 = 0;
+		}
+	else if (state==3)
+		{
+		LATCbits.LATC13 = 0;
+		LATCbits.LATC14 = 0;
+		LATGbits.LATG2 = 0;
+		LATGbits.LATG3 = 1;
+		LATBbits.LATB0 = 0;
+		LATBbits.LATB1 = 0;
+		}
+	else if (state==4)
+		{
+		LATCbits.LATC13 = 0;
+		LATCbits.LATC14 = 0;
+		LATGbits.LATG2 = 0;
+		LATGbits.LATG3 = 0;
+		LATBbits.LATB0 = 1;
+		LATBbits.LATB1 = 0;
+		}
+	else if (state==5)
+		{
+		LATCbits.LATC13 = 0;
+		LATCbits.LATC14 = 0;
+		LATGbits.LATG2 = 0;
+		LATGbits.LATG3 = 0;
+		LATBbits.LATB0 = 0;
+		LATBbits.LATB1 = 1;
+		}	
+	else
+		{
+		LATCbits.LATC13 = 0;
+		LATCbits.LATC14 = 0;
+		LATGbits.LATG2 = 0;
+		LATGbits.LATG3 = 0;
+		LATBbits.LATB0 = 0;
+		LATBbits.LATB1 = 0;
+		}	
+		
+	
+	}
