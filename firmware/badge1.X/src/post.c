@@ -7,7 +7,6 @@
 #include <stdint.h>
 #include "hw.h"
 #include "vt100.h"
-#include "menu.h"
 #include "post.h"
 #include "disp.h"
 

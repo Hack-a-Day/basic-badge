@@ -34,6 +34,17 @@ int8_t stdio_local_buffer_get (void);
 void stdio_local_buffer_put (int8_t data);
 void stdio_local_buffer_puts (int8_t * data);
 
+void menu(void);
+uint32_t hash(int8_t *);
+uint8_t get_command_index(uint32_t );
+uint8_t wisecrack(int8_t *, uint16_t , unsigned char);
+void showmenu(void);
+void fancyframe(void);
+void clear_prompt(void);
+void show_wrencher(void);
+uint8_t playriff(unsigned char);
+
+
 #define STDIO_LOCAL_BUFF_SIZE	25
 
 //Prompt handling defines

@@ -13,7 +13,7 @@
 #include "Z80/simglb.h"
 #include "Z80/hwz.h"
 #include "vt100.h"
-#include "menu.h"
+//#include "menu.h"
 #include "splash.h"
 #include "tetrapuzz.h"
 #include "post.h"
