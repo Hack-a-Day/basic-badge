@@ -20,6 +20,7 @@
 #include "badge_settings.h"
 #include "tune_player.h"
 #include "badge.h"
+#include "snake.h"
 
 int8_t bprog[BPROG_LEN+1] =
 "5 termt 0\n\
@@ -575,6 +576,7 @@ void loop_userprog (void)
     if (get_stat!=0)
     {
 	handle_display = 0; //Shut off auto-scanning of character buffer
+	play_snake();
 	animate_splash();
 	//show_splash();
 	while(stdio_get(&char_out) == 0) { ;; }  //wait for button press
