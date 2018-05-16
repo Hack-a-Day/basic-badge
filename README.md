@@ -13,6 +13,7 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 * `print`
 * `println`
 * `if`
+* `else`
 * `goto`
 * `gosub`
 * `return`
