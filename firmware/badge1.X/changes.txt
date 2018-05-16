@@ -191,4 +191,7 @@
 0.63
 - BASIC now accepts both upper and lower case words. no mixing of cases, though, so HaXxORz are out of luck
 
+0.64
+- REM word added
+
 

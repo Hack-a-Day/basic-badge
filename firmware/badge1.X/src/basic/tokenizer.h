@@ -85,6 +85,7 @@ enum {
   TOKENIZER_EDR,
   TOKENIZER_PRINTLN,
   TOKENIZER_TERMUP,
+  TOKENIZER_REM,
 };
 
 void tokenizer_init(const char *program);

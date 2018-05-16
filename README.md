@@ -21,6 +21,7 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 * `next`
 * `end`
 * `let`
+* `rem`
 
 ### Badge Custom Words
 

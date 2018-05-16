@@ -626,7 +626,20 @@ termup_statement(void)
 		tft_disp_buffer_refresh(disp_buffer,color_buffer);
 	tokenizer_next();
 }
-
+/*---------------------------------------------------------------------------*/
+static void
+rem_statement(void)
+{
+	accept(TOKENIZER_REM);
+     do {
+	tokenizer_next();
+      } while(tokenizer_token() != TOKENIZER_CR &&
+	      tokenizer_token() != TOKENIZER_ENDOFINPUT);
+      if(tokenizer_token() == TOKENIZER_CR) {
+	tokenizer_next();
+      }
+//	tokenizer_next();
+}
 //B_BAS002
 /*---------------------------------------------------------------------------*/
 static void
@@ -705,6 +718,9 @@ statement(void)
     break;
   case TOKENIZER_TERMUP:
     termup_statement();
+    break;
+  case TOKENIZER_REM:
+    rem_statement();
     break;
   default:
     sprintf(err_msg,"Bad token %d at line %d\n", token,last_linenum);

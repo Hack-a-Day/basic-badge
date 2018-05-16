@@ -23,26 +23,9 @@
 #include "snake.h"
 
 int8_t bprog[BPROG_LEN+1] =
-"5 TERMT 0\n\
-10 let x = 39\n\
-20 let d = 0\n\
-30 clrscr\n\
-40 COLOR 11,0\n\
-50 setxy x,10\n\
-60 chr 32\n\
-70 if D = 1 then GOSUB 200\n\
-80 if D = 0 then gosub 300\n\
-90 chr 254\n\
-95 termup\n\
-100 if x = 0 then d = 1\n\
-110 if x = 39 then d = 0\n\
-120 WAIT 50\n\
-130 goto 50\n\
-200 x = X + 1\n\
-210 return\n\
-300 X = x - 1\n\
-310 setxy x,10\n\
-320 RETURN\n\
+"5 println 123\n\
+10 rem println 234\n\
+20 println 345\n\
 ";
 
 //a lot of magic numbers here, should be done properly

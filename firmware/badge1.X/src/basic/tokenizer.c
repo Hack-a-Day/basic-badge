@@ -110,6 +110,8 @@ static const struct keyword_token keywords[] = {
   {"EOUT", TOKENIZER_EOUT},
   {"EDR", TOKENIZER_EDR},
   {"TERMUP", TOKENIZER_TERMUP},
+  {"rem", TOKENIZER_REM},
+  {"REM", TOKENIZER_REM},
   {NULL, TOKENIZER_ERROR}
 };
 
