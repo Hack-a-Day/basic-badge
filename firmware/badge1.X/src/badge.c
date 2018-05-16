@@ -64,6 +64,7 @@ extern const uint8_t b2_rom[2048];
 extern const uint8_t ram_init [30];
 extern uint8_t ram_disk[RAMDISK_SIZE];
 
+#define HASH_TABLE_LENGTH	12
 const uint32_t  hashtable[HASH_TABLE_LENGTH] =
 	{
 	0,				//0
@@ -77,6 +78,7 @@ const uint32_t  hashtable[HASH_TABLE_LENGTH] =
 	110149,			//8
 	3174374908u,	//9
 	132593272,		//10
+	2802956003u		//11
 	};
 
 const uint8_t wrencher[18][41] = {
@@ -147,6 +149,10 @@ void badge_menu(void)
 		uint8_t get_stat = stdio_get(&char_out);
 		if (get_stat!=0)
 			{
+			if (char_out==K_UP) char_out='U';
+			if (char_out==K_DN) char_out='D';
+			if (char_out==K_LT) char_out='L';
+			if (char_out==K_RT) char_out='R';
 			stdio_c(char_out);
 			if (char_out==BACKSPACE)
 				{
@@ -227,6 +233,10 @@ void badge_menu(void)
 						case 8: clear_flag = wisecrack("I am afraid I can't do that Dave", TEXT_LEFT,CRACK_Y); break;
 						case 9: show_wrencher(); break;
 						case 10: play_mario_tune(); break;
+						case 11: 
+							handle_display = 0;
+							play_snake();
+							break;
 						default: clear_flag = wisecrack("Nice try, wise guy",TEXT_LEFT,CRACK_Y); break;
 						}
 					}

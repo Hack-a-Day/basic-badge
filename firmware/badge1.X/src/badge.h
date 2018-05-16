@@ -68,6 +68,4 @@ uint8_t playriff(unsigned char);
 #define MENU_DEFAULT_BG 0
 #define MENU_VERSION_FG	8
 
-#define HASH_TABLE_LENGTH	11
-
 
