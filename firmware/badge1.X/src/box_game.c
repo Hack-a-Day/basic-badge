@@ -61,7 +61,7 @@ Program flow:
 #define DEFAULT_BG_COLOR	0x000000
 #define DEFAULT_STONE_COLOR	0x00FF00
 
-#define DEFAULT_DROP_DELAY	1000
+#define DEFAULT_DROP_DELAY	400
 
 static uint8_t cursor_x, cursor_y;
 
