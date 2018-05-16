@@ -59,6 +59,7 @@
       <itemPath>src/tune_player.c</itemPath>
       <itemPath>src/post.c</itemPath>
       <itemPath>src/badge.c</itemPath>
+      <itemPath>src/snake.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

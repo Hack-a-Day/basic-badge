@@ -188,4 +188,7 @@
 0.62
 - comments added, some sources reorganziation made
 
+0.63
+- BASIC now accepts both upper and lower case words. no mixing of cases, though, so HaXxORz are out of luck
+
 

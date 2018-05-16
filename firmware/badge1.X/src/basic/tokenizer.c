@@ -82,6 +82,34 @@ static const struct keyword_token keywords[] = {
   {"eout", TOKENIZER_EOUT},
   {"edr", TOKENIZER_EDR},
   {"termup", TOKENIZER_TERMUP},
+  {"LET", TOKENIZER_LET},
+  {"PRINT", TOKENIZER_PRINT},
+  {"PRINTLN", TOKENIZER_PRINTLN},
+  {"IF", TOKENIZER_IF},
+  {"THEN", TOKENIZER_THEN},
+  {"ELSE", TOKENIZER_ELSE},
+  {"FOR", TOKENIZER_FOR},
+  {"TO", TOKENIZER_TO},
+  {"NEXT", TOKENIZER_NEXT},
+  {"GOTO", TOKENIZER_GOTO},
+  {"GOSUB", TOKENIZER_GOSUB},
+  {"RETURN", TOKENIZER_RETURN},
+  {"CALL", TOKENIZER_CALL},
+  {"END", TOKENIZER_END},
+  {"OUT", TOKENIZER_OUT},
+  {"TUNE", TOKENIZER_TUNE},
+  {"TERMT", TOKENIZER_TERMT},
+  {"SETXY", TOKENIZER_SETXY},
+  {"CLRSCR", TOKENIZER_CLRSCR},
+  {"WAIT", TOKENIZER_WAIT},
+  {"LED", TOKENIZER_LED},
+  {"COLOR", TOKENIZER_COLOR},
+  {"RND", TOKENIZER_RND},
+  {"CHR", TOKENIZER_CHR},
+  {"EIN", TOKENIZER_EIN},
+  {"EOUT", TOKENIZER_EOUT},
+  {"EDR", TOKENIZER_EDR},
+  {"TERMUP", TOKENIZER_TERMUP},
   {NULL, TOKENIZER_ERROR}
 };
 
@@ -186,7 +214,7 @@ get_next_token(void)
 		}
   }
 
-  if(*ptr >= 'a' && *ptr <= 'z') {
+  if((*ptr >= 'a' && *ptr <= 'z')|(*ptr >= 'A' && *ptr <= 'Z')) {
     nextptr = ptr + 1;
     return TOKENIZER_VARIABLE;
   }
@@ -268,6 +296,7 @@ tokenizer_finished(void)
 int
 tokenizer_variable_num(void)
 {
-  return *ptr - 'a';
+ if (*ptr >= 'a' && *ptr <= 'z') return *ptr - 'a';
+ else return *ptr - 'A';
 }
 /*---------------------------------------------------------------------------*/
