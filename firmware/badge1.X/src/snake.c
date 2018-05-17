@@ -36,8 +36,6 @@ uint16_t head;
 uint16_t snake_length_limit;
 uint16_t snake_length_current;
 
-const uint8_t snake_message0[] = "Secret level (It's buggy; blame Mike)";
-
 typedef struct {
   uint16_t x;
   uint8_t y;
@@ -57,6 +55,7 @@ uint8_t move_tick = 0;
 uint16_t get_next_node(uint16_t thisNode);
 uint16_t get_previous_node(uint16_t thisNode);
 uint16_t get_node_list_length(uint16_t node1, uint16_t node2);
+uint8_t collision(point target);
 void Draw_Box(uint16_t upperX, uint8_t upperY, uint16_t lowerX, uint8_t lowerY, uint32_t color);
 
 void Draw_Box(uint16_t upperX, uint8_t upperY, uint16_t lowerX, uint8_t lowerY, uint32_t color)
@@ -112,8 +111,12 @@ uint8_t neighbors(point node1, point node2)
 
 void make_fruit(void)
 	{
-	fruit.x = (uint8_t)(rand()%(GAMEBOARD_X));
-	fruit.y = (uint8_t)(rand()%(GAMEBOARD_Y));
+	while(1)
+		{
+		fruit.x = (uint8_t)(rand()%(GAMEBOARD_X));
+		fruit.y = (uint8_t)(rand()%(GAMEBOARD_Y));
+		if (collision(fruit) == 0) break;
+		}
 	//TODO: Make sure fruit isn't overlapping the snake.
 	Draw_Box(fruit.x*SNAKE_GIRTH,fruit.y*SNAKE_GIRTH,(fruit.x*SNAKE_GIRTH)+SNAKE_GIRTH-1,(fruit.y*SNAKE_GIRTH)+SNAKE_GIRTH-1,FRUIT_COLOR);
 	}
@@ -178,7 +181,7 @@ void follow_tail(void)
 		}
 	}
 
-uint8_t collision(void)
+uint8_t collision(point target)
 	{
 	uint16_t lower = 0;
 	uint16_t upper = 0;
@@ -194,19 +197,19 @@ uint8_t collision(void)
 		//( check head-3 because you can't run into a segment any close than that to the head)
 		{ 
 		//check to see if head's x or y are shared with the current point
-		if ((corners[head].x == corners[i].x) && (corners[i].x == corners[nextNode].x))
+		if ((target.x == corners[i].x) && (corners[i].x == corners[nextNode].x))
 			{
 			//which point is the higher  number?
 			if (corners[i].y < corners[nextNode].y) {lower = corners[i].y; upper = corners[nextNode].y;}
 			else {lower = corners[nextNode].y; upper = corners[i].y;}
-			testpoint = corners[head].y;
+			testpoint = target.y;
 			}
-		else if ((corners[head].y == corners[i].y) && (corners[i].y == corners[nextNode].y))
+		else if ((target.y == corners[i].y) && (corners[i].y == corners[nextNode].y))
 			{
 			//which point is the higher  number?
 			if (corners[i].x < corners[nextNode].x) {lower = corners[i].x; upper = corners[nextNode].x;}
 			else {lower = corners[nextNode].x; upper = corners[i].x;}
-			testpoint = corners[head].x;
+			testpoint = target.x;
 			}
 
 		//Now check to see if head is a point between this node and the next
@@ -236,7 +239,6 @@ void snake_init(void)
 	Draw_Box(corners[tail].x*SNAKE_GIRTH,corners[tail].y*SNAKE_GIRTH,(corners[head].x*SNAKE_GIRTH)+SNAKE_GIRTH-1,(corners[head].y*SNAKE_GIRTH)+SNAKE_GIRTH-1,FOREGROUND);
 	//FIXME?? srand((uint16_t)SysTick->VAL);
 	TimingDelay = millis() + SNAKE_DEFAULT_DELAY;
-	Write_String(snake_message0,10,228,red,BACKGROUND);
 	make_fruit();
 	game_running = 1;
 	}
@@ -295,7 +297,7 @@ int play_snake(void)
            
 			move_head(change_dir);
 
-			if (collision()) game_over();
+			if (collision(corners[head])) game_over();
 			else
 				{
 				Draw_Box(corners[head].x*SNAKE_GIRTH,corners[head].y*SNAKE_GIRTH,(corners[head].x*SNAKE_GIRTH)+SNAKE_GIRTH-1,(corners[head].y*SNAKE_GIRTH)+SNAKE_GIRTH-1,FOREGROUND); //Redraw
