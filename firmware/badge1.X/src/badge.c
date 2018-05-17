@@ -23,26 +23,10 @@
 #include "snake.h"
 
 int8_t bprog[BPROG_LEN+1] =
-"5 termt 0\n\
-10 let x = 39\n\
-20 let d = 0\n\
-30 clrscr\n\
-40 color 11,0\n\
-50 setxy x,10\n\
-60 chr 32\n\
-70 if d = 1 then gosub 200\n\
-80 if d = 0 then gosub 300\n\
-90 chr 254\n\
-95 termup\n\
-100 if x = 0 then d = 1\n\
-110 if x = 39 then d = 0\n\
-120 wait 50\n\
-130 goto 50\n\
-200 x = x + 1\n\
-210 return\n\
-300 x = x - 1\n\
-310 setxy x,10\n\
-320 return\n\
+"5 rem user value repeater\n\
+10 let a = input \"Enter value\"\n\
+19 print \"You entered: \"\n\
+20 println a\n\
 ";
 
 //a lot of magic numbers here, should be done properly
@@ -565,7 +549,7 @@ void loop_basic (void)
 			else if (char_out==BACKSPACE)
 				{
 				if (cmd_line_pointer>0) 
-					cmd_line_buff[cmd_line_pointer--]=0;
+					cmd_line_buff[--cmd_line_pointer]=0;
 				}
 
 			}
@@ -1040,3 +1024,35 @@ void __ISR(_EXTERNAL_2_VECTOR, IPL4AUTO) Int2Handler(void)
 	{
 	IEC0bits.INT2IE = 0;
 	}
+
+
+int16_t get_user_value (void)
+	{
+	int8_t temp_arr[20];
+	uint8_t temp_arr_p=0,char_val,stat;
+	uint32_t retval;
+	stdio_write(" :");
+	while (1)
+		{
+		stat = stdio_get(&char_val);
+		if ((char_val!=NEWLINE)&(stat!=0))
+			{
+			stdio_c(char_val);
+			if (char_val>=' ') temp_arr[temp_arr_p++] = char_val;
+			else if (char_val==BACKSPACE)
+				{
+				if (temp_arr_p>0) temp_arr[--temp_arr_p]=0;
+				}
+			}
+	    if ((char_val==NEWLINE)&(stat!=0))
+			{
+			temp_arr[temp_arr_p] = 0;
+			sscanf(temp_arr,"%d",&retval);
+			stdio_c('\n');
+			return retval;
+			}
+		if (brk_key) return 0;
+		}
+	}
+
+

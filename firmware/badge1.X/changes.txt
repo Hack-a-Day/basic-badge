@@ -188,4 +188,25 @@
 0.62
 - comments added, some sources reorganziation made
 
+0.63
+- BASIC now accepts both upper and lower case words. no mixing of cases, though, so HaXxORz are out of luck
+
+0.64
+- REM word added
+
+0.65 
+- added BASIC words uin and uout for serial port handling
+
+0.66
+- POST now allows testing IO pins on expansion header and FLASH formatting for CP/M system
+
+0.67
+- improved handling of backspace character in BASIC command line mode
+
+0.68
+- added word for user numeric input
+
+0.70
+- minor typos
+
 

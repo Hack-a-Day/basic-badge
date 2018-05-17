@@ -140,6 +140,8 @@ void receive_char(uint8_t c)
         break;   /* ignore bells */
       case '\b': /* backspace */
         video_cback();
+		video_putc_raw(' ');
+		video_cback();
         break;
       case 0x0A: /* LF, VT, and FF all print a linefeed */
       case 0x0B:
