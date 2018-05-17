@@ -1,25 +1,33 @@
 //badge user settings
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.70"
+#define FIRMWARE_VERSION "0.71"
 
 //define length of BASIC program RAM buffer
 //increasing the length will allow you to hold larger programs
 // load and save functions are set to 4096B only though
-#define	BPROG_LEN	4096
+#define	BPROG_LEN	16384
+
+//define size and number of sectors for saving BASIC programs
+//BPROG_LEN = BPROG_SECSIZ*BPROG_SECNUM
+#define	BPROG_SECSIZ	4096
+#define	BPROG_SECNUM	4
 
 //amount of BASIC program slots
 #define		BASIC_SAVNUM	16
+//FLASH_CONSUMED = BASIC_SAVNUM*BPROG_LEN - that is how much of FLASH is consumed
+//the rest up to 0x080000 is free for user
+//if you don't care for BASIC or CP/M, do as you wish
 
 //where is the start of slot region in FLASH
 #define		BASIC_BASEADDR	0
 /*
  * FLASH organization is as follows
- * 0x000000-0x000FFF - first slot
- * 0x001000-0x002FFF - second slot
+ * 0x000000-0x003FFF - first slot
+ * 0x004000-0x007FFF - second slot
  * ...etc
- * 0x00F000-0x00FFFF - 16-th slot
- * 0x010000-0x07FFFF - empty space
+ * 0x03C000-0x03FFFF - 16-th slot
+ * 0x040000-0x07FFFF - empty space
  * 0x080000-0x0FFFFF - D disk of CP/M machine
  * 0x100000-0x17FFFF - E disk of CP/M machine
  * 0x180000-0x1FFFFF - F disk of CP/M machine

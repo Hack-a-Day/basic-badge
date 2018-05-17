@@ -22,7 +22,9 @@
 #include "badge.h"
 #include "snake.h"
 
-int8_t bprog[BPROG_LEN+1] =
+
+int8_t bprog[BPROG_LEN+1];
+int8_t bprog_init[200] =
 "5 rem user value repeater\n\
 10 let a = input \"Enter value\"\n\
 19 print \"You entered: \"\n\
@@ -102,6 +104,7 @@ void badge_init (void)
 	stdio_src = STDIO_LOCAL;
 //	stdio_src = STDIO_TTY1;
 	term_init();
+	strcpy(bprog,bprog_init);
 	}
 
 //B_BDG002
@@ -811,21 +814,31 @@ uint16_t basic_saves (int8_t * data, uint16_t maxlen)
 uint8_t basic_save_program (uint8_t * data, uint8_t slot)
 	{
 	uint32_t  addr;
+	uint16_t  cnt;
 	addr = slot;
-	addr = addr * 4096;
+	addr = addr * BPROG_SECSIZ * BPROG_SECNUM;
 	addr = addr + BASIC_BASEADDR;
-	fl_erase_4k(addr);
-	fl_write_4k(addr,data);	
+	for (cnt = 0;cnt<BPROG_SECNUM;cnt++)
+		{
+		fl_erase_4k(addr + cnt*BPROG_SECSIZ);
+		fl_write_4k(addr + cnt*BPROG_SECSIZ,data + cnt*BPROG_SECSIZ);	
+		}
 	return 1;
 	}
+
+
 //B_BAS012
 uint8_t basic_load_program (uint8_t * data, uint8_t slot)
 	{
 	uint32_t  addr;
+	uint16_t  cnt;
 	addr = slot;
-	addr = addr * 4096;
+	addr = addr * BPROG_SECSIZ * BPROG_SECNUM;
 	addr = addr + BASIC_BASEADDR;
-	fl_read_4k(addr,data);
+	for (cnt = 0;cnt<BPROG_SECNUM;cnt++)
+		{
+		fl_read_4k(addr + cnt*BPROG_SECSIZ,data + cnt*BPROG_SECSIZ);	
+		}
 	return 1;
 	}
 

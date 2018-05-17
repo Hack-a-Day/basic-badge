@@ -209,4 +209,7 @@
 0.70
 - minor typos
 
+0.71 
+- program buffer increased to 16kB
+
 

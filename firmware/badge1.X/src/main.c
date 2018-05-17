@@ -45,7 +45,7 @@ int16_t main(void)
  * and B_BDG007 and B_BDG008. Badge can be turned on or off via power button. This erases display.
  * Since badge doesn't have graphic framebuffer (it has terminal text buffer though), the user should 
  * refresh the display in appropriate function, set up via function pointer, see B_BDG005 and B_BDG009
- * Currently, there is about 30kB of RAM and 48kB of FLASH free to use for user
+ * Currently, there is about 16kB of RAM and 45kB of FLASH free to use for user
  * If some CP/M features are disabled, see B_BDG010, user can gain additional quarter of megabyte of 
  * FLASH space and about 22kB of RAM.
  * 
@@ -72,11 +72,8 @@ int16_t main(void)
  * If not, program flows through series of comparisons to determine whether the thing that user wrote is 
  * something from a few commands that command interpreter can execute. One of them is RUN that sets up 
  * interpreter in B_BAS009 and runs main loop in B_BAS010.
- * Program buffer is set to 4kB, so you can't have programs longer than that. You may redefine buffer 
- * length (see badge_settings.h), but save and load FLASH routines are now expecting 4kB (one FLASH sector)
- * see B_BAS010 and B_BAS011
- * ssave and sload functions (via serial port) will work regardless (within reasonable limits) of program 
- * buffer size
+ * Program buffer is set to 16kB, so you can't have programs longer than that. You may redefine buffer 
+ * length (see badge_settings.h), you may want to check save/load routines, see B_BAS011
  * 
  * 
  * 
