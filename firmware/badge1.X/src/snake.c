@@ -208,7 +208,6 @@ uint8_t collision(void)
 			else {lower = corners[nextNode].x; upper = corners[i].x;}
 			testpoint = corners[head].x;
 			}
-		else continue;
 
 		//Now check to see if head is a point between this node and the next
 		if ((lower<=testpoint) && (testpoint<= upper)) return 1;
