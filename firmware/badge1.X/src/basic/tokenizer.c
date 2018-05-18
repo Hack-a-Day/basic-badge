@@ -118,6 +118,19 @@ static const struct keyword_token keywords[] = {
   {"UOUT", TOKENIZER_UOUT},
   {"input", TOKENIZER_INPUT},
   {"INPUT", TOKENIZER_INPUT},
+//aliases
+  {"clr", TOKENIZER_CLRSCR},
+  {"CLR", TOKENIZER_CLRSCR},
+  {"pnt", TOKENIZER_PRINT},
+  {"PNT", TOKENIZER_PRINT},
+  {"ptl", TOKENIZER_PRINTLN},
+  {"Ptl", TOKENIZER_PRINTLN},
+  {"inp", TOKENIZER_INPUT},
+  {"INP", TOKENIZER_INPUT},
+  {"sxy", TOKENIZER_SETXY},
+  {"SXY", TOKENIZER_SETXY},
+  {"ret", TOKENIZER_RETURN},
+  {"RET", TOKENIZER_RETURN},  
   {NULL, TOKENIZER_ERROR}
 };
 

@@ -212,4 +212,6 @@
 0.71 
 - program buffer increased to 16kB
 
+0.72
+- clr changed to mamclr, some aliases added
 

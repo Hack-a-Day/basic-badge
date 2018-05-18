@@ -519,7 +519,7 @@ void loop_z80_cpm (void)
 //B_BAS005
 void init_basic (void)
 	{
-	stdio_write("BASIC interpreter, type help for help\n");
+	stdio_write("BASIC interpreter\n");
 	prompt = 1;
 	brk_key = 0;
 	cmd_line_pointer=0;
@@ -548,7 +548,7 @@ void loop_basic (void)
 			}
 	    else
 			{
-			if (char_out>=' ') cmd_line_buff[cmd_line_pointer++] = char_out;
+			if ((char_out>=' ')&(char_out<0x7F)) cmd_line_buff[cmd_line_pointer++] = char_out;
 			else if (char_out==BACKSPACE)
 				{
 				if (cmd_line_pointer>0) 
@@ -676,15 +676,8 @@ uint8_t cmd_exec (int8_t * cmd)
 		}
     else
 		{
-		if (strcmp("help",cmd)==0)
-			{
-			stdio_write("help - this help\n");
-			stdio_write("clr - clear program buffer\n");
-			stdio_write("run - run program in buffer\n");
-			stdio_write("list - list program buffer\n");
-			}
-		else if (strcmp("list",cmd)==0) stdio_write(bprog);
-		else if (strcmp("clr",cmd)==0) bprog[0]=0;
+		if (strcmp("list",cmd)==0) stdio_write(bprog);
+		else if (strcmp("memclr",cmd)==0) bprog[0]=0;
 		else if (strcmp("free",cmd)==0)
 			{
 			sprintf(stdio_buff,"%d B of memory free\n",get_free_mem(bprog,BPROG_LEN));
