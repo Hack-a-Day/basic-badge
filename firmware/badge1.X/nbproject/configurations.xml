@@ -22,6 +22,7 @@
       <itemPath>src/post.h</itemPath>
       <itemPath>src/badge_settings.h</itemPath>
       <itemPath>src/badge.h</itemPath>
+      <itemPath>src/user_program.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -59,6 +60,7 @@
       <itemPath>src/post.c</itemPath>
       <itemPath>src/badge.c</itemPath>
       <itemPath>src/snake.c</itemPath>
+      <itemPath>src/user_program.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
