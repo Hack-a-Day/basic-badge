@@ -1,5 +1,4 @@
 #include <xc.h>
-#include "globals.h"
 #include "basic/ubasic.h"
 #include "basic/tokenizer.h"
 #include <plib.h>
@@ -324,13 +323,8 @@ void badge_menu(void)
 					enable_display_scanning(0); //Shut off auto-scanning of character buffer
 					tetrapuzz();
 					}
-				//B_BDG006
+				//B_BDG006		
 				else if (strcmp(menu_buff,"5")==0)
-					{
-					init_userprog();
-					while (1) loop_userprog();
-					}			
-				else if (strcmp(menu_buff,"6")==0)
 					{
 					stdio_local_buffer_puts("c:\nzork1\n");
 					video_clrscr();
@@ -340,7 +334,12 @@ void badge_menu(void)
 					wait_ms(2000);
 					init_z80_cpm();
 					while (1) loop_z80_cpm();
-					}				
+					}
+				else if (strcmp(menu_buff,"6")==0)
+					{
+					init_userprog();
+					while (1) loop_userprog();
+					}	
 				else
 					{
 					switch (get_command_index(hash(menu_buff)))
@@ -515,9 +514,9 @@ void showmenu(void)
 	video_gotoxy(TEXT_LEFT,9);
 	stdio_write("4 - Play Badgetris!");
 	video_gotoxy(TEXT_LEFT,10);
-	stdio_write("5 - User Program");
+	stdio_write("5 - Zork @ CP/M @ Z80");
 	video_gotoxy(TEXT_LEFT,11);
-	stdio_write("6 - Zork @ CP/M @ Z80");
+	stdio_write("6 - User Program");
 	
 	show_version();
 	clear_prompt();
