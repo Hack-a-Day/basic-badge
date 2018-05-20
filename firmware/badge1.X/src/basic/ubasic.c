@@ -38,6 +38,7 @@
 
 
 #include "ubasic.h"
+#include "../badge.h"
 #include "../hw.h"
 #include "../vt100.h"
 #include "tokenizer.h"
@@ -48,8 +49,6 @@
 
 extern jmp_buf jbuf;
 extern uint8_t handle_display;
-extern int8_t disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
-extern int8_t color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 
 char err_msg[40];
 int last_linenum;

@@ -1,5 +1,3 @@
-#define DISP_BUFFER_WIDE    40
-#define DISP_BUFFER_HIGH    20
 #define MAX_ESC_LEN 48 
 #define  NOT_IN_ESC 	0
 #define    ESC_GOT_1B	1

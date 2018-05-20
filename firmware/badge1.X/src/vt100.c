@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "vt100.h"
+#include "badge.h"
 
 #define MAX_BUF 50
 
@@ -38,7 +39,7 @@ static uint8_t revvideo;
 
 uint8_t cur_type,cur_blink;
 
-extern int8_t disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
+//extern int8_t disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 extern int8_t color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 volatile uint8_t buf[MAX_BUF];
 

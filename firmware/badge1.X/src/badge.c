@@ -1,4 +1,5 @@
 #include <xc.h>
+#include "globals.h"
 #include "basic/ubasic.h"
 #include "basic/tokenizer.h"
 #include <plib.h>
@@ -13,7 +14,6 @@
 #include "Z80/simglb.h"
 #include "Z80/hwz.h"
 #include "vt100.h"
-//#include "menu.h"
 #include "splash.h"
 #include "tetrapuzz.h"
 #include "post.h"
@@ -21,7 +21,83 @@
 #include "tune_player.h"
 #include "badge.h"
 #include "snake.h"
+#include "user_program.h"
 
+/************ Defines ****************************/
+#define STDIO_LOCAL_BUFF_SIZE	25
+
+//Prompt handling defines
+#define COMMAND_MAX 32
+#define TEXT_LEFT	4
+#define PROMPT_Y	15
+#define CRACK_Y		17
+#define VERSION_X	33
+#define VERSION_Y	18
+#define CRACK_TIMEOUT 4000
+//Menu color values
+#define MENU_FRAME_FG	12
+#define MENU_FRAME_BG	0
+#define MENU_BANNER_FG	0
+#define MENU_BANNER_BG	15
+#define MENU_HEADER_FG	15
+#define MENU_HEADER_BG	8
+#define MENU_ENTRY_FG	15
+#define MENU_ENTRY_BG	9
+#define MENU_DEFAULT_FG 15
+#define MENU_DEFAULT_BG 0
+#define MENU_VERSION_FG	8
+#define MENU_SECRET_COLOR 10
+#define MENU_CRACK_COLOR 14
+/********** End Defines **************************/
+
+/************* Function Prototypes ***************/
+uint8_t add_prog_line (int8_t * line, int8_t * prog, int16_t linenum);
+void terminal_init(void);
+int8_t term_k_stat (void);
+int8_t term_k_char (int8_t * out);
+uint8_t rx_sta (void);
+uint8_t rx_read (void);
+void tx_write (uint8_t data);
+uint8_t cmd_exec (int8_t * cmd);
+uint8_t basic_save_program (uint8_t * data, uint8_t slot);
+uint8_t basic_load_program (uint8_t * data, uint8_t slot);
+uint16_t get_free_mem(uint8_t * prog, uint16_t max_mem);
+const char* get_firmware_string(void);
+uint16_t basic_loads (int8_t * data, uint16_t maxlen);
+uint16_t basic_saves (int8_t * data, uint16_t maxlen);
+void init_z80_cpm (void);
+void init_basic (void);
+void init_userprog(void);
+void loop_z80_cpm (void);
+void loop_basic (void);
+void loop_userprog(void);
+void boot_animation(void);
+void init_8080_basic (void);
+void loop_8080_basic (void);
+void loop_badge(void);
+
+void list_more (void);
+
+uint8_t stdio_local_buffer_state (void);
+int8_t stdio_local_buffer_get (void);
+void stdio_local_buffer_put (int8_t data);
+void stdio_local_buffer_puts (int8_t * data);
+
+void menu(void);
+uint32_t hash(int8_t *);
+uint8_t get_command_index(uint32_t );
+uint8_t wisecrack(int8_t *, uint16_t , unsigned char, uint8_t);
+void clear_crack(void);
+uint8_t random_crack(void);
+void showmenu(void);
+void show_version(void);
+void fancyframe(void);
+void clear_prompt(void);
+void show_wrencher(void);
+uint8_t playriff(unsigned char);
+
+int16_t get_user_value (void);
+/*** End Function Prototypes **********************88*/
 
 int8_t bprog[BPROG_LEN+1];
 int8_t bprog_init[200] =
@@ -33,7 +109,7 @@ int8_t bprog_init[200] =
 
 //a lot of magic numbers here, should be done properly
 int8_t tprog[100],stdio_buff[50],key_buffer[10],char_out, stdio_local_buff[STDIO_LOCAL_BUFF_SIZE];
-int8_t disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE], color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
+
 uint8_t get_stat,key_buffer_ptr =0,cmd_line_buff[30], cmd_line_pointer,cmd_line_key_stat_old,prompt;
 uint8_t stdio_local_len=0;
 uint16_t term_pointer,vertical_shift;
@@ -670,43 +746,24 @@ void loop_basic (void)
 //B_BDG007
 void init_userprog (void)
 {
-    clr_buffer();
-    stdio_write("Press any key to show splash screen.\n");
+	user_program_init();
 }
 
 //B_BDG008
 void loop_userprog (void)
 {
-    get_stat = stdio_get(&char_out);
-    if (get_stat!=0)
-    {
-	handle_display = 0; //Shut off auto-scanning of character buffer
-	play_snake();
-	animate_splash();
-	//show_splash();
-	while(stdio_get(&char_out) == 0) { ;; }  //wait for button press
-	handle_display = 1; //Go back to character display
-    }
-
-    static uint16_t delay_until = 0;
-    static uint8_t count = '0';
-
-    if (ticks>=delay_until)
-    {
-	disp_buffer[10][10] = count++;
-	if (count > '9')
-	{
-	    count = '0';
-	}
-	delay_until = ticks+1000;
-    }
+	user_program_loop();
 }
 
 void clr_buffer (void)
 	{
 	for (i=0; i<DISP_BUFFER_HIGH+1; i++)
 		{
-		for (j=0; j<DISP_BUFFER_WIDE; j++) disp_buffer[i][j] = 0;
+		for (j=0; j<DISP_BUFFER_WIDE; j++) 
+			{
+			disp_buffer[i][j] = 0;		//Blank the buffer
+			color_buffer[i][j] = 0x0F;	//White text on black background
+			}
 		}
 	}
 
