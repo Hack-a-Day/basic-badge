@@ -37,8 +37,11 @@ void stdio_local_buffer_puts (int8_t * data);
 void menu(void);
 uint32_t hash(int8_t *);
 uint8_t get_command_index(uint32_t );
-uint8_t wisecrack(int8_t *, uint16_t , unsigned char);
+uint8_t wisecrack(int8_t *, uint16_t , unsigned char, uint8_t);
+void clear_crack(void);
+uint8_t random_crack(void);
 void showmenu(void);
+void show_version(void);
 void fancyframe(void);
 void clear_prompt(void);
 void show_wrencher(void);
@@ -56,7 +59,7 @@ int16_t get_user_value (void);
 #define CRACK_Y		17
 #define VERSION_X	33
 #define VERSION_Y	18
-
+#define CRACK_TIMEOUT 4000
 //Menu color values
 #define MENU_FRAME_FG	12
 #define MENU_FRAME_BG	0
@@ -69,5 +72,7 @@ int16_t get_user_value (void);
 #define MENU_DEFAULT_FG 15
 #define MENU_DEFAULT_BG 0
 #define MENU_VERSION_FG	8
+#define MENU_SECRET_COLOR 10
+#define MENU_CRACK_COLOR 14
 
 
