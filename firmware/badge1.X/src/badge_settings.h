@@ -4,7 +4,7 @@
 #define __BADGE_SETTINGS_H
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.73"
+#define FIRMWARE_VERSION "0.74"
 
 //define length of BASIC program RAM buffer
 //increasing the length will allow you to hold larger programs

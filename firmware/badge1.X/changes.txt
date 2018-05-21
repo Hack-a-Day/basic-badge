@@ -219,3 +219,7 @@
 - a lot of reformatting
 - LEDs status remembered after wake from sleep
 
+0.74
+- LEDs are off after POR/manual reset
+
+

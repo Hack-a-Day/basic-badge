@@ -4,7 +4,7 @@
  * code for the basic badge
  ************************************/
 
-#include "badge.h"
+
 #include "badge_user.h"
 
 void user_program_init(void)

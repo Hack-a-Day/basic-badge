@@ -350,7 +350,6 @@ void hw_sleep (void)
 	PMD5 = 0;
 	PMD6 = 0;
 	hw_init();
-	set_led_word(led_state);
 	start_after_wake();
 	}
 
@@ -453,6 +452,14 @@ void hw_init (void)
 	LCD_BKLT = 0;					//turn backlight on
 	fl_rst_pb();
 
+	//if reset is after POR or manual reset, forget LED state
+	if ((RCONbits.BOR)|(RCONbits.EXTR)|(RCONbits.POR))
+		{
+		RCON = 0;
+		led_state = 0;
+		}
+	set_led_word(led_state);	
+	
   	}
 
 
