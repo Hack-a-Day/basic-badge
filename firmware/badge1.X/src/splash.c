@@ -2,10 +2,10 @@
 #include <stdint.h>
 
 struct Cipher_box
-{
+	{
     int16_t x;	    // Pixel location on screen (negative values for left overflow)
     uint8_t row; // Which of 12 columns in the splash logo this belongs to
-};
+	};
 
 void show_splash(void)
 {

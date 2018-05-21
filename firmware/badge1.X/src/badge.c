@@ -1,4 +1,5 @@
 #include <xc.h>
+#include "badge.h"
 #include "basic/ubasic.h"
 #include "basic/tokenizer.h"
 #include <plib.h>
@@ -7,20 +8,41 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdint.h>
-#include "hw.h"
 #include <setjmp.h>
 #include "Z80/sim.h"
 #include "Z80/simglb.h"
-#include "Z80/hwz.h"
-#include "vt100.h"
-#include "splash.h"
-#include "tetrapuzz.h"
-#include "post.h"
-#include "badge_settings.h"
-#include "tune_player.h"
-#include "badge.h"
-#include "snake.h"
-#include "user_program.h"
+
+
+
+uint16_t basic_loads (int8_t * data, uint16_t maxlen);
+uint16_t basic_saves (int8_t * data, uint16_t maxlen);
+void init_z80_cpm (void);
+void init_basic (void);
+void init_userprog(void);
+void loop_z80_cpm (void);
+void loop_basic (void);
+void loop_userprog(void);
+void boot_animation(void);
+void init_8080_basic (void);
+void loop_8080_basic (void);
+uint8_t cmd_exec (int8_t * cmd);
+uint8_t basic_save_program (uint8_t * data, uint8_t slot);
+uint8_t basic_load_program (uint8_t * data, uint8_t slot);
+uint16_t get_free_mem(uint8_t * prog, uint16_t max_mem);
+uint8_t add_prog_line (int8_t * line, int8_t * prog, int16_t linenum);
+void list_more (void);
+void menu(void);
+uint32_t hash(int8_t *);
+uint8_t get_command_index(uint32_t );
+uint8_t wisecrack(int8_t *, uint16_t , unsigned char, uint8_t);
+void clear_crack(void);
+uint8_t random_crack(void);
+void showmenu(void);
+void show_version(void);
+void fancyframe(void);
+void clear_prompt(void);
+void show_wrencher(void);
+uint8_t playriff(unsigned char);
 
 /************ Defines ****************************/
 #define STDIO_LOCAL_BUFF_SIZE	25
@@ -50,52 +72,6 @@
 /********** End Defines **************************/
 
 /************* Function Prototypes ***************/
-uint8_t add_prog_line (int8_t * line, int8_t * prog, int16_t linenum);
-void terminal_init(void);
-int8_t term_k_stat (void);
-int8_t term_k_char (int8_t * out);
-uint8_t rx_sta (void);
-uint8_t rx_read (void);
-void tx_write (uint8_t data);
-uint8_t cmd_exec (int8_t * cmd);
-uint8_t basic_save_program (uint8_t * data, uint8_t slot);
-uint8_t basic_load_program (uint8_t * data, uint8_t slot);
-uint16_t get_free_mem(uint8_t * prog, uint16_t max_mem);
-const char* get_firmware_string(void);
-uint16_t basic_loads (int8_t * data, uint16_t maxlen);
-uint16_t basic_saves (int8_t * data, uint16_t maxlen);
-void init_z80_cpm (void);
-void init_basic (void);
-void init_userprog(void);
-void loop_z80_cpm (void);
-void loop_basic (void);
-void loop_userprog(void);
-void boot_animation(void);
-void init_8080_basic (void);
-void loop_8080_basic (void);
-void loop_badge(void);
-
-void list_more (void);
-
-uint8_t stdio_local_buffer_state (void);
-int8_t stdio_local_buffer_get (void);
-void stdio_local_buffer_put (int8_t data);
-void stdio_local_buffer_puts (int8_t * data);
-
-void menu(void);
-uint32_t hash(int8_t *);
-uint8_t get_command_index(uint32_t );
-uint8_t wisecrack(int8_t *, uint16_t , unsigned char, uint8_t);
-void clear_crack(void);
-uint8_t random_crack(void);
-void showmenu(void);
-void show_version(void);
-void fancyframe(void);
-void clear_prompt(void);
-void show_wrencher(void);
-uint8_t playriff(unsigned char);
-
-int16_t get_user_value (void);
 /*** End Function Prototypes **********************88*/
 
 int8_t bprog[BPROG_LEN+1];
@@ -124,6 +100,10 @@ extern const uint8_t ram_image[65536];
 extern const uint8_t b2_rom[2048];
 extern const uint8_t ram_init [30];
 extern uint8_t ram_disk[RAMDISK_SIZE];
+
+
+int8_t disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
+int8_t color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 
 #define HASH_TABLE_LENGTH	12
 const uint32_t  hashtable[HASH_TABLE_LENGTH] =
@@ -881,7 +861,7 @@ uint8_t cmd_exec (int8_t * cmd)
 			stdio_write("Press BRK to exit...\n");
 			serial_flush();
 			handle_display = 0;
-			tft_disp_buffer_refresh(disp_buffer,color_buffer);
+			display_refresh_force();
 			i = basic_loads(bprog,BPROG_LEN);
 			handle_display = 1;
 			sprintf(stdio_buff,"\nOK, received %d bytes.\n",i);
@@ -1174,15 +1154,10 @@ void __ISR(_TIMER_5_VECTOR, IPL3AUTO) Timer5Handler(void)
     IFS0bits.T5IF = 0;
 	loop_badge();
     if (handle_display)
-		{
-		tft_disp_buffer_refresh_part(disp_buffer,color_buffer);
-		//tft_disp_buffer_refresh_part(disp_buffer,0xFFFFFF,0);
-		}
+		tft_disp_buffer_refresh_part((uint8_t *)(disp_buffer),(uint8_t *)color_buffer);
     key_temp = keyb_tasks();
     if (key_temp>0)
-		{
 		key_buffer[key_buffer_ptr++] = key_temp;
-		}
 }
 
 void __ISR(_TIMER_1_VECTOR, IPL4AUTO) Timer1Handler(void)
@@ -1194,7 +1169,6 @@ void __ISR(_EXTERNAL_2_VECTOR, IPL4AUTO) Int2Handler(void)
 	{
 	IEC0bits.INT2IE = 0;
 	}
-
 
 int16_t get_user_value (void)
 	{
@@ -1226,3 +1200,7 @@ int16_t get_user_value (void)
 	}
 
 
+void display_refresh_force (void)
+	{
+	tft_disp_buffer_refresh((uint8_t *)disp_buffer,(uint8_t *)color_buffer);
+	}

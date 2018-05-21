@@ -5,11 +5,7 @@
  ************************************/
 
 #include "badge.h"
-#include "vt100.h"
-#include "hw.h"
-#include "disp.h"
-#include "Z80/hwz.h"
-
+#include "badge_user.h"
 
 void user_program_init(void)
 	{
@@ -24,7 +20,6 @@ void user_program_init(void)
 void user_program_loop(void)
 	{
 	/* This should contain user program (will be run after init function)*/
-	
 	
 	/* Write some stuff to the screen*/
 	video_set_color(3,8);	//Set color before writing

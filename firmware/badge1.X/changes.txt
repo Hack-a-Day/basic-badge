@@ -215,3 +215,7 @@
 0.72
 - clr changed to mamclr, some aliases added
 
+0.73
+- a lot of reformatting
+- LEDs status remembered after wake from sleep
+

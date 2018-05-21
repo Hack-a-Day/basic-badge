@@ -1,3 +1,6 @@
+#ifndef		__SLPASH_H
+#define		__SLPASH_H
+
 /*
  * Graphic from poster located here:
  * https://cdn.hackaday.io/images/5980891518077065617.png
@@ -41,3 +44,5 @@ const uint16_t b_cipher[12] = {
     0b0000110111101110,
     0b0000101101110111
 };
+
+#endif

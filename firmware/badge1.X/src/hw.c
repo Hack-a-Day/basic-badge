@@ -36,8 +36,7 @@
 #pragma config BWP = OFF                // Boot Flash Write Protect bit (Protection Disabled)
 #pragma config CP = OFF                 // Code Protect (Protection Disabled)
 
-uint8_t key_state=0,key_last,key;
-
+uint8_t key_state=0,key_last,key,led_state=0;
 uint16_t rnd_var1,rnd_var2,rnd_var3;
 
 const int8_t keys_normal[50] = 
@@ -203,6 +202,25 @@ const uint16_t tone_pr_table[128] =
 	239, // 127 | G9 | 12543.9Hz
 	};
 
+uint8_t get_led_word(void)
+	{
+	uint8_t retval = 0;
+	if (LED_R) retval = retval | 0x01;
+	if (LED_G) retval = retval | 0x02;
+	if (LED_B) retval = retval | 0x04;
+	return retval;
+	}
+
+void set_led_word (uint8_t val)
+	{
+	if (val&0x01) LED_R = 1;
+		else LED_R = 0;
+	if (val&0x02) LED_G = 1;
+		else LED_G = 0;
+	if (val&0x04) LED_B = 1;
+		else LED_B = 0;
+	}
+
 void set_led (uint8_t led_n, uint8_t led_v)
 	{
 	if (led_n==0)
@@ -268,6 +286,8 @@ void sound_set_generator (uint16_t period, uint8_t generator)
 
 void hw_sleep (void)
 	{
+	led_state = get_led_word();
+	set_led_word(0);
 	T1CONbits.TON = 0;
 	T2CONbits.TON = 0;
 	T3CONbits.TON = 0;
@@ -330,6 +350,7 @@ void hw_sleep (void)
 	PMD5 = 0;
 	PMD6 = 0;
 	hw_init();
+	set_led_word(led_state);
 	start_after_wake();
 	}
 
@@ -348,9 +369,6 @@ void hw_init (void)
 	TRISD = 0;
 	TRISDbits.TRISD9 = 1;
 	TRISDbits.TRISD10 = 1;
-	LEDR = 0;
-	LEDG = 0;
-	LEDB = 0;
     TRISE = 0;
     TRISG = 0;
 	TRISGbits.TRISG6 = 1;
@@ -490,19 +508,19 @@ uint8_t keyb_tasks (void)
 
 
 void wait_ms (uint32_t count)
-{
+	{
 	uint32_t ticks_wait;
 	ticks_wait = millis() + count;
 	rnd_var2 = rnd_var2  + ticks_wait;
 	while (millis()<= ticks_wait);
-}
+	}
 
 unsigned char	SPI_dat (uint8_t data)
-{
-SPI1BUF = data;
-while (SPI1STATbits.SPIRBF==0);
-return (SPI1BUF);
-}
+	{
+	SPI1BUF = data;
+	while (SPI1STATbits.SPIRBF==0);
+	return (SPI1BUF);
+	}
 
 
 uint16_t get_rnd (void)
@@ -570,20 +588,20 @@ void serial_flush (void)
 	}
 
 uint8_t rx_sta (void)
-{
-if (U3STAbits.URXDA==1) return 0xFF;
-else return 0x00;
-}
+	{
+	if (U3STAbits.URXDA==1) return 0xFF;
+	else return 0x00;
+	}
 
 uint8_t rx_read (void)
-{
+	{
 	uint8_t data;
 	data = U3RXREG;
 	return data;
-}
+	}
 void tx_write (uint8_t data)
-{   
-U3TXREG = data;
-while (U3STAbits.UTXBF==1); 
-}
+	{   
+	U3TXREG = data;
+	while (U3STAbits.UTXBF==1); 
+	}
 

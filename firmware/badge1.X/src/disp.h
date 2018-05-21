@@ -1,3 +1,7 @@
+#ifndef	__DISP_H
+#define	__DISP_H
+
+
 void TFT_24_7789_Init(void);
 inline void TFT_24_7789_Write_Data(uint16_t data1);
 inline void TFT_24_7789_Write_Data3(uint16_t data1,uint16_t data2, uint16_t data3);
@@ -25,3 +29,4 @@ void tft_disp_buffer_refresh_part(uint8_t * buff, uint8_t * color_buff);
 #define	EGA_YELLOW	14
 #define	EGA_WHITE	15
 
+#endif

@@ -1,3 +1,6 @@
+#ifndef		__HWZ_H
+#define		__HWZ_H
+
 #include <stdint.h>
 #include "../badge_settings.h"
 
@@ -62,3 +65,5 @@ void write_sector (unsigned char *data, unsigned int addr);
 
 #define		IO_CPM_MODE		0
 #define		IO_BASIC_MODE	1
+
+#endif

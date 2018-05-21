@@ -395,118 +395,118 @@ inline void tft_set_write_area (uint16_t x, uint16_t y, uint16_t xlen, uint16_t 
 
 /*******************************************************************************/
 void TFT_24_7789_Write_Command(uint16_t command)
-{
-LCD_RD = 1;
-LCD_DC = 0;
-LCD_WR_CLR;
-LCD_PORT = command;
-LCD_WR_SET;
-LCD_DC = 1;
-}
+	{
+	LCD_RD = 1;
+	LCD_DC = 0;
+	LCD_WR_CLR;
+	LCD_PORT = command;
+	LCD_WR_SET;
+	LCD_DC = 1;
+	}
 /*******************************************************************************/
 inline void TFT_24_7789_Write_Data(uint16_t data1)
-{
-LCD_WR_CLR;
-LCD_PORT = data1;
-LCD_WR_SET;
-}
+	{
+	LCD_WR_CLR;
+	LCD_PORT = data1;
+	LCD_WR_SET;
+	}
 
 inline void TFT_24_7789_Write_Data3(uint16_t data1,uint16_t data2, uint16_t data3)
-{
-LCD_WR_CLR;
-LCD_PORT = data1;
-LCD_WR_SET;
-LCD_WR_CLR;
-LCD_PORT = data2;
-LCD_WR_SET;
-LCD_WR_CLR;
-LCD_PORT = data3;
-LCD_WR_SET;
-}
+	{
+	LCD_WR_CLR;
+	LCD_PORT = data1;
+	LCD_WR_SET;
+	LCD_WR_CLR;
+	LCD_PORT = data2;
+	LCD_WR_SET;
+	LCD_WR_CLR;
+	LCD_PORT = data3;
+	LCD_WR_SET;
+	}
 
 /*******************************************************************************/
 void TFT_24_7789_Init(void)
-{
-LCD_RES = 0;
-LCD_RD = 1;
-LCD_WR = 1;
-//wait_ms(2);
-LCD_RES = 1;
-wait_ms(2);
-TFT_24_7789_Write_Command(0x0029);//exit SLEEP mode
-wait_ms(2);
-TFT_24_7789_Write_Command(0x0036);
-TFT_24_7789_Write_Data(0x70);//MADCTL: memory data access control
-TFT_24_7789_Write_Command(0x003A);
-TFT_24_7789_Write_Data(0x0066);//COLMOD: Interface Pixel format
-TFT_24_7789_Write_Command(0x00B2);
-TFT_24_7789_Write_Data(0x0C);
-TFT_24_7789_Write_Data(0x0C);
-TFT_24_7789_Write_Data(0x00);
-TFT_24_7789_Write_Data(0x33);
-TFT_24_7789_Write_Data(0x33);//PORCTRK: Porch setting
-TFT_24_7789_Write_Command(0x00B7);
-TFT_24_7789_Write_Data(0x0035);//GCTRL: Gate Control
-TFT_24_7789_Write_Command(0x00BB);
-TFT_24_7789_Write_Data(0x002B);//VCOMS: VCOM setting
-TFT_24_7789_Write_Command(0x00C0);
-TFT_24_7789_Write_Data(0x002C);//LCMCTRL: LCM Control
-TFT_24_7789_Write_Command(0x00C2);
-TFT_24_7789_Write_Data(0x0001);
-TFT_24_7789_Write_Data(0xFF);//VDVVRHEN: VDV and VRH Command Enable
-TFT_24_7789_Write_Command(0x00C3);
-TFT_24_7789_Write_Data(0x0011);//VRHS: VRH Set
-TFT_24_7789_Write_Command(0x00C4);
-TFT_24_7789_Write_Data(0x0020);//VDVS: VDV Set[10]
-TFT_24_7789_Write_Command(0x00C6);
-TFT_24_7789_Write_Data(0x000F);//FRCTRL2: Frame Rate control in normal mode
-TFT_24_7789_Write_Command(0x00D0);
-TFT_24_7789_Write_Data(0x00A4);
-TFT_24_7789_Write_Data(0xA1);//PWCTRL1: Power Control 1
-TFT_24_7789_Write_Command(0x00E0);
-TFT_24_7789_Write_Data(0x00D0);
-TFT_24_7789_Write_Data(0x0000);
-TFT_24_7789_Write_Data(0x0005);
-TFT_24_7789_Write_Data(0x000E);
-TFT_24_7789_Write_Data(0x0015);
-TFT_24_7789_Write_Data(0x000D);
-TFT_24_7789_Write_Data(0x0037);
-TFT_24_7789_Write_Data(0x0043);
-TFT_24_7789_Write_Data(0x0047);
-TFT_24_7789_Write_Data(0x0009);
-TFT_24_7789_Write_Data(0x0015);
-TFT_24_7789_Write_Data(0x0012);
-TFT_24_7789_Write_Data(0x0016);
-TFT_24_7789_Write_Data(0x0019);//PVGAMCTRL: Positive Voltage Gamma control
-TFT_24_7789_Write_Command(0x00E1);
-TFT_24_7789_Write_Data(0x00D0);
-TFT_24_7789_Write_Data(0x0000);
-TFT_24_7789_Write_Data(0x0005);
-TFT_24_7789_Write_Data(0x000D);
-TFT_24_7789_Write_Data(0x000C);
-TFT_24_7789_Write_Data(0x0006);
-TFT_24_7789_Write_Data(0x002D);
-TFT_24_7789_Write_Data(0x0044);
-TFT_24_7789_Write_Data(0x0040);
-TFT_24_7789_Write_Data(0x000E);
-TFT_24_7789_Write_Data(0x001C);
-TFT_24_7789_Write_Data(0x0018);
-TFT_24_7789_Write_Data(0x0016);
-TFT_24_7789_Write_Data(0x0019);//NVGAMCTRL: Negative Voltage Gamma control
-TFT_24_7789_Write_Command(0x002A);
-TFT_24_7789_Write_Data(0x0000);
-TFT_24_7789_Write_Data(0x0000);
-TFT_24_7789_Write_Data(0x0001);
-TFT_24_7789_Write_Data(0x003F);//X address set
-TFT_24_7789_Write_Command(0x002B);
-TFT_24_7789_Write_Data(0x0000);
-TFT_24_7789_Write_Data(0x0000);
-TFT_24_7789_Write_Data(0x0000);
-TFT_24_7789_Write_Data(0x00EF);//Y address set
-TFT_24_7789_Write_Command(0x11);
-TFT_24_7789_Write_Command(0x38);
-TFT_24_7789_Write_Command(0x13);
+	{
+	LCD_RES = 0;
+	LCD_RD = 1;
+	LCD_WR = 1;
+	//wait_ms(2);
+	LCD_RES = 1;
+	wait_ms(2);
+	TFT_24_7789_Write_Command(0x0029);//exit SLEEP mode
+	wait_ms(2);
+	TFT_24_7789_Write_Command(0x0036);
+	TFT_24_7789_Write_Data(0x70);//MADCTL: memory data access control
+	TFT_24_7789_Write_Command(0x003A);
+	TFT_24_7789_Write_Data(0x0066);//COLMOD: Interface Pixel format
+	TFT_24_7789_Write_Command(0x00B2);
+	TFT_24_7789_Write_Data(0x0C);
+	TFT_24_7789_Write_Data(0x0C);
+	TFT_24_7789_Write_Data(0x00);
+	TFT_24_7789_Write_Data(0x33);
+	TFT_24_7789_Write_Data(0x33);//PORCTRK: Porch setting
+	TFT_24_7789_Write_Command(0x00B7);
+	TFT_24_7789_Write_Data(0x0035);//GCTRL: Gate Control
+	TFT_24_7789_Write_Command(0x00BB);
+	TFT_24_7789_Write_Data(0x002B);//VCOMS: VCOM setting
+	TFT_24_7789_Write_Command(0x00C0);
+	TFT_24_7789_Write_Data(0x002C);//LCMCTRL: LCM Control
+	TFT_24_7789_Write_Command(0x00C2);
+	TFT_24_7789_Write_Data(0x0001);
+	TFT_24_7789_Write_Data(0xFF);//VDVVRHEN: VDV and VRH Command Enable
+	TFT_24_7789_Write_Command(0x00C3);
+	TFT_24_7789_Write_Data(0x0011);//VRHS: VRH Set
+	TFT_24_7789_Write_Command(0x00C4);
+	TFT_24_7789_Write_Data(0x0020);//VDVS: VDV Set[10]
+	TFT_24_7789_Write_Command(0x00C6);
+	TFT_24_7789_Write_Data(0x000F);//FRCTRL2: Frame Rate control in normal mode
+	TFT_24_7789_Write_Command(0x00D0);
+	TFT_24_7789_Write_Data(0x00A4);
+	TFT_24_7789_Write_Data(0xA1);//PWCTRL1: Power Control 1
+	TFT_24_7789_Write_Command(0x00E0);
+	TFT_24_7789_Write_Data(0x00D0);
+	TFT_24_7789_Write_Data(0x0000);
+	TFT_24_7789_Write_Data(0x0005);
+	TFT_24_7789_Write_Data(0x000E);
+	TFT_24_7789_Write_Data(0x0015);
+	TFT_24_7789_Write_Data(0x000D);
+	TFT_24_7789_Write_Data(0x0037);
+	TFT_24_7789_Write_Data(0x0043);
+	TFT_24_7789_Write_Data(0x0047);
+	TFT_24_7789_Write_Data(0x0009);
+	TFT_24_7789_Write_Data(0x0015);
+	TFT_24_7789_Write_Data(0x0012);
+	TFT_24_7789_Write_Data(0x0016);
+	TFT_24_7789_Write_Data(0x0019);//PVGAMCTRL: Positive Voltage Gamma control
+	TFT_24_7789_Write_Command(0x00E1);
+	TFT_24_7789_Write_Data(0x00D0);
+	TFT_24_7789_Write_Data(0x0000);
+	TFT_24_7789_Write_Data(0x0005);
+	TFT_24_7789_Write_Data(0x000D);
+	TFT_24_7789_Write_Data(0x000C);
+	TFT_24_7789_Write_Data(0x0006);
+	TFT_24_7789_Write_Data(0x002D);
+	TFT_24_7789_Write_Data(0x0044);
+	TFT_24_7789_Write_Data(0x0040);
+	TFT_24_7789_Write_Data(0x000E);
+	TFT_24_7789_Write_Data(0x001C);
+	TFT_24_7789_Write_Data(0x0018);
+	TFT_24_7789_Write_Data(0x0016);
+	TFT_24_7789_Write_Data(0x0019);//NVGAMCTRL: Negative Voltage Gamma control
+	TFT_24_7789_Write_Command(0x002A);
+	TFT_24_7789_Write_Data(0x0000);
+	TFT_24_7789_Write_Data(0x0000);
+	TFT_24_7789_Write_Data(0x0001);
+	TFT_24_7789_Write_Data(0x003F);//X address set
+	TFT_24_7789_Write_Command(0x002B);
+	TFT_24_7789_Write_Data(0x0000);
+	TFT_24_7789_Write_Data(0x0000);
+	TFT_24_7789_Write_Data(0x0000);
+	TFT_24_7789_Write_Data(0x00EF);//Y address set
+	TFT_24_7789_Write_Command(0x11);
+	TFT_24_7789_Write_Command(0x38);
+	TFT_24_7789_Write_Command(0x13);
 
-}
+	}
 /*******************************************************************************/
 

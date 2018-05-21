@@ -23,6 +23,7 @@
       <itemPath>src/badge_settings.h</itemPath>
       <itemPath>src/badge.h</itemPath>
       <itemPath>src/user_program.h</itemPath>
+      <itemPath>src/badge_user.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -83,7 +84,7 @@
         <platformTool>PK4Tool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.05</languageToolchainVersion>
-        <platform>2</platform>
+        <platform>3</platform>
       </toolsSet>
       <compileType>
         <linkerTool>

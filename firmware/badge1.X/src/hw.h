@@ -1,6 +1,12 @@
+#ifndef		__HW_H
+#define		__HW_H
+
 //#include <xc.h>
 #include <stdint.h>
 #include "badge_settings.h"
+
+#define DISP_BUFFER_WIDE    40
+#define DISP_BUFFER_HIGH    20
 
 #define		LCD_PORT	LATE
 #define		LCD_WR		LATDbits.LATD4
@@ -90,6 +96,10 @@ uint16_t get_rnd (void);
 void exp_set(uint8_t pos, uint8_t val);
 void exp_ddr(uint8_t pos, uint8_t val);
 uint8_t exp_get (uint8_t pos);
+uint8_t get_led_word(void);
+void set_led_word (uint8_t val);
+
+
 
 typedef union
 {
@@ -144,3 +154,4 @@ uint8_t rx_read (void);
 void tx_write (uint8_t data);
 
 
+#endif

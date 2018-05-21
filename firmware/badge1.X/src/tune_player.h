@@ -1,3 +1,6 @@
+#ifndef		__TUNE_PLAYER_H
+#define		__TUNE_PLAYER_H
+
 void play_mario_tune(void);
 void play_music_array(const unsigned char *, unsigned char, const unsigned int *);
 
@@ -168,3 +171,6 @@ const unsigned char mario_clip4[64] =
 		43,0,0,0,
 		0,0,0,0
 	};
+
+#endif
+

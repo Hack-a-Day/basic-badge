@@ -1,3 +1,6 @@
+#ifndef	__VT100_H
+#define	__VT100_H
+
 #define MAX_ESC_LEN 48 
 #define  NOT_IN_ESC 	0
 #define    ESC_GOT_1B	1
@@ -139,4 +142,6 @@ static void _video_scrolldown_lin(uint8_t line);
 void write_direct(uint16_t * x, uint16_t * y, uint8_t * str);
 void term_init (void);
 void video_set_color(uint8_t fg, uint8_t bg);
+
+#endif
 
