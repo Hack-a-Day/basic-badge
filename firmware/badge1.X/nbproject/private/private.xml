@@ -3,22 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/box_game.c</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/nbproject/Makefile-impl.mk</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/hw.c</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/badge.h</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/basic/ubasic.c</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/tetrapuzz.c</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/hw.h</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/post.c</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/badge.c</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/snake.c</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/tune_player.h</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/user_program.h</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/main.c</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/snake.h</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/disp.c</file>
-            <file>file:/home/mike/compile/basic-badge/firmware/badge1.X/src/user_program.c</file>
+            <file>file:/home/jarin/storage/main/backup_mg/badge/badge1.X/src/main.c</file>
+            <file>file:/home/jarin/storage/main/backup_mg/badge/badge1.X/src/badge.c</file>
         </group>
     </open-files>
 </project-private>

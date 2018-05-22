@@ -869,7 +869,7 @@ uint8_t cmd_exec (int8_t * cmd)
 			}	
 		else if (strcmp("run",cmd)==0)
 			{
-			ubasic_init(bprog);
+			ubasic_init(bprog,0);
 			brk_key = 0;
 			do 
 				{
@@ -894,7 +894,7 @@ uint8_t cmd_exec (int8_t * cmd)
 			if (strlen(cmd)>0)
 				{
 				sprintf(tprog,"0 %s\n",cmd);
-				ubasic_init(tprog);
+				ubasic_init(tprog,1);
 				do 
 					{
 					if (!setjmp(jbuf)) ubasic_run();

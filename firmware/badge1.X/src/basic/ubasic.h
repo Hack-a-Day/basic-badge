@@ -30,7 +30,8 @@
 #ifndef __UBASIC_H__
 #define __UBASIC_H__
 
-void ubasic_init(const char *program);
+#include <stdint.h>
+void ubasic_init(const char *program, uint8_t mode);
 void ubasic_run(void);
 int ubasic_finished(void);
 

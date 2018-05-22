@@ -75,6 +75,7 @@ static int for_stack_ptr;
 static int variables[MAX_VARNUM];
 
 static int ended;
+uint8_t interactive_mode;
 
 uint8_t term_vt100=1;
 unsigned int term_x=0,term_y=0;
@@ -86,7 +87,7 @@ extern volatile int8_t brk_key;
 
 //B_BAS009
 /*---------------------------------------------------------------------------*/
-void ubasic_init(const char *program)
+void ubasic_init(const char *program, uint8_t mode)
 	{
 	program_ptr = program;
 	for_stack_ptr = gosub_stack_ptr = 0;
@@ -94,6 +95,7 @@ void ubasic_init(const char *program)
 	ended = 0;
 	term_vt100=1;
 	last_linenum = 0;
+	interactive_mode = mode;
 	}
 /*---------------------------------------------------------------------------*/
 static void accept(int token)
@@ -712,6 +714,18 @@ static void uout_statement(void)
 	tokenizer_next();
 	}
 
+
+void seek_end (void)
+	{
+	do
+		{
+		tokenizer_next();
+		}
+	while(tokenizer_token() != TOKENIZER_CR && tokenizer_token() != TOKENIZER_ENDOFINPUT);
+	if(tokenizer_token() == TOKENIZER_CR) tokenizer_next();
+	stdio_write("Command unavailable in interactive mode\n");
+	}
+
 //B_BAS002
 /*---------------------------------------------------------------------------*/
 static void statement(void)
@@ -729,24 +743,59 @@ static void statement(void)
 			println_statement();
 			break;
 		case TOKENIZER_IF:
+			if (interactive_mode)
+				{
+				seek_end();
+				break;
+				}
 			if_statement();
 			break;
 		case TOKENIZER_GOTO:
+			if (interactive_mode)
+				{
+				seek_end();
+				break;
+				}
 			goto_statement();
 			break;
 		case TOKENIZER_GOSUB:
+			if (interactive_mode)
+				{
+				seek_end();
+				break;
+				}
 			gosub_statement();
 			break;
 		case TOKENIZER_RETURN:
+			if (interactive_mode)
+				{
+				seek_end();
+				break;
+				}
 			return_statement();
 			break;
 		case TOKENIZER_FOR:
+			if (interactive_mode)
+				{
+				seek_end();
+				break;
+				}
 			for_statement();
 			break;
 		case TOKENIZER_NEXT:
+			if (interactive_mode)
+				{
+				seek_end();
+				break;
+				}
 			next_statement();
 			break;
 		case TOKENIZER_END:
+			if (interactive_mode)
+				{
+				seek_end();
+				break;
+				}
 			end_statement();
 			break;
 		case TOKENIZER_OUT:

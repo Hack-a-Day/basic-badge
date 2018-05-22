@@ -123,6 +123,8 @@ static const struct keyword_token keywords[] =
 //aliases
 		{"clr", TOKENIZER_CLRSCR},
 		{"CLR", TOKENIZER_CLRSCR},
+		{"cls", TOKENIZER_CLRSCR},
+		{"CLS", TOKENIZER_CLRSCR},
 		{"pnt", TOKENIZER_PRINT},
 		{"PNT", TOKENIZER_PRINT},
 		{"ptl", TOKENIZER_PRINTLN},

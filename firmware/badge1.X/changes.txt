@@ -222,4 +222,8 @@
 0.74
 - LEDs are off after POR/manual reset
 
+0.75
+- restricted availability of some words in interactive mode
+- some more aliases
+
 
