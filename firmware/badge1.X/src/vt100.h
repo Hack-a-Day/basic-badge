@@ -139,7 +139,6 @@ static void _video_scrollup_lin(uint8_t lin);
 static void _video_scrolldown_lin(uint8_t line);
 
 
-void write_direct(uint16_t * x, uint16_t * y, uint8_t * str);
 void term_init (void);
 void video_set_color(uint8_t fg, uint8_t bg);
 

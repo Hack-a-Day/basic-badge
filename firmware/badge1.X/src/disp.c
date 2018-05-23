@@ -1,6 +1,7 @@
 #include <xc.h>
 #include "hw.h"
 #include "disp.h"
+#include "vt100.h"
 #include <stdint.h>
 
 
@@ -264,29 +265,63 @@ uint32_t color_table[16] = {
 	
 	};
 
+uint16_t cursor_blink_cnt;
+uint8_t cursor_blink_state, cursor_visible;
+
+
+void set_cursor_state (uint8_t state)
+	{
+	if (state==0)
+		cursor_visible = 0;
+	else
+		cursor_visible = 1;
+	}
+
+void disp_tasks (void)
+	{
+	cursor_blink_cnt++;
+	if (cursor_blink_cnt> 40)
+		{
+		cursor_blink_cnt = 0;
+		if (cursor_blink_state)
+			cursor_blink_state = 0;
+		else
+			cursor_blink_state = 1;
+		}
+	}
 
 void tft_disp_buffer_refresh(uint8_t * buff, uint8_t * color_buff)
 	{
-	uint16_t i,j,ad,col,back;
+	uint16_t i,j,ad,col,back,cur_x,cur_y;
+	cur_x = video_getx();
+	cur_y = video_gety();
 	for (i=0;i<20;i++)
 		for (j=0;j<40;j++)	
 			{
 			col = color_buff[j+(i*40)]&0xF;
 			back = (color_buff[j+(i*40)]>>4)&0xF;
-			tft_print_char(buff[j+(i*40)],j*8,i*12,color_table[col],color_table[back]);
+			if ((cur_x==j)&(cur_y==i)&(cursor_blink_state==1)&(cursor_visible!=0))
+				tft_print_char(219,j*8,i*12,color_table[15],color_table[back]);
+			else
+				tft_print_char(buff[j+(i*40)],j*8,i*12,color_table[col],color_table[back]);
 			}
 	}
 
 void tft_disp_buffer_refresh_part(uint8_t * buff, uint8_t * color_buff)
 	{
-    static uint8_t dr_cnt=0,col,back;
+    static uint8_t dr_cnt=0,col,back,cur_x,cur_y;
 	uint16_t i,j,ad;
+	cur_x = video_getx();
+	cur_y = video_gety();
 	for (i=(dr_cnt);i<(dr_cnt+2);i++)
 		for (j=0;j<40;j++)	
 			{
 			col = color_buff[j+(i*40)]&0xF;
 			back = (color_buff[j+(i*40)]>>4)&0xF;
-			tft_print_char(buff[j+(i*40)],j*8,i*12,color_table[col],color_table[back]);
+			if ((cur_x==j)&(cur_y==i)&(cursor_blink_state==1)&(cursor_visible!=0))
+				tft_print_char(219,j*8,i*12,color_table[15],color_table[back]);
+			else
+				tft_print_char(buff[j+(i*40)],j*8,i*12,color_table[col],color_table[back]);
 			}
     dr_cnt = dr_cnt + 2;
     if (dr_cnt == 20)

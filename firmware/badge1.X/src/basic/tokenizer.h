@@ -91,7 +91,7 @@ enum {
   TOKENIZER_INPUT,
   TOKENIZER_PEEK,
   TOKENIZER_POKE,  
-  
+  TOKENIZER_CURSOR,
 };
 
 void tokenizer_init(const char *program);

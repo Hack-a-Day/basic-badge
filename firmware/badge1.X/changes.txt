@@ -229,4 +229,7 @@
 0.76
 - added peek and poke words
 
+0.77
+- added curor, as well word to turn it on/off
+
 

@@ -750,7 +750,15 @@ static void poke_statement(void)
 	tokenizer_next();
 	}
 /*---------------------------------------------------------------------------*/
-
+static void cursor_statement(void)
+	{
+	int c1;
+	accept(TOKENIZER_CURSOR);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	set_cursor_state(c1);
+	tokenizer_next();
+	}
+/*---------------------------------------------------------------------------*/
 
 
 
@@ -888,6 +896,9 @@ static void statement(void)
 			break;
 		case TOKENIZER_POKE:
 			poke_statement();
+			break;
+		case TOKENIZER_CURSOR:
+			cursor_statement();
 			break;
 		default:
 			sprintf(err_msg,"Bad token %d at line %d\n", token,last_linenum);

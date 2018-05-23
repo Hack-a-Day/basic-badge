@@ -11,6 +11,9 @@ inline void tft_print_char (uint8_t val, uint16_t x, uint16_t y, uint32_t col, u
 void tft_fill_area (uint16_t x, uint16_t y, uint16_t xlen, uint16_t ylen, uint32_t back);
 void tft_disp_buffer_refresh(uint8_t * buff, uint8_t * color_buff);
 void tft_disp_buffer_refresh_part(uint8_t * buff, uint8_t * color_buff);
+void disp_tasks (void);
+void set_cursor_state (uint8_t state);
+
 
 #define	EGA_BLACK	0
 #define	EGA_BLUE	1

@@ -48,27 +48,6 @@ void video_set_color(uint8_t fg, uint8_t bg)
 	color_composite = (fg&0xF) | ((bg&0xF)<<4);
 	}
 
-
-void write_direct(uint16_t * x, uint16_t * y, uint8_t * str)
-	{
-	uint16_t xt,yt;
-	xt = *x;
-	yt = *y;
-	while (*str>=' ')
-		{
-		disp_buffer[yt][xt] = *str++;
-		color_buffer[yt][xt] = color_composite;
-		xt++;
-		if (xt==DISP_BUFFER_WIDE)
-			{
-			xt=0;
-			yt++;
-			}
-		}
-	*x = xt;
-	*y = yt;
-	}
-
 void term_init (void)
 	{
 	video_reset_margins();

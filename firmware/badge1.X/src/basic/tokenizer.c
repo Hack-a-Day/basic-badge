@@ -124,6 +124,8 @@ static const struct keyword_token keywords[] =
 		{"PEEK", TOKENIZER_PEEK},
 		{"poke", TOKENIZER_POKE},
 		{"POKE", TOKENIZER_POKE},
+		{"cursor", TOKENIZER_CURSOR},
+		{"CURSOR", TOKENIZER_CURSOR},		
 //aliases
 		{"clr", TOKENIZER_CLRSCR},
 		{"CLR", TOKENIZER_CLRSCR},
@@ -139,6 +141,8 @@ static const struct keyword_token keywords[] =
 		{"SXY", TOKENIZER_SETXY},
 		{"ret", TOKENIZER_RETURN},
 		{"RET", TOKENIZER_RETURN},
+		{"cur", TOKENIZER_CURSOR},
+		{"CUR", TOKENIZER_CURSOR},		
 		{NULL, TOKENIZER_ERROR}
 	};
 
