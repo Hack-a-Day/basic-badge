@@ -89,6 +89,9 @@ enum {
   TOKENIZER_UIN,
   TOKENIZER_UOUT,
   TOKENIZER_INPUT,
+  TOKENIZER_PEEK,
+  TOKENIZER_POKE,  
+  
 };
 
 void tokenizer_init(const char *program);

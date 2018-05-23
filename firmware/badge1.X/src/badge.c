@@ -245,7 +245,6 @@ void badge_menu(void)
 			if (char_out==K_DN) char_out='D';
 			if (char_out==K_LT) char_out='L';
 			if (char_out==K_RT) char_out='R';
-			if (char_out==K_DEL) continue;
 			stdio_c(char_out);
 			if (char_out==BACKSPACE)
 				{

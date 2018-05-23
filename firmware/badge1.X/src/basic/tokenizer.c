@@ -43,7 +43,7 @@
 
 static char const *ptr, *nextptr;
 
-#define MAX_NUMLEN 5
+#define MAX_NUMLEN 6
 
 struct keyword_token
 	{
@@ -120,6 +120,10 @@ static const struct keyword_token keywords[] =
 		{"UOUT", TOKENIZER_UOUT},
 		{"input", TOKENIZER_INPUT},
 		{"INPUT", TOKENIZER_INPUT},
+		{"peek", TOKENIZER_PEEK},
+		{"PEEK", TOKENIZER_PEEK},
+		{"poke", TOKENIZER_POKE},
+		{"POKE", TOKENIZER_POKE},
 //aliases
 		{"clr", TOKENIZER_CLRSCR},
 		{"CLR", TOKENIZER_CLRSCR},

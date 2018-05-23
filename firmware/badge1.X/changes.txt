@@ -226,4 +226,7 @@
 - restricted availability of some words in interactive mode
 - some more aliases
 
+0.76
+- added peek and poke words
+
 

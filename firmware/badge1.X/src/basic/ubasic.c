@@ -49,6 +49,12 @@
 
 extern jmp_buf jbuf;
 extern uint8_t handle_display;
+extern uint8_t ram[65536L];
+
+uint8_t get_memory (uint16_t addr);
+void set_memory (uint16_t addr, uint8_t value);
+
+
 
 char err_msg[40];
 int last_linenum;
@@ -152,6 +158,11 @@ static int factor(void)
 			r = expr();
 			r = exp_get(r);
 			break;
+		case TOKENIZER_PEEK:
+			accept(TOKENIZER_PEEK);
+			r = expr();
+			r = get_memory(r);
+			break;
 
 		case TOKENIZER_UIN:
 			accept(TOKENIZER_UIN);
@@ -189,6 +200,8 @@ static int factor(void)
 			r = get_user_value();
 			break;
 
+			
+			
 		default:
 			r = varfactor();
 			break;
@@ -714,6 +727,33 @@ static void uout_statement(void)
 	tokenizer_next();
 	}
 
+uint8_t get_memory (uint16_t addr)
+	{
+	return ram[addr];
+	}
+
+void set_memory (uint16_t addr, uint8_t value)
+	{
+	ram[addr] = value;
+	}
+
+/*---------------------------------------------------------------------------*/
+static void poke_statement(void)
+	{
+	volatile int c1,c2;
+	accept(TOKENIZER_POKE);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	accept(TOKENIZER_COMMA);
+	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c2 =  expr();
+	//todo
+	set_memory(c1,c2);
+	tokenizer_next();
+	}
+/*---------------------------------------------------------------------------*/
+
+
+
+
 
 void seek_end (void)
 	{
@@ -845,6 +885,9 @@ static void statement(void)
 			break;
 		case TOKENIZER_UOUT:
 			uout_statement();
+			break;
+		case TOKENIZER_POKE:
+			poke_statement();
 			break;
 		default:
 			sprintf(err_msg,"Bad token %d at line %d\n", token,last_linenum);
