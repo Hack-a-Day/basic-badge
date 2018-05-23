@@ -232,4 +232,7 @@
 0.77
 - added curor, as well word to turn it on/off
 
+0.78
+- holding RSHIFT while resetting the badge skips splash screen
 
+ 

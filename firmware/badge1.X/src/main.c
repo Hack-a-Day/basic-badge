@@ -11,7 +11,7 @@ int16_t main(void)
 	hw_init();
 	badge_init();
 	if (KEY_BRK==0) post();
-	if (SHOW_SPLASH) boot_animation();
+	if ((SHOW_SPLASH)&(K_SHIFTR==1)) boot_animation();
 	badge_menu();
 	while (1); //menu is never left, but anyway
 	}
