@@ -235,4 +235,7 @@
 0.78
 - holding RSHIFT while resetting the badge skips splash screen
 
- 
+0.79
+- user input bug is fixed
+
+

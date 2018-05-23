@@ -30,7 +30,7 @@ int8_t stdio_local_buffer_get (void);
 void stdio_local_buffer_put (int8_t data);
 void stdio_local_buffer_puts (int8_t * data);
 
-int16_t get_user_value (void);
+uint16_t get_user_value (void);
 void enable_display_scanning(uint8_t onoff);
 uint32_t millis(void);
 void display_refresh_force (void);

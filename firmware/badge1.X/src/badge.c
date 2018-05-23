@@ -1172,7 +1172,7 @@ void __ISR(_EXTERNAL_2_VECTOR, IPL4AUTO) Int2Handler(void)
 	IEC0bits.INT2IE = 0;
 	}
 
-int16_t get_user_value (void)
+uint16_t get_user_value (void)
 	{
 	int8_t temp_arr[20];
 	uint8_t temp_arr_p=0,char_val,stat;
