@@ -617,7 +617,7 @@ void loop_badge(void)
 		}
 	if (KEY_BRK==0)
 		{
-		if ((K_SHIFTL==0)&(brk_is_pressed==9))
+		if ((K_SHIFTL==0)&(K_SHIFTR==0)&(brk_is_pressed==9))
 			{
 			serial_flush();
 			if (stdio_src == STDIO_TTY1)

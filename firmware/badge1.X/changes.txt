@@ -238,4 +238,7 @@
 0.79
 - user input bug is fixed
 
+0.80
+- switching consoles now via LSHIFT+RSHIFT+BRK
+
 
