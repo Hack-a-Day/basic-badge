@@ -247,4 +247,7 @@
 0.82
 - POST test performs FLASH verification
 
+0.83
+- fixed bug in FLASH handling
+
 

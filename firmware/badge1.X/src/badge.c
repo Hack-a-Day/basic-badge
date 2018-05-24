@@ -829,6 +829,7 @@ uint8_t cmd_exec (int8_t * cmd)
 			stdio_write(stdio_buff);
 			}	
 		else if (strcmp("more",cmd)==0) list_more();
+		else if (strcmp("help",cmd)==0) stdio_write(" For more documentation see hac.io/Mz3r");
 		else if (strncmp("load",cmd,4)==0)
 			{
 			sscanf (cmd+4,"%d",&prognum);

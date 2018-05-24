@@ -264,6 +264,7 @@ CS_FLASH = 0;
 SPI_dat(0x50);
 CS_FLASH = 1;
 */
+fl_wren();
 CS_FLASH = 0;
 SPI_dat(0x01);
 SPI_dat(0x00);
@@ -360,7 +361,10 @@ if (verify!=0)
 		fl_read_128(j+(1*4096),disk_temp);
 		for (k=0;k<128;k++) 
 			{
-			if (disk_temp[k]!=0xE5)return 1;
+			if (disk_temp[k]!=0xE5)
+				{
+				return 1;
+				}
 			}
 		}
 	}
