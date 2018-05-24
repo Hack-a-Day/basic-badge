@@ -40,6 +40,10 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 * `uin X` - function to return received byte from serial port, if X=0, function is non-blocking, if X=1, function is blocking
 * `uout X` - outputs value X to serial port as single byte
 * `input "string"` - prints string and returns user entered value
+* `peek X` - returns value from memory location X
+* `poke X,Y` - write value Y into memory, on location X
+* `cursor X` - turns cursor on (X=1) or off (X=0)
+
 
 ### BASIC CLI commands
 
@@ -52,6 +56,8 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 * `free` - prints amount of free program buffer
 * `sload` - load new program into buffer from serial port
 * `ssave` - output program buffer via serial port
+* `help` - prints out basic BASIC help
+
 
 
 ## Setting Up the Toolchain for BASIC Badge
