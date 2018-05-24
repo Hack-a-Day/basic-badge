@@ -44,9 +44,9 @@ void post (void)
 
 	flash_id = fl_rdid();
 	if (flash_id==0x1f4501)
-		video_set_color(EGA_GREEN,EGA_BLACK);
+		video_set_color(EGA_WHITE,EGA_GREEN);
 	else
-		video_set_color(EGA_RED,EGA_BLACK);
+		video_set_color(EGA_YELLOW,EGA_RED);
 	video_gotoxy(0,15);
 	sprintf(temp_string,"FLASH ID is %x\n",flash_id);
 	stdio_write(temp_string);
@@ -226,12 +226,21 @@ void post (void)
 			if (retval == 'f') 
 				{
 				stdio_write("Formatting FLASH...\n");
-				init_first_x_sects(128);
-				stdio_write("OK\n");
+				if (init_first_x_sects(128,1)==0)
+					{
+					video_set_color(EGA_WHITE,EGA_GREEN);
+					stdio_write("OK, verified\n");
+					}
+				else
+					{
+					video_set_color(EGA_YELLOW,EGA_RED);
+					stdio_write("Verification error\n");
+					}
 				break;
 				}
 			}
 		}
+	video_set_color(EGA_WHITE,EGA_BLACK);
 	stdio_write("End of test, reset badge now\n");
 	while(1);
 	}

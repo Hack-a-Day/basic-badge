@@ -244,4 +244,7 @@
 0.81
 - using correct FLASH type
 
+0.82
+- POST test performs FLASH verification
+
 

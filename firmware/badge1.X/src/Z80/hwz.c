@@ -337,9 +337,9 @@ addr = ((uint32_t )(sector))*128UL;
 fl_read_nk(addr,data,128);
 }
 
-void init_first_x_sects (uint8_t i)			//format directory area
+uint8_t init_first_x_sects (uint8_t i, uint8_t verify)			//format directory area
 {
-uint32_t j;
+uint32_t j,k;
 for (j=0;j<128;j++) disk_temp[j]=0xE5;
 #ifdef USE_EEPROM
 for (j=0;j<i;j++) 
@@ -353,7 +353,21 @@ for (j=0;j<i;j++)
 	fl_write_128(j+(1*4096),disk_temp);
 	}
 
+if (verify!=0)
+	{
+	for (j=0;j<i;j++) 
+		{
+		fl_read_128(j+(1*4096),disk_temp);
+		for (k=0;k<128;k++) 
+			{
+			if (disk_temp[k]!=0xE5)return 1;
+			}
+		}
+	}
+return 0;
 }
+
+
 
 #ifdef USE_EEPROM
 void write_sector (unsigned char *data, unsigned int addr)
@@ -426,4 +440,5 @@ CS_MEM = 0;
 SPI_dat(0x04);
 CS_MEM = 1;
 }
+
 #endif
