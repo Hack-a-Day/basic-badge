@@ -250,4 +250,8 @@
 0.83
 - fixed bug in FLASH handling
 
+0.84
+- improved help
+- added license
+
 

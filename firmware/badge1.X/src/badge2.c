@@ -849,13 +849,7 @@ uint8_t cmd_exec (int8_t * cmd)
 			stdio_write(stdio_buff);
 			}	
 		else if (strcmp("more",cmd)==0) list_more();
-		else if (strcmp("help",cmd)==0) 
-			{
-			stdio_write("Basic BASIC help:\n");
-			stdio_write("Type more to list the program in buffer, ");
-			stdio_write("or run to run it.\n");
-			stdio_write(" For more documentation see hac.io/Mz3r\n");
-			}
+		else if (strcmp("help",cmd)==0) stdio_write(" For more documentation see hac.io/Mz3r");
 		else if (strncmp("load",cmd,4)==0)
 			{
 			sscanf (cmd+4,"%d",&prognum);

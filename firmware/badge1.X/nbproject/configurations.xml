@@ -59,9 +59,9 @@
       <itemPath>src/box_game.c</itemPath>
       <itemPath>src/tune_player.c</itemPath>
       <itemPath>src/post.c</itemPath>
-      <itemPath>src/badge.c</itemPath>
       <itemPath>src/snake.c</itemPath>
       <itemPath>src/user_program.c</itemPath>
+      <itemPath>src/badge.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -84,7 +84,7 @@
         <platformTool>PK4Tool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.05</languageToolchainVersion>
-        <platform>3</platform>
+        <platform>2</platform>
       </toolsSet>
       <compileType>
         <linkerTool>
