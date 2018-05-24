@@ -34,6 +34,8 @@ uint16_t get_user_value (void);
 void enable_display_scanning(uint8_t onoff);
 uint32_t millis(void);
 void display_refresh_force (void);
+void clr_buffer (void);
+
 
 /***************************************************************************************************/
 

@@ -93,8 +93,6 @@ int16_t main(void)
  * B: - 128kB ROM disk, contains a lot of goodies. You could pack a lot of software into 128kB then.
  * C: - 128kB ROM dosk, contains Zork and Sargon. You know, games.
  * D: - 512kB FLASH disk, free for your use
- * E: - 512kB FLASH disk, free for your use
- * F: - 512kB FLASH disk, free for your use
  * hwz.c contains all stuff to access disks and devices of CP/M machine, like disk byte read and write
  * functions, called directly by BIOS via addresses 0x07 and 0x08, with 0x05 and 0x06 setting track and
  * sector of drive selected via 0x04.

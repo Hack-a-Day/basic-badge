@@ -193,16 +193,15 @@ void show_help(void)
 	{
 	clr_buffer();
 	video_gotoxy(0,0);
-	stdio_write("Badge keyboard shortcuts:");
-	video_gotoxy(2,1);
-	stdio_write("Reset badge : shift - RESET");
-	video_gotoxy(2,2);
-	stdio_write("Type underscore : Rshift - dash");
-	video_gotoxy(2,3);
-	stdio_write("Fast reset : Lshift - Rshift - RESET");
-	video_gotoxy(2,4);
-	stdio_write("Cursor off Lshift - Rshift - BRK");
-	video_gotoxy(0,6);
+	stdio_write("Badge keyboard shortcuts:\n");
+	stdio_write("Reset badge\n");
+	stdio_write(" Lshift - RESET\n");
+	stdio_write("Type underscore\n");
+	stdio_write(" Rshift - dash\n");
+	stdio_write("Fast reset\n");
+	stdio_write(" Lshift - Rshift - RESET\n");
+	stdio_write("Switch to serial console and back\n");
+	stdio_write(" Lshift - Rshift - BRK\n");
 	stdio_write("Badge Documentation : hac.io / Mz3r");
 	}
 
