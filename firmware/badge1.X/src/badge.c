@@ -974,9 +974,8 @@ uint8_t basic_load_program (uint8_t * data, uint8_t slot)
 	addr = addr * BPROG_SECSIZ * BPROG_SECNUM;
 	addr = addr + BASIC_BASEADDR;
 	for (cnt = 0;cnt<BPROG_SECNUM;cnt++)
-		{
 		fl_read_4k(addr + cnt*BPROG_SECSIZ,data + cnt*BPROG_SECSIZ);	
-		}
+	if (data[0] == 0xFF) data[0] = 0;
 	return 1;
 	}
 

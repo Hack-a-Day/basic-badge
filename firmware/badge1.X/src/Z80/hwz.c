@@ -118,13 +118,9 @@ if (drive==3)
 	}
 if (drive==4)
 	{
-	if (disk_temp_pointer==0) fl_read_128(base+(CPM1_DISK2_OFFSET),disk_temp);
-	temp = disk_temp[disk_temp_pointer];
 	}
 if (drive==5)
 	{
-	if (disk_temp_pointer==0) fl_read_128(base+(CPM1_DISK3_OFFSET),disk_temp);
-	temp = disk_temp[disk_temp_pointer];
 	}
 if (drive==6)
 	{
@@ -174,19 +170,9 @@ if (drive==3)
 	}
 if (drive==4)
 	{
-	disk_temp[disk_temp_pointer] = dat;
-	if (disk_temp_pointer==127) 
-		{
-		fl_write_128(base+(CPM1_DISK2_OFFSET),disk_temp);
-		}
 	}
 if (drive==5)
 	{
-	disk_temp[disk_temp_pointer] = dat;
-	if (disk_temp_pointer==127) 
-		{
-		fl_write_128(base+(CPM1_DISK3_OFFSET),disk_temp);
-		}
 	}
 if (drive==6)
 	{
@@ -273,9 +259,11 @@ CS_FLASH = 1;
 
 void fl_rst_pb(void)
 {
+/*
 CS_FLASH = 0;
 SPI_dat(0x50);
 CS_FLASH = 1;
+*/
 CS_FLASH = 0;
 SPI_dat(0x01);
 SPI_dat(0x00);
@@ -363,14 +351,6 @@ for (j=0;j<i;j++)
 for (j=0;j<i;j++) 
 	{
 	fl_write_128(j+(1*4096),disk_temp);
-	}
-for (j=0;j<i;j++) 
-	{
-	fl_write_128(j+(2*4096),disk_temp);
-	}
-for (j=0;j<i;j++) 
-	{
-	fl_write_128(j+(3*4096),disk_temp);
 	}
 
 }

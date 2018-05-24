@@ -4,8 +4,6 @@
 #include "hw.h"
 #include "post.h"
 
-int16_t val;
-
 int16_t main(void)
 	{
 	hw_init();

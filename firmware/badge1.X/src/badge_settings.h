@@ -4,7 +4,7 @@
 #define __BADGE_SETTINGS_H
 
 //Badge firmware version should be defined as a string here:
-#define FIRMWARE_VERSION "0.80"
+#define FIRMWARE_VERSION "0.81"
 
 //define length of BASIC program RAM buffer
 //increasing the length will allow you to hold larger programs
@@ -32,12 +32,10 @@
  * 0x03C000-0x03FFFF - 16-th slot
  * 0x040000-0x07FFFF - empty space
  * 0x080000-0x0FFFFF - D disk of CP/M machine
- * 0x100000-0x17FFFF - E disk of CP/M machine
- * 0x180000-0x1FFFFF - F disk of CP/M machine
  */
 
 //Set SHOW_SPLASH to 0 to skip splash screen at boot
-#define SHOW_SPLASH	1
+#define SHOW_SPLASH	0
 
 //B_BDG010
 //this one enables 64k of RAM image for CP/M 

@@ -43,7 +43,7 @@ void post (void)
 	set_led(2,0);	
 
 	flash_id = fl_rdid();
-	if (flash_id==0xC22315)
+	if (flash_id==0x1f4501)
 		video_set_color(EGA_GREEN,EGA_BLACK);
 	else
 		video_set_color(EGA_RED,EGA_BLACK);
@@ -226,7 +226,7 @@ void post (void)
 			if (retval == 'f') 
 				{
 				stdio_write("Formatting FLASH...\n");
-				init_first_x_sects(32);
+				init_first_x_sects(128);
 				stdio_write("OK\n");
 				break;
 				}

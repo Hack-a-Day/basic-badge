@@ -241,4 +241,7 @@
 0.80
 - switching consoles now via LSHIFT+RSHIFT+BRK
 
+0.81
+- using correct FLASH type
+
 
