@@ -38,7 +38,6 @@ uint8_t get_command_index(uint32_t );
 uint8_t wisecrack(int8_t *, uint16_t , unsigned char, uint8_t);
 void clear_crack(void);
 uint8_t random_crack(void);
-void clr_buffer(void);
 void showmenu(void);
 void show_version(void);
 void fancyframe(void);
@@ -196,22 +195,16 @@ void show_help(void)
 	set_cursor_state(0);
 	video_gotoxy(0,0);
 	video_set_color(3,1);
-	stdio_write("Badge keyboard shortcuts:");
-	video_gotoxy(2,1);
+	stdio_write("Badge keyboard shortcuts:\n");
 	video_set_color(15,0);
-	stdio_write("Reset badge : shift-RESET");
-	video_gotoxy(2,2);
-	stdio_write("Type underscore: Rshift-dash");
-	video_gotoxy(2,3);
-	stdio_write("Fast reset: Lshift-Rshift-RESET");
-	video_gotoxy(2,4);
-	stdio_write("Serial console: Lshift-Rshift-BRK");
-	video_gotoxy(0,6);
+	stdio_write("  Reset badge : shift-RESET\n");
+	stdio_write("  Type underscore: Rshift-dash\n");
+	stdio_write("  Fast reset: Lshift-Rshift-RESET\n");
+	stdio_write("  Serial console: Lshift-Rshift-BRK\n");
 	video_set_color(1,11);
-	stdio_write("Badge Documentation:");
-	video_gotoxy(2,7);
+	stdio_write("Badge Documentation:\n");
 	video_set_color(15,0);
-	stdio_write("hac.io/Mz3r");
+	stdio_write("  hac.io/Mz3r");
 	}
 
 //B_BDG005
