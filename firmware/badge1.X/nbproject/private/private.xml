@@ -5,9 +5,8 @@
         <group>
             <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/badge_settings.h</file>
             <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/badge.c</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/images.c</file>
-            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/hw.c</file>
             <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/main.c</file>
+            <file>file:/home/jarin/j/backup_mg/badge/badge1.X/src/badge.h</file>
         </group>
     </open-files>
 </project-private>

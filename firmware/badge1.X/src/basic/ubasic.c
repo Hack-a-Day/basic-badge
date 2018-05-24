@@ -577,13 +577,13 @@ static void tune_statement(void)
 	int tone1,tone2,tone3,duration;
 
 	accept(TOKENIZER_TUNE);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) tone1 =  expr();
+	tone1 =  expr();
 	accept(TOKENIZER_COMMA);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) tone2 =  expr();
+	tone2 =  expr();
 	accept(TOKENIZER_COMMA);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) tone3 =  expr();
+	tone3 =  expr();
 	accept(TOKENIZER_COMMA);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) duration =  expr();
+	duration =  expr();
 	//sprintf(str_out,"playing %d %d %d for %d\n",tone1,tone2,tone3,duration);
 	//stdio_write(str_out);
 	//now perform the actual beep
@@ -596,9 +596,9 @@ static void setxy_statement(void)
 	{
 	int x_temp,y_temp;
 	accept(TOKENIZER_SETXY);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) x_temp =  expr();
+	x_temp =  expr();
 	accept(TOKENIZER_COMMA);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) y_temp =  expr();
+	y_temp =  expr();
 	tokenizer_next();
 	video_gotoxy(x_temp,y_temp);
 	}
@@ -607,7 +607,7 @@ static void termt_statement(void)
 	{
 	int type;
 	accept(TOKENIZER_TERMT);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) type =  expr();
+	type =  expr();
 	if (type==0)
 		{
 		term_vt100 = 0;
@@ -633,7 +633,7 @@ static void wait_statement(void)
 	{
 	int time;
 	accept(TOKENIZER_WAIT);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) time =  expr();
+	time =  expr();
 	wait_ms(time);
 	tokenizer_next();
 	}
@@ -642,9 +642,9 @@ static void led_statement(void)
 	{
 	int led_p,led_v;
 	accept(TOKENIZER_LED);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) led_p =  expr();
+	led_p =  expr();
 	accept(TOKENIZER_COMMA);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) led_v =  expr();
+	led_v =  expr();
 	//now set up led_p to value led_v
 	set_led(led_p,led_v);
 	tokenizer_next();
@@ -654,9 +654,9 @@ static void color_statement(void)
 	{
 	int c1,c2;
 	accept(TOKENIZER_COLOR);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	c1 =  expr();
 	accept(TOKENIZER_COMMA);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c2 =  expr();
+	c2 =  expr();
 	//now set up led_p to value led_v
 	video_set_color(c1,c2);
 	tokenizer_next();
@@ -667,7 +667,7 @@ static void chr_statement(void)
 	int var,c1;
 	long temp;
 	accept(TOKENIZER_CHR);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	c1 =  expr();
 	stdio_c(c1);
 	tokenizer_next();
 	}
@@ -676,9 +676,9 @@ static void edr_statement(void)
 	{
 	int c1,c2;
 	accept(TOKENIZER_EDR);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	c1 =  expr();
 	accept(TOKENIZER_COMMA);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c2 =  expr();
+	c2 =  expr();
 	exp_ddr(c1,c2);
 	tokenizer_next();
 	}
@@ -687,9 +687,9 @@ static void eout_statement(void)
 	{
 	int c1,c2;
 	accept(TOKENIZER_EOUT);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	c1 =  expr();
 	accept(TOKENIZER_COMMA);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c2 =  expr();
+	 c2 =  expr();
 	exp_set(c1,c2);
 	tokenizer_next();
 	}
@@ -722,7 +722,7 @@ static void uout_statement(void)
 	{
 	int c1;
 	accept(TOKENIZER_UOUT);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	c1 =  expr();
 	tx_write(c1);
 	tokenizer_next();
 	}
@@ -742,9 +742,9 @@ static void poke_statement(void)
 	{
 	volatile int c1,c2;
 	accept(TOKENIZER_POKE);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	c1 =  expr();
 	accept(TOKENIZER_COMMA);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c2 =  expr();
+	c2 =  expr();
 	//todo
 	set_memory(c1,c2);
 	tokenizer_next();
@@ -754,7 +754,7 @@ static void cursor_statement(void)
 	{
 	int c1;
 	accept(TOKENIZER_CURSOR);
-	if(tokenizer_token() == TOKENIZER_VARIABLE || tokenizer_token() == TOKENIZER_NUMBER) c1 =  expr();
+	c1 =  expr();
 	set_cursor_state(c1);
 	tokenizer_next();
 	}

@@ -76,12 +76,30 @@ uint8_t playriff(unsigned char);
 /*** End Function Prototypes **********************88*/
 
 int8_t bprog[BPROG_LEN+1];
-int8_t bprog_init[200] =
-"5 rem user value repeater\n\
-10 let a = input \"Enter value\"\n\
-19 print \"You entered: \"\n\
-20 println a\n\
-";
+int8_t bprog_init[700] =
+"10 c = 1 + rnd 4\n\
+20 color c,c+8\n\
+30 for i=1 to 800\n\
+40 chr 200 + (rnd 6)\n\
+50 next i\n\
+60 wait 100\n\
+70 tune 60,64,67,800\n\
+80 tune 57,62,66,800\n\
+90 tune 59,64,47,800\n\
+100 tune 59,62,67,800\n\
+110 for i=60 to 72\n\
+120 led (rnd 2),1\n\
+130 led (rnd 2),0\n\
+140 tune 0,0,i,20\n\
+150 next i\n\
+160 tune 67,71,74,1600\n\
+170 for i=0 to 2\n\
+180 led i,0\n\
+190 next i\n\
+200 color 15,0\n\
+210 println \"Type more to see code\"\n\
+220 println \" \"\n\
+230 println \"Find documentation: hac.io/Mz3r \" \n";
 
 //a lot of magic numbers here, should be done properly
 int8_t tprog[100],stdio_buff[50],key_buffer[10],char_out, stdio_local_buff[STDIO_LOCAL_BUFF_SIZE];

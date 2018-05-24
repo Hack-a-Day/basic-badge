@@ -257,4 +257,7 @@
 0.85
 - improved help
 
+0.86
+- included example BASIC program
+
 
