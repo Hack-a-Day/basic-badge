@@ -32,6 +32,7 @@ uint16_t get_free_mem(uint8_t * prog, uint16_t max_mem);
 uint8_t add_prog_line (int8_t * line, int8_t * prog, int16_t linenum);
 void list_more (void);
 void menu(void);
+void show_help(void);
 uint32_t hash(int8_t *);
 uint8_t get_command_index(uint32_t );
 uint8_t wisecrack(int8_t *, uint16_t , unsigned char, uint8_t);
@@ -105,7 +106,7 @@ extern uint8_t ram_disk[RAMDISK_SIZE];
 int8_t disp_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 int8_t color_buffer[DISP_BUFFER_HIGH+1][DISP_BUFFER_WIDE];
 
-#define HASH_TABLE_LENGTH	12
+#define HASH_TABLE_LENGTH	13
 const uint32_t  hashtable[HASH_TABLE_LENGTH] =
 	{
 	0,				//0
@@ -119,7 +120,8 @@ const uint32_t  hashtable[HASH_TABLE_LENGTH] =
 	110149,			//8
 	3174374908u,	//9
 	132593272,		//10
-	2802956003u		//11
+	2802956003u,	//11
+	3638929			//12
 	};
 
 const uint8_t wrencher[18][41] = {
@@ -186,6 +188,23 @@ const uint8_t * cracks[CRACKCOUNT] =
 	rand_crack17,
 	rand_crack18
 	};
+
+void show_help(void)
+	{
+	clr_buffer();
+	video_gotoxy(0,0);
+	stdio_write("Badge keyboard shortcuts:");
+	video_gotoxy(2,1);
+	stdio_write("Reset badge : shift - RESET");
+	video_gotoxy(2,2);
+	stdio_write("Type underscore : Rshift - dash");
+	video_gotoxy(2,3);
+	stdio_write("Fast reset : Lshift - Rshift - RESET");
+	video_gotoxy(2,4);
+	stdio_write("Cursor off Lshift - Rshift - BRK");
+	video_gotoxy(0,6);
+	stdio_write("Badge Documentation : hac.io / Mz3r");
+	}
 
 //B_BDG005
 void wake_return(void)
@@ -339,7 +358,8 @@ void badge_menu(void)
 							handle_display = 0;
 							play_snake();
 							break;
-						default: clear_flag = random_crack(); break;
+						case 12: show_help(); break;
+						default: clear_flag = random_crack(); while(1) { ;; }
 						}
 					}
 
