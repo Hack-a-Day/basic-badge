@@ -254,4 +254,7 @@
 - improved help
 - added license
 
+0.85
+- improved help
+
 
