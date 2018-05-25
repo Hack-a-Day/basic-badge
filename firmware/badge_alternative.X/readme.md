@@ -1,1 +1,2 @@
-This is alternative firmware as starting point for those, who want to write their own firmware. It uses reduced firmware skeleton from main badge firmware, but it should get you going faster then reducing down it manually.
+This is alternative firmware, using reduced firmware framework, as starting point for those, wanting to write their own firmware on badge hardware. 
+It is not doing anything useful, merely demonstrating how to access display/keyboard/spekaer/LEDs.
