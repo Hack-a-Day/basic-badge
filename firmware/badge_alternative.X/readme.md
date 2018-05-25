@@ -1,0 +1,1 @@
+This is alternative firmware as starting point for those, who want to write their own firmware. It uses reduced firmware skeleton from main badge firmware, but it should get you going faster then reducing down it manually.
