@@ -260,4 +260,7 @@
 0.86
 - included example BASIC program
 
+1.00
+- first stable release
+
 
