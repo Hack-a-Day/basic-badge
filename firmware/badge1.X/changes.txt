@@ -263,4 +263,9 @@
 1.00
 - first stable release
 
+1.01
+- serial access functions should be more stable now
+- fixed bug with long input line
+- fixed backspace bug
+
 

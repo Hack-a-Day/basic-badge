@@ -104,7 +104,7 @@ int8_t bprog_init[700] =
 //a lot of magic numbers here, should be done properly
 int8_t tprog[100],stdio_buff[50],key_buffer[10],char_out, stdio_local_buff[STDIO_LOCAL_BUFF_SIZE];
 
-uint8_t get_stat,key_buffer_ptr =0,cmd_line_buff[30], cmd_line_pointer,cmd_line_key_stat_old,prompt;
+uint8_t get_stat,key_buffer_ptr =0,cmd_line_buff[80], cmd_line_pointer,cmd_line_key_stat_old,prompt;
 uint8_t stdio_local_len=0;
 uint16_t term_pointer,vertical_shift;
 int16_t prog_ptr;
@@ -740,7 +740,7 @@ void loop_basic (void)
 	get_stat = stdio_get(&char_out);
 	if (get_stat!=0)
 	    {
-	    stdio_c(char_out);	
+	    if ((char_out!=BACKSPACE)|(cmd_line_pointer>0)) stdio_c(char_out);	
 	    if (char_out==NEWLINE) 
 			{
 			cmd_line_buff[cmd_line_pointer] = 0;

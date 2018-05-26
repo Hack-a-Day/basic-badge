@@ -102,6 +102,7 @@ void ubasic_init(const char *program, uint8_t mode)
 	term_vt100=1;
 	last_linenum = 0;
 	interactive_mode = mode;
+	serial_flush();
 	}
 /*---------------------------------------------------------------------------*/
 static void accept(int token)
@@ -612,6 +613,7 @@ static void termt_statement(void)
 		{
 		term_vt100 = 0;
 		handle_display = 0;
+		display_refresh_force();
 		}
 	else
 		{
