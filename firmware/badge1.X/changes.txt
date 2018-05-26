@@ -268,4 +268,7 @@
 - fixed bug with long input line
 - fixed backspace bug
 
+1.02
+- added function kin that returns value of pressed key, can be either blocking or non-blocking
+
 

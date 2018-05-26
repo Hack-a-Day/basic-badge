@@ -132,6 +132,7 @@ static int varfactor(void)
 /*---------------------------------------------------------------------------*/
 static int factor(void)
 	{
+	uint8_t char_out=0;
 	int r;
 	long temp;
 	DEBUG_PRINTF("factor: token %d\n", tokenizer_token());
@@ -164,16 +165,35 @@ static int factor(void)
 			r = expr();
 			r = get_memory(r);
 			break;
-
+		case TOKENIZER_KIN:
+			accept(TOKENIZER_KIN);
+			r = expr();
+			if (r==0)
+				{
+				term_k_char((&char_out));
+				r = char_out;
+				}
+			else
+				{
+				while (1)
+					{
+					if (term_k_stat()!=0)
+						{
+						term_k_char(&char_out);
+						r = char_out;
+						break;
+						}
+					if (brk_key) break;
+					}
+				}
+			break;
 		case TOKENIZER_UIN:
 			accept(TOKENIZER_UIN);
 			r = expr();
 			if (r==0)
 				{
-				if (rx_sta()!=0)
-					r = rx_read();
-				else
-					r = 0;
+				if (rx_sta()!=0) r = rx_read();
+				else r = 0;
 				}
 			else
 				{
@@ -184,8 +204,7 @@ static int factor(void)
 						r = rx_read();
 						break;
 						}
-					if (brk_key)
-						break;
+					if (brk_key) break;
 					}
 				}
 			break;

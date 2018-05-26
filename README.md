@@ -43,7 +43,7 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 * `peek X` - returns value from memory location X
 * `poke X,Y` - write value Y into memory, on location X
 * `cursor X` - turns cursor on (X=1) or off (X=0)
-
+* `kin X` - function to return byte from keyboard, if X=0, function is non-blocking, if X=1, function is blocking
 
 ### BASIC CLI commands
 
