@@ -589,6 +589,7 @@ uint8_t exp_get (uint8_t pos)
 
 void serial_flush (void)
 	{
+	static uint32_t temp1,temp2;	
 	while (rx_sta()) rx_read();
 	if (U3STAbits.OERR) U3STAbits.OERR = 0;
 	while (rx_sta()) rx_read();

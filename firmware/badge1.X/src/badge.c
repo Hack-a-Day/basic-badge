@@ -656,16 +656,19 @@ void loop_badge(void)
 		}
 	if (KEY_BRK==0)
 		{
-		if ((K_SHIFTL==0)&(K_SHIFTR==0)&(brk_is_pressed==9))
+		if (brk_is_pressed==9)
 			{
-			serial_flush();
-			if (stdio_src == STDIO_TTY1)
-				stdio_src = STDIO_LOCAL;
+			if ((K_SHIFTL==0)&(K_SHIFTR==0))
+				{
+				serial_flush();
+				if (stdio_src == STDIO_TTY1)
+					stdio_src = STDIO_LOCAL;
+				else
+					stdio_src = STDIO_TTY1;
+				}
 			else
-				stdio_src = STDIO_TTY1;
+				brk_key = 1;
 			}
-		else
-			brk_key = 1;
 		if (brk_is_pressed<10) brk_is_pressed++;
 		}
 	else

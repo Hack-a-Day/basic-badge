@@ -271,4 +271,7 @@
 1.02
 - added function kin that returns value of pressed key, can be either blocking or non-blocking
 
+1.03
+- BRK key was flaky at times, now it's not
+
 
