@@ -9,6 +9,8 @@ Hardware details available on [the BASIC Badge project page](https://hackaday.io
 
 ## BASIC Word List:
 
+Firmware at the day of conference was 1.00. There are new versions coming since then, see changes at https://github.com/Hack-a-Day/basic-badge/blob/master/firmware/badge1.X/changes.txt
+
 ### Standard Words:
 * `print`
 * `println`
