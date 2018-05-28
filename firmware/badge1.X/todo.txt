@@ -1,4 +1,3 @@
-- api for user code
-- remove dependancy from PLIB
+- more math functions
 
 

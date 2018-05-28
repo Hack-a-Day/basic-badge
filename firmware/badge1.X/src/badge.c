@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdint.h>
-#include <setjmp.h>
 #include "Z80/sim.h"
 #include "Z80/simglb.h"
 
@@ -100,6 +99,7 @@ int8_t bprog_init[700] =
 210 println \"Type more to see code\"\n\
 220 println \" \"\n\
 230 println \"Find documentation: hac.io/Mz3r \" \n";
+
 
 //a lot of magic numbers here, should be done properly
 int8_t tprog[100],stdio_buff[50],key_buffer[10],char_out, stdio_local_buff[STDIO_LOCAL_BUFF_SIZE];
@@ -1151,7 +1151,6 @@ int8_t term_k_char (int8_t * out)
 	return retval;
 	}
 
-
 void boot_animation(void)
 	{
 	handle_display = 0; //Shut off auto-scanning of character buffer
@@ -1192,34 +1191,6 @@ void stdio_local_buffer_puts (int8_t * data)
 	while (*data!=0) stdio_local_buffer_put(*data++);
 	}
 
-//************************************************************************
-//some hardware stuff
-
-
-//B_BDG003
-void __ISR(_TIMER_5_VECTOR, IPL3AUTO) Timer5Handler(void)
-{
-    uint8_t key_temp;
-    IFS0bits.T5IF = 0;
-	disp_tasks();
-	loop_badge();
-    if (handle_display)
-		tft_disp_buffer_refresh_part((uint8_t *)(disp_buffer),(uint8_t *)color_buffer);
-    key_temp = keyb_tasks();
-    if (key_temp>0)
-		key_buffer[key_buffer_ptr++] = key_temp;
-}
-
-void __ISR(_TIMER_1_VECTOR, IPL4AUTO) Timer1Handler(void)
-	{
-    IFS0bits.T1IF = 0;
-    ++ticks;
-	}
-void __ISR(_EXTERNAL_2_VECTOR, IPL4AUTO) Int2Handler(void)
-	{
-	IEC0bits.INT2IE = 0;
-	}
-
 uint16_t get_user_value (void)
 	{
 	int8_t temp_arr[20];
@@ -1249,8 +1220,37 @@ uint16_t get_user_value (void)
 		}
 	}
 
-
 void display_refresh_force (void)
 	{
 	tft_disp_buffer_refresh((uint8_t *)disp_buffer,(uint8_t *)color_buffer);
 	}
+
+
+//************************************************************************
+//some hardware stuff
+
+
+//B_BDG003
+void __ISR(_TIMER_5_VECTOR, IPL3AUTO) Timer5Handler(void)
+{
+    uint8_t key_temp;
+    IFS0bits.T5IF = 0;
+	disp_tasks();
+	loop_badge();
+    if (handle_display)
+		tft_disp_buffer_refresh_part((uint8_t *)(disp_buffer),(uint8_t *)color_buffer);
+    key_temp = keyb_tasks();
+    if (key_temp>0)
+		key_buffer[key_buffer_ptr++] = key_temp;
+}
+
+void __ISR(_TIMER_1_VECTOR, IPL4AUTO) Timer1Handler(void)
+	{
+    IFS0bits.T1IF = 0;
+    ++ticks;
+	}
+void __ISR(_EXTERNAL_2_VECTOR, IPL4AUTO) Int2Handler(void)
+	{
+	IEC0bits.INT2IE = 0;
+	}
+

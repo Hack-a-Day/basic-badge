@@ -14,14 +14,11 @@ int16_t main(void)
 	while (1); //menu is never left, but anyway
 	}
 
-
-
-
-
 /*
  * Interesting places to take look at, in MPLABX use CtrlCtrl+Shift+F to search in all files
  * for those "bookmarks"
- * 
+ *
+ *  
  * ----------------badge stuff----------------
  * After reset, badge checks whether BRK key is pressed. In case it is, test routine starts, see
  * B_BDG001
@@ -72,7 +69,6 @@ int16_t main(void)
  * interpreter in B_BAS009 and runs main loop in B_BAS010.
  * Program buffer is set to 16kB, so you can't have programs longer than that. You may redefine buffer 
  * length (see badge_settings.h), you may want to check save/load routines, see B_BAS011
- * 
  * 
  * 
  * ----------------CP/M machine----------------

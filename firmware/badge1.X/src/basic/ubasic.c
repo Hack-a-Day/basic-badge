@@ -348,6 +348,13 @@ static void jump_linenum(int linenum)
 				{
 				tokenizer_next();
 				}
+			if (tokenizer_token() == TOKENIZER_ENDOFINPUT)
+				{
+				sprintf(err_msg,"Unreachable line %d called from %d\n",linenum,last_linenum);
+				stdio_write(err_msg);
+				tokenizer_error_print();
+				longjmp(jbuf,1);             // jumps back to where setjmp was called - making setjmp now return 1
+				}
 			}
 		while(tokenizer_token() != TOKENIZER_NUMBER);
 		DEBUG_PRINTF("jump_linenum: Found line %d\n", tokenizer_num());
