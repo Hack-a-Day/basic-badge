@@ -54,6 +54,10 @@ Program flow:
 #define BOX_SCOREBOX_Y			64
 #define BOX_SCOREBOX_WIDTH		110
 #define BOX_SCOREBOX_HEIGHT		22
+#define BOX_NEXT_PIECE_X                207
+#define BOX_NEXT_PIECE_Y                100
+#define BOX_NEXT_PIECE_WIDTH            (BOX_MULTIPLIER*4 + BOX_FRAME_THICKNESS*2)
+#define BOX_NEXT_PIECE_HEIGHT           BOX_NEXT_PIECE_WIDTH
 
 #define ARRAY_SIZE (((BOX_BOARD_BOTTOM+8)/8) * (BOX_BOARD_RIGHT + 1))
 
@@ -65,7 +69,8 @@ Program flow:
 
 static uint8_t cursor_x, cursor_y;
 
-volatile uint8_t random_piece = 0;	//Used to select a piece "randomly" (but not really)
+volatile uint8_t random_piece = 0;	// Used to select a piece "randomly" (but not really)
+uint8_t next_piece = 4;                 // Updated on every spawn
 
 uint8_t BOX_piece[4];
 
@@ -349,14 +354,13 @@ void BOX_clearscreen(void)
 	tft_fill_area(0, 0, 319, 239, 0x000000);
 	}
 
-void BOX_draw(uint8_t X, uint8_t Y, uint32_t color)
-	{
-	//Draw box
-	uint8_t row = Y*BOX_MULTIPLIER;
-	uint16_t col = X*BOX_MULTIPLIER;
+void BOX_draw_ofs(uint16_t ofs_x, uint8_t ofs_y, uint8_t x, uint8_t y, uint32_t color) {
+  //Draw box
+  uint8_t row = y*BOX_MULTIPLIER;
+  uint16_t col = x*BOX_MULTIPLIER;
 	
-	tft_fill_area(col+BOX_XOFFSET, row+BOX_YOFFSET, BOX_MULTIPLIER-1, BOX_MULTIPLIER-1, color);
-	}
+  tft_fill_area(col+ofs_x, row+ofs_y, BOX_MULTIPLIER-1, BOX_MULTIPLIER-1, color);
+}
 
 void BOX_erase(uint8_t X, uint8_t Y)
 	{
@@ -383,8 +387,8 @@ void BOX_pregame(void)
 		}
 	//Draw frame around grid
 	tft_fill_area(BOX_FRAMEX, BOX_FRAMEY, BOX_FRAME_THICKNESS-1, BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), BOX_FRAMECOLOR);
-	tft_fill_area(BOX_FRAMEX, BOX_FRAMEY+BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), (BOX_MULTIPLIER*(BOX_BOARD_RIGHT + 1))+(BOX_FRAME_THICKNESS*2)-1, BOX_FRAME_THICKNESS-1, 0xFFFFFF);
-	tft_fill_area(BOX_FRAMEX+(BOX_MULTIPLIER*(BOX_BOARD_RIGHT+1))+BOX_FRAME_THICKNESS, BOX_FRAMEY, BOX_FRAME_THICKNESS-1, BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), 0xFFFFFF);
+	tft_fill_area(BOX_FRAMEX, BOX_FRAMEY+BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), (BOX_MULTIPLIER*(BOX_BOARD_RIGHT + 1))+(BOX_FRAME_THICKNESS*2)-1, BOX_FRAME_THICKNESS-1, BOX_FRAMECOLOR);
+	tft_fill_area(BOX_FRAMEX+(BOX_MULTIPLIER*(BOX_BOARD_RIGHT+1))+BOX_FRAME_THICKNESS, BOX_FRAMEY, BOX_FRAME_THICKNESS-1, BOX_MULTIPLIER*(BOX_BOARD_BOTTOM+1), BOX_FRAMECOLOR);
    
 	//Show game title
 	tft_fill_area(BOX_SCOREBOX_X, BOX_GAMETITLE_Y, BOX_SCOREBOX_WIDTH, BOX_SCOREBOX_HEIGHT, BOX_FRAMECOLOR);
@@ -395,6 +399,16 @@ void BOX_pregame(void)
 	tft_fill_area(BOX_SCOREBOX_X, BOX_SCOREBOX_Y, BOX_SCOREBOX_WIDTH, BOX_SCOREBOX_HEIGHT, BOX_FRAMECOLOR);
 	tft_fill_area(BOX_SCOREBOX_X+BOX_FRAME_THICKNESS, BOX_SCOREBOX_Y+BOX_FRAME_THICKNESS, BOX_SCOREBOX_WIDTH-(2*BOX_FRAME_THICKNESS), BOX_SCOREBOX_HEIGHT-(2*BOX_FRAME_THICKNESS), DEFAULT_BG_COLOR);
 
+	// Next piece area
+	tft_fill_area(BOX_NEXT_PIECE_X, BOX_NEXT_PIECE_Y,
+		      BOX_NEXT_PIECE_WIDTH, BOX_NEXT_PIECE_HEIGHT,
+		      BOX_FRAMECOLOR);
+	tft_fill_area(BOX_NEXT_PIECE_X + BOX_FRAME_THICKNESS,
+		      BOX_NEXT_PIECE_Y + BOX_FRAME_THICKNESS,
+		      BOX_NEXT_PIECE_WIDTH - BOX_FRAME_THICKNESS*2,
+		      BOX_NEXT_PIECE_HEIGHT - BOX_FRAME_THICKNESS*2,
+		      DEFAULT_BG_COLOR);
+	
 	//Show game area
 	BOX_rewrite_display(DEFAULT_FG_COLOR);
 	
@@ -612,7 +626,7 @@ void BOX_write_piece(void)  //Writes piece to display
 				if (BOX_piece[i] & 1<<j)
 					{
 					//TODO: change this for different colored playing pieces
-					BOX_draw(x_loc+i, y_loc-j, DEFAULT_FG_COLOR);
+					  BOX_draw_ofs(BOX_XOFFSET, BOX_YOFFSET, x_loc+i, y_loc-j, DEFAULT_FG_COLOR);
 					}
 				}
 			}
@@ -639,6 +653,10 @@ void BOX_clear_piece(void)  //Clears piece from display
 		}
 	}
 
+void BOX_show_next_piece(void) {
+  
+}
+
 void BOX_rewrite_display(uint32_t fgcolor)	//Rewrites entire playing area
 	{
 	//printf(cls);
@@ -648,8 +666,10 @@ void BOX_rewrite_display(uint32_t fgcolor)	//Rewrites entire playing area
 		{
 		for (rows=0; rows<=BOX_BOARD_BOTTOM; rows++)
 			{
-			if(BOX_loc_return_bit(cols,rows)) BOX_draw(cols,rows,fgcolor);
-			else BOX_erase(cols,rows);
+			  if(BOX_loc_return_bit(cols,rows))
+			    BOX_draw_ofs(BOX_XOFFSET, BOX_YOFFSET, cols,rows,fgcolor);
+			  else
+			    BOX_erase(cols,rows);
 			}
 		}
 	}
@@ -664,7 +684,8 @@ void BOX_spawn(void)
 	{
 	x_loc = 4;
 	y_loc = 1;
-	cur_piece = random_piece;
+	cur_piece = next_piece;
+	next_piece = random_piece;
 	rotate = 0;
 
 	BOX_load_reference(cur_piece, rotate);  //load from reference
@@ -680,6 +701,7 @@ void BOX_spawn(void)
 
 	BOX_store_loc(); //Store new location
 	BOX_write_piece(); //draw piece
+	BOX_show_next_piece();
 	BOX_update_screen();
 	}
 
