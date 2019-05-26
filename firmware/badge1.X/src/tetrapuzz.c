@@ -28,7 +28,7 @@ void tetrapuzz(void)
 			if (sstr[0]==K_UP) {	BOX_rotate(1);	}
 			if (sstr[0]==K_LT) {	BOX_lt();	}
 			if (sstr[0]==K_RT) {	BOX_rt();	}
-			if (sstr[0]==K_DN) {	BOX_dn();	}
+			if (sstr[0]==K_DN) {	BOX_drop();	}
 			}
 
 		//Service the loop on a non-blocking delay here

@@ -848,6 +848,25 @@ void BOX_dn(void)
 	BOX_update_screen();
 	}
 
+void BOX_drop(void)
+	{
+	BOX_clear_loc();
+	BOX_clear_piece();
+
+	while (!BOX_check(0, 0)) {
+	  y_loc++;
+	}
+	y_loc--;
+
+	BOX_store_loc();
+	BOX_write_piece();
+
+	BOX_rewrite_display(DEFAULT_STONE_COLOR);
+	BOX_line_check();
+	BOX_spawn();
+	BOX_update_score();
+	}
+
 void BOX_lt(void)
 	{
 	if (BOX_check(-1, 0)) return; //Do nothing if moving causes an overlap

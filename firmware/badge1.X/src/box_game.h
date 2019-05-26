@@ -32,3 +32,4 @@ void BOX_up(void);
 void BOX_dn(void);
 void BOX_lt(void);
 void BOX_rt(void);
+void BOX_drop(void);
