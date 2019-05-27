@@ -54,10 +54,10 @@ Program flow:
 #define BOX_SCOREBOX_Y			64
 #define BOX_SCOREBOX_WIDTH		110
 #define BOX_SCOREBOX_HEIGHT		22
-#define BOX_NEXT_PIECE_X                207
+#define BOX_NEXT_PIECE_X                202
 #define BOX_NEXT_PIECE_Y                100
-#define BOX_NEXT_PIECE_WIDTH            (BOX_MULTIPLIER*4 + BOX_FRAME_THICKNESS*2)
-#define BOX_NEXT_PIECE_HEIGHT           BOX_NEXT_PIECE_WIDTH
+#define BOX_NEXT_PIECE_WIDTH            (BOX_MULTIPLIER*5 + BOX_FRAME_THICKNESS*2)
+#define BOX_NEXT_PIECE_HEIGHT           (BOX_MULTIPLIER*4 + BOX_FRAME_THICKNESS*2)
 
 #define ARRAY_SIZE (((BOX_BOARD_BOTTOM+8)/8) * (BOX_BOARD_RIGHT + 1))
 
@@ -362,15 +362,6 @@ void BOX_draw_ofs(uint16_t ofs_x, uint8_t ofs_y, uint8_t x, uint8_t y, uint32_t 
   tft_fill_area(col+ofs_x, row+ofs_y, BOX_MULTIPLIER-1, BOX_MULTIPLIER-1, color);
 }
 
-void BOX_erase(uint8_t X, uint8_t Y)
-	{
-	//Erase box
-	uint8_t row = Y*BOX_MULTIPLIER;
-	uint16_t col = X*BOX_MULTIPLIER;
-	
-	tft_fill_area(col+BOX_XOFFSET, row+BOX_YOFFSET, BOX_MULTIPLIER-1, BOX_MULTIPLIER-1, DEFAULT_BG_COLOR);
-	}
-
 void BOX_pregame(void)
 	{
 	//Draw fancy background
@@ -613,7 +604,8 @@ void BOX_rotate(uint8_t direction)
 
 
 
-void BOX_write_piece(void)  //Writes piece to display
+void BOX_write_piece_ofs(const uint8_t* piece_ref, uint16_t ofs_x,
+			 uint8_t ofs_y, uint8_t x, uint8_t y, uint32_t color)  //Writes piece to display
 	{
 	uint8_t i, j;
 	for (i=0; i<4; i++)  //Step through each of 4 columns
@@ -621,40 +613,36 @@ void BOX_write_piece(void)  //Writes piece to display
 		for (j=0; j<4; j++) //Step through each of 4 rows
 			{
 			//prevent invalid indices from being written
-			if ((y_loc-j) >= 0)
+			if ((y-j) >= 0)
 				{
-				if (BOX_piece[i] & 1<<j)
+				if (piece_ref[i] & 1<<j)
 					{
 					//TODO: change this for different colored playing pieces
-					  BOX_draw_ofs(BOX_XOFFSET, BOX_YOFFSET, x_loc+i, y_loc-j, DEFAULT_FG_COLOR);
+					  BOX_draw_ofs(ofs_x, ofs_y, x+i, y-j, color);
 					}
 				}
 			}
 		}
 	}
 
-void BOX_clear_piece(void)  //Clears piece from display
-	{
-	uint8_t i, j;
-	for (i=0; i<4; i++)  //Step through each of 4 columns
-		{
-		for (j=0; j<4; j++) //Step through each of 4 rows
-			{
-			//prevent invalid indices from being written
-			if ((y_loc-j) >= 0)
-				{
-				if (BOX_piece[i] & 1<<j)
-					{
-					//TODO: change this for different colored playing pieces
-					BOX_erase(x_loc+i, y_loc-j);
-					}
-				}
-			}
-		}
-	}
+void BOX_write_piece(void) {
+  BOX_write_piece_ofs(BOX_piece, BOX_XOFFSET, BOX_YOFFSET, x_loc, y_loc, DEFAULT_FG_COLOR);
+}
 
-void BOX_show_next_piece(void) {
-  
+void BOX_clear_piece(void) {
+  BOX_write_piece_ofs(BOX_piece, BOX_XOFFSET, BOX_YOFFSET, x_loc, y_loc, DEFAULT_BG_COLOR);
+}
+
+void BOX_show_next_piece(uint8_t piece_id) {
+  BOX_write_piece_ofs(BOX_reference[piece_id][0],
+		      BOX_NEXT_PIECE_X + BOX_FRAME_THICKNESS + BOX_MULTIPLIER,
+		      BOX_NEXT_PIECE_Y + BOX_FRAME_THICKNESS + BOX_MULTIPLIER, 0, 1, DEFAULT_FG_COLOR);
+}
+
+void BOX_clear_next_piece(uint8_t piece_id) {
+  BOX_write_piece_ofs(BOX_reference[piece_id][0],
+		      BOX_NEXT_PIECE_X + BOX_FRAME_THICKNESS + BOX_MULTIPLIER,
+		      BOX_NEXT_PIECE_Y + BOX_FRAME_THICKNESS + BOX_MULTIPLIER, 0, 1, DEFAULT_BG_COLOR);
 }
 
 void BOX_rewrite_display(uint32_t fgcolor)	//Rewrites entire playing area
@@ -669,7 +657,7 @@ void BOX_rewrite_display(uint32_t fgcolor)	//Rewrites entire playing area
 			  if(BOX_loc_return_bit(cols,rows))
 			    BOX_draw_ofs(BOX_XOFFSET, BOX_YOFFSET, cols,rows,fgcolor);
 			  else
-			    BOX_erase(cols,rows);
+			    BOX_draw_ofs(BOX_XOFFSET, BOX_YOFFSET, cols,rows, DEFAULT_BG_COLOR);
 			}
 		}
 	}
@@ -684,13 +672,12 @@ void BOX_spawn(void)
 	{
 	x_loc = 4;
 	y_loc = 1;
+      	BOX_clear_next_piece(next_piece);
 	cur_piece = next_piece;
 	next_piece = random_piece;
 	rotate = 0;
 
 	BOX_load_reference(cur_piece, rotate);  //load from reference
-
-
 
 	//Check to see if we've filled the screen
 	if (BOX_check(0,0))
@@ -701,7 +688,7 @@ void BOX_spawn(void)
 
 	BOX_store_loc(); //Store new location
 	BOX_write_piece(); //draw piece
-	BOX_show_next_piece();
+	BOX_show_next_piece(next_piece);
 	BOX_update_screen();
 	}
 
