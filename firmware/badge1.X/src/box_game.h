@@ -6,8 +6,7 @@ void BOX_inc_random(void);
 uint8_t BOX_get_score(void);
 uint16_t  BOX_get_delay(void);
 void BOX_clearscreen(void);
-void BOX_draw(uint8_t X, uint8_t Y, uint32_t  color);
-void BOX_erase(uint8_t X, uint8_t Y);
+void BOX_draw_ofs(uint16_t ofs_x, uint8_t ofs_y, uint8_t X, uint8_t Y, uint32_t  color);
 void BOX_pregame(void);
 void BOX_start_game(void);
 void BOX_show_gameover(void);
@@ -22,6 +21,10 @@ void BOX_clear_loc(void);
 void BOX_load_reference(uint8_t piece, uint8_t rotation);
 void BOX_rotate(uint8_t direction);
 void BOX_write_piece(void);
+void BOX_write_piece_ofs(const uint8_t* piece_ref, uint16_t ofs_x, uint8_t ofs_y,
+			 uint8_t x, uint8_t y, uint32_t color);
+void BOX_clear_piece_ofs(const uint8_t* piece_re, uint16_t ofs_x, uint8_t ofs_y,
+			 uint8_t x, uint8_t y);
 void BOX_clear_piece(void);
 void BOX_rewrite_display(uint32_t  fgcolor);
 void BOX_update_screen(void);
@@ -32,3 +35,8 @@ void BOX_up(void);
 void BOX_dn(void);
 void BOX_lt(void);
 void BOX_rt(void);
+void BOX_drop(void);
+
+void BOX_show_next_piece(uint8_t piece_id);
+void BOX_clear_next_piece(uint8_t piece_id);
+
